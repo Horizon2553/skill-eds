@@ -1,20 +1,160 @@
+/* ==========================================================================
+   Footer — Dark multi-column layout matching SkillBridge design
+   ========================================================================== */
+
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background: #0f172a;
+  color: #94a3b8;
 }
 
+/* ── Inner wrapper ── */
 footer .footer > div {
-  margin: auto;
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: auto;
+  padding: 64px 24px 0;
 }
 
-footer .footer p {
+footer .footer .section {
+  padding: 0;
   margin: 0;
 }
 
+footer .footer .section:first-child {
+  margin-bottom: 40px;
+}
+
+/* Copyright bar */
+footer .footer .section:last-child {
+  border-top: 1px solid rgb(255 255 255 / 8%);
+  padding: 24px 0;
+  margin-top: 48px;
+}
+
+footer .footer p {
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+footer .footer a:any-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+footer .footer a:hover {
+  color: #1dbf73;
+}
+
+/* ── Brand name ── */
+footer .footer .section:first-child strong {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--heading-font-family);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+}
+
+footer .footer .section:first-child strong::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #1dbf73;
+  border-radius: 50%;
+  margin-left: 3px;
+  flex-shrink: 0;
+}
+
+footer .footer .section:first-child p:not(:first-child) {
+  font-size: 0.9rem;
+  color: #64748b;
+  max-width: 280px;
+  line-height: 1.65;
+}
+
+/* ── Link columns: 3-col grid inside links section ── */
+footer .footer .section:nth-child(2) .default-content-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 32px;
+}
+
+footer .footer .section:nth-child(2) p {
+  margin-bottom: 0;
+}
+
+footer .footer .section:nth-child(2) strong {
+  display: block;
+  color: #f1f5f9;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+footer .footer .section:nth-child(2) ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+}
+
+footer .footer .section:nth-child(2) ul li {
+  margin-bottom: 10px;
+}
+
+footer .footer .section:nth-child(2) ul li a {
+  font-size: 0.88rem;
+  color: #94a3b8;
+}
+
+footer .footer .section:nth-child(2) ul li a:hover {
+  color: #1dbf73;
+}
+
+/* ── Copyright ── */
+footer .footer .section:last-child p {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* ── Desktop: brand left, links right ── */
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    padding: 72px 32px 0;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 0;
+    align-items: start;
+  }
+
+  footer .footer .section:first-child {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+    padding-right: 32px;
+  }
+
+  footer .footer .section:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 64px;
+    border-left: 1px solid rgb(255 255 255 / 6%);
+  }
+
+  footer .footer .section:last-child {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (width < 600px) {
+  footer .footer .section:nth-child(2) .default-content-wrapper {
+    grid-template-columns: 1fr 1fr;
   }
 }

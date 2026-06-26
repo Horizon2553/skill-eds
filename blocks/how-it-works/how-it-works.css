@@ -1,0 +1,141 @@
+.how-it-works {
+  padding: 80px 0;
+  background: #fff;
+}
+
+/* Header row: title left, toggle right */
+.how-it-works .hiw-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.how-it-works .hiw-section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Toggle pill */
+.how-it-works .hiw-toggle-pill {
+  display: inline-flex;
+  background: #f3f3f3;
+  border: 1px solid #e0e0e0;
+  border-radius: 99px;
+  padding: 4px;
+}
+
+.how-it-works .hiw-toggle-btn {
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 10px 24px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+}
+
+.how-it-works .hiw-toggle-btn.active {
+  background: #1dbf73;
+  color: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+.how-it-works .hiw-toggle-btn:not(.active):hover {
+  color: #111;
+}
+
+/* Panels */
+.how-it-works .hiw-panel {
+  display: none;
+}
+
+.how-it-works .hiw-panel.active {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Cards */
+.how-it-works .hiw-card {
+  background: #fff;
+  border: 1px solid rgb(29 191 115 / 25%);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.how-it-works .hiw-card:hover {
+  border-color: rgb(29 191 115 / 55%);
+  box-shadow: 0 12px 32px rgb(29 191 115 / 10%);
+  transform: translateY(-4px);
+}
+
+/* Icon */
+.how-it-works .hiw-icon {
+  color: #1dbf73;
+  margin-bottom: 24px;
+}
+
+/* Card title */
+.how-it-works .hiw-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+/* Card description */
+.how-it-works .hiw-card-desc {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 24px;
+  flex-grow: 1;
+}
+
+/* CTA link */
+.how-it-works .hiw-cta-link {
+  color: #1dbf73;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  margin-top: auto;
+  transition: color 0.15s;
+}
+
+.how-it-works .hiw-cta-link:hover {
+  color: #17a862;
+  text-decoration: underline;
+}
+
+@media (width >= 600px) {
+  .how-it-works .hiw-panel.active {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (width >= 900px) {
+  .how-it-works .hiw-panel.active {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (width < 600px) {
+  .how-it-works .hiw-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -13,15 +13,20 @@
 :root {
   /* colors */
   --background-color: white;
-  --light-color: #f8f8f8;
-  --dark-color: #505050;
-  --text-color: #131313;
-  --link-color: #3b63fb;
-  --link-hover-color: #1d3ecf;
+  --light-color: #f8fafc;
+  --dark-color: #334155;
+  --text-color: #0f172a;
+  --link-color: #1dbf73;
+  --link-hover-color: #17a862;
+
+  /* brand */
+  --brand-color: #1dbf73;
+  --brand-dark: #17a862;
+  --brand-accent: #4f46e5;
 
   /* fonts */
-  --body-font-family: roboto, roboto-fallback, sans-serif;
-  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  --body-font-family: 'Inter', inter-fallback, sans-serif;
+  --heading-font-family: 'Bricolage Grotesque', bricolage-grotesque-fallback, sans-serif;
 
   /* body sizes */
   --body-font-size-m: 22px;

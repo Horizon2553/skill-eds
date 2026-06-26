@@ -1,11 +1,21 @@
-/* header and nav layout */
+/* ==========================================================================
+   Header / Nav — Frosted-glass fixed bar matching SkillBridge design
+   ========================================================================== */
+
 header .nav-wrapper {
-  background-color: var(--background-color);
-  width: 100%;
-  z-index: 2;
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgb(255 255 255 / 92%);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: 0 2px 20px rgb(0 0 0 / 4%);
 }
 
+/* ── Nav grid layout ── */
 header nav {
   box-sizing: border-box;
   display: grid;
@@ -15,9 +25,9 @@ header nav {
   align-items: center;
   gap: 0 24px;
   margin: auto;
-  max-width: 1248px;
+  max-width: 1264px;
   height: var(--nav-height);
-  padding: 0 24px;
+  padding: 0 20px;
   font-family: var(--body-font-family);
 }
 
@@ -25,27 +35,30 @@ header nav[aria-expanded='true'] {
   grid-template:
     'hamburger brand' var(--nav-height)
     'sections sections' 1fr
-    'tools tools' var(--nav-height) / auto 1fr;
+    'tools tools' auto / auto 1fr;
   overflow-y: auto;
   min-height: 100dvh;
+  background: #fff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 @media (width >= 900px) {
-  header .nav-wrapper {
-    position: relative;
-  }
-
   header nav {
     display: flex;
-    justify-content: space-between;
-    gap: 0 32px;
+    align-items: center;
+    gap: 0;
     max-width: 1264px;
     padding: 0 32px;
+    height: 64px;
   }
 
   header nav[aria-expanded='true'] {
     min-height: 0;
     overflow: visible;
+    background: transparent;
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
   }
 }
 
@@ -56,9 +69,10 @@ header nav p {
 
 header nav a:any-link {
   color: currentcolor;
+  text-decoration: none;
 }
 
-/* hamburger */
+/* ── Hamburger (mobile only) ── */
 header nav .nav-hamburger {
   grid-area: hamburger;
   height: 22px;
@@ -72,7 +86,7 @@ header nav .nav-hamburger button {
   border: 0;
   border-radius: 0;
   padding: 0;
-  background-color: var(--background-color);
+  background: transparent;
   color: inherit;
   overflow: initial;
   text-overflow: initial;
@@ -139,21 +153,35 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
   }
 }
 
-/* brand */
+/* ── Brand / Logo ── */
 header .nav-brand {
   grid-area: brand;
-  flex-basis: 128px;
-  font-size: var(--heading-font-size-s);
-  font-weight: 700;
   line-height: 1;
 }
 
-header nav .nav-brand img {
-  width: 128px;
-  height: auto;
+header .nav-brand a {
+  font-family: var(--heading-font-family);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* sections */
+header .nav-brand a::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #1dbf73;
+  border-radius: 50%;
+  margin-left: 3px;
+  flex-shrink: 0;
+  margin-bottom: 1px;
+}
+
+/* ── Nav Links (sections) ── */
 header nav .nav-sections {
   grid-area: sections;
   flex: 1 1 auto;
@@ -165,108 +193,160 @@ header nav[aria-expanded='true'] .nav-sections {
   display: block;
   visibility: visible;
   align-self: start;
+  padding: 16px 0;
 }
 
 header nav .nav-sections ul {
   list-style: none;
-  padding-left: 0;
-  font-size: var(--body-font-size-s);
+  padding: 0;
+  margin: 0;
 }
 
 header nav .nav-sections ul > li {
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
-header nav .nav-sections ul > li > ul {
-  margin-top: 0;
+header nav .nav-sections ul > li > a {
+  display: block;
+  padding: 12px 0;
+  color: #555;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.15s;
 }
 
-header nav .nav-sections ul > li > ul > li {
-  font-weight: 400;
+header nav .nav-sections ul > li > a:hover {
+  color: #111;
 }
 
 @media (width >= 900px) {
   header nav .nav-sections {
-    display: block;
+    display: flex;
     visibility: visible;
-    white-space: nowrap;
+    justify-content: center;
+    flex: 1;
+    margin: 0 32px;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
     align-self: unset;
+    padding: 0;
   }
 
-  header nav .nav-sections .nav-drop {
-    position: relative;
-    padding-right: 16px;
-    cursor: pointer;
-  }
-
-  header nav .nav-sections .nav-drop::after {
-    content: '';
-    display: inline-block;
-    position: absolute;
-    top: 0.5em;
-    right: 2px;
-    transform: rotate(135deg);
-    width: 6px;
-    height: 6px;
-    border: 2px solid currentcolor;
-    border-radius: 0 1px 0 0;
-    border-width: 2px 2px 0 0;
-  }
-
-  header nav .nav-sections .nav-drop[aria-expanded='true']::after {
-    top: unset;
-    bottom: 0.5em;
-    transform: rotate(315deg);
+  header nav .nav-sections .default-content-wrapper {
+    display: flex;
+    align-items: center;
   }
 
   header nav .nav-sections ul {
     display: flex;
-    gap: 24px;
-    margin: 0;
+    align-items: center;
+    gap: 4px;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li {
-    flex: 0 1 auto;
-    position: relative;
+  header nav .nav-sections ul > li > a {
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    color: #555;
+    transition: background 0.15s, color 0.15s;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul {
-    display: none;
-    position: relative;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
-    display: block;
-    position: absolute;
-    left: -24px;
-    width: 200px;
-    top: 150%;
-    padding: 16px;
-    background-color: var(--light-color);
-    white-space: initial;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 16px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--light-color);
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    padding: 8px 0;
+  header nav .nav-sections ul > li > a:hover {
+    background: rgb(0 0 0 / 4%);
+    color: #111;
   }
 }
 
-/* tools */
+/* ── Tools (Login + Get Started) ── */
 header nav .nav-tools {
   grid-area: tools;
+  display: flex;
+  align-items: center;
+}
+
+header nav[aria-expanded='true'] .nav-tools {
+  align-self: unset;
+  padding: 20px 0 32px;
+  border-top: 1px solid #f0f0f0;
+}
+
+header nav .nav-tools .default-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+header nav[aria-expanded='true'] .nav-tools .default-content-wrapper {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 10px;
+}
+
+header nav .nav-tools .button-wrapper {
+  margin: 0;
+}
+
+/* Login — ghost text (a tag added to beat styles.css specificity) */
+header nav .nav-tools a.button.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #555;
+  background: transparent;
+  border: 2px solid transparent;
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+header nav .nav-tools a.button.secondary:hover {
+  color: #111;
+  background: rgb(0 0 0 / 4%);
+}
+
+/* Get Started — green pill (a tag added to beat styles.css specificity) */
+header nav .nav-tools a.button.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: #1dbf73;
+  border: 2px solid #1dbf73;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+header nav .nav-tools a.button.primary:hover {
+  background: #17a862;
+  border-color: #17a862;
+  box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
+}
+
+/* Mobile: full-width stacked buttons when menu is open */
+header nav[aria-expanded='true'] .nav-tools a.button.secondary,
+header nav[aria-expanded='true'] .nav-tools a.button.primary {
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+header nav[aria-expanded='true'] .nav-tools a.button.secondary {
+  border: 2px solid #e0e0e0;
+  color: #111;
+}
+
+/* ── Push body content below fixed nav ── */
+main {
+  padding-top: var(--nav-height);
 }
