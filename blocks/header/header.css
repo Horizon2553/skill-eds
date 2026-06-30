@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Header / Nav — Frosted-glass fixed bar matching SkillBridge design
+   Header / Nav — Clean white bar matching SkillBridge design
    ========================================================================== */
 
 header .nav-wrapper {
@@ -10,36 +10,22 @@ header .nav-wrapper {
   z-index: 1000;
   background-color: #fff;
   border-bottom: 1px solid #e8e8e8;
-  height: var(--nav-height);
-  overflow: hidden;
 }
 
-/* Mobile: let expanded nav grow beyond 64px */
-header .nav-wrapper:has(nav[aria-expanded='true']) {
-  height: auto;
-  overflow: visible;
-}
-
-/* ── Nav: always flex row ── */
+/* ── Nav: flex row (desktop). aria-expanded is true by default even on
+   desktop in the boilerplate's header.js — it means "sections visible",
+   not "mobile menu open". Mobile-only stacking rules must be scoped to
+   the <900px media query below, never left unconditional. ── */
 header nav {
   box-sizing: border-box;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  flex-wrap: nowrap !important;
-  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-height: var(--nav-height);
   max-width: 1264px;
   margin: 0 auto;
   padding: 0 20px;
   font-family: var(--body-font-family);
-  gap: 0;
-}
-
-/* Mobile: let expanded nav wrap sections below */
-header nav[aria-expanded='true'] {
-  height: auto;
-  flex-wrap: wrap;
-  padding-bottom: 16px;
 }
 
 header nav p {
@@ -155,20 +141,12 @@ header .nav-brand a::after {
   margin-bottom: 2px;
 }
 
-/* ── Nav Links (sections) ── */
+/* ── Nav Links (sections) — hidden until JS marks them via aria-expanded
+   on mobile; always visible (flex row) on desktop ── */
 header nav .nav-sections {
   flex: 1;
   display: none;
   visibility: hidden;
-}
-
-header nav[aria-expanded='true'] .nav-sections {
-  display: block;
-  visibility: visible;
-  flex-basis: 100%;
-  order: 10;
-  border-top: 1px solid #f0f0f0;
-  padding: 8px 0 4px;
 }
 
 header nav .nav-sections ul {
@@ -184,15 +162,32 @@ header nav .nav-sections ul > li {
 
 header nav .nav-sections ul > li > a {
   display: block;
-  padding: 12px 0;
   color: #555;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
 }
 
-header nav .nav-sections ul > li > a:hover {
-  color: #111;
+/* Mobile only: hamburger-triggered expanded sections, stacked below */
+@media (width < 900px) {
+  header nav[aria-expanded='true'] {
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+  }
+
+  header nav[aria-expanded='true'] .nav-sections {
+    display: block;
+    visibility: visible;
+    flex-basis: 100%;
+    order: 10;
+    border-top: 1px solid #f0f0f0;
+    padding: 8px 0 4px;
+  }
+
+  header nav .nav-sections ul > li > a {
+    padding: 12px 0;
+  }
 }
 
+/* Desktop: sections always visible, single row, centered */
 @media (width >= 900px) {
   header nav .nav-sections {
     display: flex;
@@ -201,11 +196,13 @@ header nav .nav-sections ul > li > a:hover {
     align-items: center;
     flex: 1;
     margin: 0 24px;
+    min-width: 0;
   }
 
   header nav .nav-sections .default-content-wrapper {
     display: flex;
     align-items: center;
+    min-width: 0;
   }
 
   header nav .nav-sections ul {
@@ -214,10 +211,14 @@ header nav .nav-sections ul > li > a:hover {
     gap: 4px;
   }
 
+  header nav .nav-sections ul > li {
+    flex-shrink: 0;
+  }
+
   header nav .nav-sections ul > li > a {
     padding: 6px 14px;
     border-radius: 99px;
-    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
   }
 
   header nav .nav-sections ul > li > a:hover {
@@ -226,7 +227,7 @@ header nav .nav-sections ul > li > a:hover {
   }
 }
 
-/* ── Tools (Login + Get Started) ── */
+/* ── Tools (Log In + Register/Get Started) ── */
 header nav .nav-tools {
   flex-shrink: 0;
   display: flex;
@@ -234,7 +235,6 @@ header nav .nav-tools {
   margin-left: auto;
 }
 
-/* Flatten nested wrappers — put buttons in a row */
 header nav .nav-tools .default-content-wrapper {
   display: flex;
   flex-direction: row;
@@ -242,7 +242,6 @@ header nav .nav-tools .default-content-wrapper {
   gap: 6px;
 }
 
-/* Kill the margin that styles.css adds to p.button-wrapper */
 header nav .nav-tools p,
 header nav p.button-wrapper {
   margin: 0;
@@ -262,6 +261,7 @@ header nav .nav-tools a.button.secondary:any-link {
   background: #fff;
   border: 1.5px solid #d0d0d0;
   text-decoration: none;
+  white-space: nowrap;
   transition: border-color 0.15s, background 0.15s;
 }
 
@@ -270,7 +270,7 @@ header nav .nav-tools a.button.secondary:hover {
   background: #f8f8f8;
 }
 
-/* Get Started — green pill (use :any-link to override styles.css) */
+/* Get Started / Register — green pill */
 header nav .nav-tools a.button.primary:any-link {
   display: inline-flex;
   align-items: center;
@@ -293,32 +293,34 @@ header nav .nav-tools a.button.primary:hover {
   box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
 }
 
-/* Mobile expanded: tools go below sections, full-width stacked */
-header nav[aria-expanded='true'] .nav-tools {
-  flex-basis: 100%;
-  order: 11;
-  margin-left: 0;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 16px;
-}
+/* Mobile only: tools stack below sections, full width */
+@media (width < 900px) {
+  header nav[aria-expanded='true'] .nav-tools {
+    flex-basis: 100%;
+    order: 11;
+    margin-left: 0;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 16px;
+  }
 
-header nav[aria-expanded='true'] .nav-tools .default-content-wrapper {
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
+  header nav[aria-expanded='true'] .nav-tools .default-content-wrapper {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
 
-header nav[aria-expanded='true'] .nav-tools a.button.secondary:any-link,
-header nav[aria-expanded='true'] .nav-tools a.button.primary:any-link {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-}
+  header nav[aria-expanded='true'] .nav-tools a.button.secondary:any-link,
+  header nav[aria-expanded='true'] .nav-tools a.button.primary:any-link {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
 
-header nav[aria-expanded='true'] .nav-tools a.button.secondary:any-link {
-  border: 2px solid #e0e0e0;
-  color: #111;
+  header nav[aria-expanded='true'] .nav-tools a.button.secondary:any-link {
+    border: 2px solid #e0e0e0;
+    color: #111;
+  }
 }
 
 /* ── Push body content below fixed nav ── */
