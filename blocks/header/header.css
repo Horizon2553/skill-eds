@@ -23,10 +23,10 @@ header .nav-wrapper:has(nav[aria-expanded='true']) {
 /* ── Nav: always flex row ── */
 header nav {
   box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: nowrap;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
   height: var(--nav-height);
   max-width: 1264px;
   margin: 0 auto;
