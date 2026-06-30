@@ -1,0 +1,499 @@
+/* ── Page hero ── */
+.hire-talent .ht-hero {
+  padding: 30px 0 20px;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.hire-talent .ht-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.hire-talent .ht-hero-title {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111;
+  margin: 0;
+}
+
+.hire-talent .ht-hero-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1dbf73;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 26px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 4px 14px rgb(29 191 115 / 28%);
+  white-space: nowrap;
+}
+
+.hire-talent .ht-hero-btn:hover {
+  background: #17a362;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(29 191 115 / 36%);
+}
+
+/* ── Page layout ── */
+.hire-talent .ht-page-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 22px 16px 72px;
+}
+
+@media (width >= 900px) {
+  .hire-talent .ht-page-wrap {
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    padding: 40px 32px 96px;
+  }
+}
+
+@media (width >= 1100px) {
+  .hire-talent .ht-page-wrap {
+    grid-template-columns: 300px 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── Sidebar filters ── */
+.hire-talent .ht-sidebar {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (width >= 900px) {
+  .hire-talent .ht-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.hire-talent .ht-sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.hire-talent .ht-sidebar-top h2 {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+}
+
+.hire-talent .ht-clear-all {
+  background: none;
+  border: none;
+  font-family: var(--body-font-family);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1dbf73;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hire-talent .ht-clear-all:hover { opacity: 0.7; }
+
+.hire-talent .ht-search-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.hire-talent .ht-search-wrapper svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #bbb;
+  pointer-events: none;
+}
+
+.hire-talent .ht-search-input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  font-family: var(--body-font-family);
+  font-size: 0.875rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #111;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  box-sizing: border-box;
+}
+
+.hire-talent .ht-search-input:focus {
+  border-color: #1dbf73;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(29 191 115 / 10%);
+}
+
+.hire-talent .ht-sidebar-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 0 0 18px;
+}
+
+.hire-talent .ht-filter-group { margin-bottom: 18px; }
+
+.hire-talent .ht-filter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.hire-talent .ht-filter-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 8px;
+}
+
+.hire-talent .ht-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+  min-width: 0;
+}
+
+.hire-talent .ht-checkbox-label:hover { background: #f5f5f5; }
+.hire-talent .ht-checkbox-label:has(input:checked) { background: #f0fdf7; }
+
+.hire-talent .ht-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.hire-talent .ht-checkbox-label input[type="checkbox"]:checked {
+  background: #1dbf73;
+  border-color: #1dbf73;
+}
+
+.hire-talent .ht-checkbox-label input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0;
+  width: 5px;
+  height: 8px;
+  border: 1.5px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.hire-talent .ht-checkbox-label span {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hire-talent .ht-checkbox-label:has(input:checked) span { color: #111; font-weight: 600; }
+
+.hire-talent .ht-sort-select {
+  width: 100%;
+  padding: 9px 32px 9px 11px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.875rem;
+  color: #333;
+  background: #fafafa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 11px center;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.hire-talent .ht-sort-select:focus { border-color: #1dbf73; }
+
+/* ── Directory ── */
+.hire-talent .ht-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hire-talent .ht-results-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+}
+
+.hire-talent .ht-candidates-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (width >= 640px) {
+  .hire-talent .ht-candidates-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Candidate card ── */
+.hire-talent .ht-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 24px 24px 22px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.18s;
+}
+
+.hire-talent .ht-card:hover {
+  box-shadow: 0 12px 36px rgb(0 0 0 / 9%);
+  transform: translateY(-3px);
+  border-color: rgb(29 191 115 / 35%);
+}
+
+.hire-talent .ht-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.hire-talent .ht-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+}
+
+.hire-talent .ht-avatar-img,
+.hire-talent .ht-avatar-wrap picture,
+.hire-talent .ht-avatar-wrap img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #e8e8e8;
+  display: block;
+}
+
+.hire-talent .ht-online-dot {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 12px;
+  height: 12px;
+  background: #1dbf73;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgb(29 191 115 / 20%);
+}
+
+.hire-talent .ht-info {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.hire-talent .ht-name {
+  font-family: var(--heading-font-family);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-bottom: 3px;
+}
+
+.hire-talent .ht-role {
+  font-size: 0.84rem;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.hire-talent .ht-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.hire-talent .ht-rate {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.hire-talent .ht-sep {
+  color: #ccc;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.hire-talent .ht-rating {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.hire-talent .ht-review-cnt {
+  font-size: 0.78rem;
+  color: #999;
+}
+
+.hire-talent .ht-jobs {
+  font-size: 0.78rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.hire-talent .ht-bio {
+  font-size: 0.855rem;
+  color: #555;
+  line-height: 1.55;
+  margin: 0 0 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hire-talent .ht-skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.hire-talent .ht-skills img,
+.hire-talent .ht-skills picture,
+.hire-talent .ht-skills source {
+  display: none;
+}
+
+.hire-talent .ht-skill {
+  display: inline-flex;
+  align-items: center;
+  background: #f5f5f5;
+  border: 1px solid #e8e8e8;
+  color: #444;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 99px;
+  white-space: nowrap;
+  height: 26px;
+  line-height: 1;
+}
+
+.hire-talent .ht-skill-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #f0fdf7;
+  border: 1px solid rgb(29 191 115 / 25%);
+  color: #1dbf73;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  height: 26px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hire-talent .ht-skill-more:hover { background: #1dbf73; color: #fff; border-color: #1dbf73; }
+
+.hire-talent .ht-see-profile {
+  display: block;
+  width: 100%;
+  padding: 11px 0;
+  background: #1dbf73;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
+  letter-spacing: 0.01em;
+  margin-top: auto;
+}
+
+.hire-talent .ht-see-profile:hover {
+  background: #17a862;
+  box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
+  transform: translateY(-1px);
+}
+
+/* ── Empty state ── */
+.hire-talent .ht-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 72px 24px;
+  background: #fafafa;
+  border: 1.5px dashed #e4e4e4;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.hire-talent .ht-empty-icon { color: #d0d0d0; }
+.hire-talent .ht-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: #111; margin: 0; }
+.hire-talent .ht-empty-state p { font-size: 0.88rem; color: #999; max-width: 300px; margin: 0 auto; }
