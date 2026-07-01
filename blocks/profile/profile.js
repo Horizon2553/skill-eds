@@ -1,3 +1,20 @@
+function extractImage(cell) {
+  if (!cell) return null;
+  const existing = cell.querySelector('picture, img');
+  if (existing) return existing.cloneNode(true);
+  // Accept a hyperlink whose href points to an image
+  const link = cell.querySelector('a');
+  const href = link?.href || '';
+  const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href) ? href : cell.textContent.trim();
+  if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.loading = 'lazy';
+    return img;
+  }
+  return null;
+}
+
 const ICONS = {
   star: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
   arrow: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
@@ -21,7 +38,7 @@ export default async function decorate(block) {
 
     if (label === 'hero') {
       hero = {
-        avatarEl: cells[1]?.querySelector('picture, img')?.cloneNode(true) || null,
+        avatarEl: extractImage(cells[1]),
         name: cells[2]?.textContent.trim() || '',
         role: cells[3]?.textContent.trim() || '',
         availability: cells[4]?.textContent.trim() || 'Available',
@@ -41,7 +58,7 @@ export default async function decorate(block) {
     } else if (label === 'project') {
       projects.push({
         title: cells[1]?.textContent.trim() || '',
-        thumbEl: cells[2]?.querySelector('picture, img')?.cloneNode(true) || null,
+        thumbEl: extractImage(cells[2]),
         desc: cells[3]?.textContent.trim() || '',
         tech: (cells[4]?.textContent.trim() || '').split(',').map((s) => s.trim()).filter(Boolean),
         link: cells[5]?.querySelector('a')?.href || '',
