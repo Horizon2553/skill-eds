@@ -1,3 +1,20 @@
+function extractImage(cell) {
+  if (!cell) return null;
+  const existing = cell.querySelector('picture, img');
+  if (existing) return existing.cloneNode(true);
+  const link = cell.querySelector('a');
+  const href = link?.href || '';
+  const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
+    ? href : cell.textContent.trim();
+  if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.loading = 'lazy';
+    return img;
+  }
+  return null;
+}
+
 const SVG = {
   projects: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
   freelancers: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
@@ -109,7 +126,7 @@ export default async function decorate(block) {
     const cells = [...row.children];
     const firstCell = cells[0];
     const hasBold = !!firstCell.querySelector('strong, b');
-    const hasImage = !!firstCell.querySelector('picture, img');
+    const hasImage = !!(firstCell.querySelector('picture, img') || extractImage(firstCell));
     const firstAnchor = firstCell.querySelector('a');
     const isCTA = !hasBold && !hasImage && firstAnchor
       && cells.slice(1).every((c) => !c.textContent.trim() && !c.querySelector('a'));
@@ -126,14 +143,14 @@ export default async function decorate(block) {
     } else if (isCTA) {
       ctaLink = firstAnchor;
     } else if (hasImage && currentSection) {
-      const imgEl = firstCell.querySelector('picture, img').cloneNode(true);
+      const imgEl = extractImage(firstCell);
       if (currentSection.label.toLowerCase().includes('project')) {
         currentSection.cards.push({
           imgEl,
           href: cells[1]?.querySelector('a')?.href || '#',
           title: cells[1]?.textContent.trim() || '',
           author: cells[2]?.textContent.trim() || '',
-          avatarEl: cells[3]?.querySelector('picture, img')?.cloneNode(true) || null,
+          avatarEl: extractImage(cells[3]),
           likes: cells[4]?.textContent.trim() || '',
           views: cells[5]?.textContent.trim() || '',
         });
