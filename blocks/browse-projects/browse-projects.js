@@ -1,3 +1,82 @@
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('skillbridge_auth')); } catch { return null; }
+}
+function getProposals() {
+  try { return JSON.parse(localStorage.getItem('sb_proposals')) || []; } catch { return []; }
+}
+
+function openProposalModal(job, session) {
+  const existing = document.getElementById('bp-proposal-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'bp-proposal-modal';
+  modal.innerHTML = `
+    <div class="bp-modal-overlay">
+      <div class="bp-modal-card">
+        <button class="bp-modal-close" aria-label="Close">&times;</button>
+        <h2>Submit Proposal</h2>
+        <p class="bp-modal-job-title">${job.title}</p>
+        <form id="bp-proposal-form" novalidate>
+          <div class="bp-modal-field">
+            <label>Cover Letter <span class="bp-req">*</span></label>
+            <textarea id="bp-cover" rows="5" placeholder="Describe your experience and why you're a great fit..." required></textarea>
+          </div>
+          <div class="bp-modal-row">
+            <div class="bp-modal-field">
+              <label>Your Budget <span class="bp-req">*</span></label>
+              <input type="text" id="bp-budget" placeholder="e.g. ₹15,000" required>
+            </div>
+            <div class="bp-modal-field">
+              <label>Timeline <span class="bp-req">*</span></label>
+              <input type="text" id="bp-timeline" placeholder="e.g. 2 weeks">
+            </div>
+          </div>
+          <p class="bp-modal-error" id="bp-modal-err"></p>
+          <button type="submit" class="bp-modal-submit">Submit Proposal</button>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  modal.querySelector('.bp-modal-close').addEventListener('click', close);
+  modal.querySelector('.bp-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
+
+  modal.querySelector('#bp-proposal-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const cover = modal.querySelector('#bp-cover').value.trim();
+    const budget = modal.querySelector('#bp-budget').value.trim();
+    const timeline = modal.querySelector('#bp-timeline').value.trim();
+    const err = modal.querySelector('#bp-modal-err');
+    if (!cover || !budget) { err.textContent = 'Please fill in all required fields.'; return; }
+
+    const proposals = getProposals();
+    proposals.push({
+      id: `prop-${Date.now()}`,
+      jobId: job.id,
+      jobTitle: job.title,
+      clientId: job.clientId || 'client-jane',
+      freelancerId: session.id,
+      freelancerName: session.name,
+      freelancerRole: session.skill || 'Freelancer',
+      coverLetter: cover,
+      budget,
+      timeline,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem('sb_proposals', JSON.stringify(proposals));
+    close();
+
+    const btn = document.querySelector(`.bp-apply-btn[data-job="${job.id}"]`);
+    if (btn) { btn.textContent = '✓ Applied'; btn.disabled = true; btn.classList.add('applied'); }
+    alert('Your proposal has been submitted successfully!');
+  });
+}
+
 const ICONS = {
   search: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
   clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
@@ -5,9 +84,23 @@ const ICONS = {
   empty: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d0d0d0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
 };
 
-function buildJobCard(j) {
+function buildJobCard(j, session, appliedIds) {
   const badgeClass = j.budgetType.toLowerCase() === 'hourly' ? 'bp-badge-hourly' : 'bp-badge-fixed';
   const initial = j.client.charAt(0).toUpperCase();
+  const hasApplied = appliedIds.has(j.id);
+  const isFreelancer = session?.role === 'freelancer';
+
+  let applyBtn;
+  if (hasApplied) {
+    applyBtn = `<button class="bp-apply-btn applied" disabled>✓ Applied</button>`;
+  } else if (isFreelancer) {
+    applyBtn = `<button class="bp-apply-btn" data-job="${j.id}">Submit Proposal</button>`;
+  } else if (!session) {
+    applyBtn = `<a href="/login" class="bp-apply-btn">Log in to Apply</a>`;
+  } else {
+    applyBtn = ``;
+  }
+
   return `
     <div class="bp-job-card">
       <div class="bp-job-header">
@@ -32,7 +125,7 @@ function buildJobCard(j) {
           <span>${ICONS.clock} ${j.deadline}</span>
           <span>${ICONS.users} ${j.proposals} proposals</span>
         </div>
-        <a href="${j.applyHref}" class="bp-apply-btn">Submit Proposal</a>
+        ${applyBtn}
       </div>
     </div>
   `;
@@ -57,8 +150,11 @@ export default async function decorate(block) {
       return;
     }
     const skillsText = cells[8]?.textContent.trim() || '';
+    const jobTitle = cells[0]?.textContent.trim() || '';
     jobs.push({
-      title: cells[0]?.textContent.trim() || '',
+      id: jobTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      clientId: 'client-jane',
+      title: jobTitle,
       client: cells[1]?.textContent.trim() || '',
       posted: cells[2]?.textContent.trim() || '',
       budget: cells[3]?.textContent.trim() || '',
@@ -72,6 +168,7 @@ export default async function decorate(block) {
     });
   });
 
+  const session = getSession();
   const categories = [...new Set(jobs.map((j) => j.category))].sort((a, b) => a.localeCompare(b));
 
   block.innerHTML = `
@@ -141,7 +238,16 @@ export default async function decorate(block) {
       `;
       return;
     }
-    list.innerHTML = matches.map(buildJobCard).join('');
+    const appliedIds = new Set(
+      getProposals().filter((p) => p.freelancerId === session?.id).map((p) => p.jobId),
+    );
+    list.innerHTML = matches.map((j) => buildJobCard(j, session, appliedIds)).join('');
+    list.querySelectorAll('.bp-apply-btn[data-job]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const job = jobs.find((j) => j.id === btn.dataset.job);
+        if (job) openProposalModal(job, session);
+      });
+    });
   }
 
   searchInput.addEventListener('input', render);

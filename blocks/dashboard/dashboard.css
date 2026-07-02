@@ -1,0 +1,347 @@
+.dashboard .db-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* Welcome */
+.dashboard .db-welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.dashboard .db-title {
+  font-family: var(--heading-font-family);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111;
+  margin: 0 0 6px;
+}
+
+.dashboard .db-sub { font-size: 0.95rem; color: #888; margin: 0; }
+
+.dashboard .db-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #1dbf73;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 11px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+.dashboard .db-cta-btn:hover { background: #17a862; }
+
+/* Stats */
+.dashboard .db-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+@media (width < 768px) {
+  .dashboard .db-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+.dashboard .db-stat-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 4%);
+}
+
+.dashboard .db-stat-num {
+  font-family: var(--heading-font-family);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.dashboard .db-stat-label { font-size: 0.82rem; color: #888; font-weight: 500; }
+
+/* Tabs */
+.dashboard .db-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 28px;
+}
+
+.dashboard .db-tab {
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  padding: 12px 20px;
+  font-family: var(--body-font-family);
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.dashboard .db-tab.active {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+/* Panels */
+.dashboard .db-panel { display: none; }
+.dashboard .db-panel.active { display: block; }
+
+/* Proposal cards */
+.dashboard .db-proposal-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 4%);
+}
+
+.dashboard .db-proposal-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.dashboard .db-proposal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.dashboard .db-fl-role { color: #888; font-weight: 400; }
+
+.dashboard .db-proposal-meta {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 4px;
+}
+
+.dashboard .db-status-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dashboard .db-proposal-cover {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+/* Action buttons */
+.dashboard .db-action-row {
+  display: flex;
+  gap: 10px;
+}
+
+.dashboard .db-approve-btn,
+.dashboard .db-reject-btn {
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, transform 0.12s;
+}
+
+.dashboard .db-approve-btn {
+  background: #1dbf73;
+  color: #fff;
+}
+.dashboard .db-approve-btn:hover { background: #17a862; transform: translateY(-1px); }
+
+.dashboard .db-reject-btn {
+  background: #fff;
+  color: #dc2626;
+  border: 1.5px solid #fca5a5;
+}
+.dashboard .db-reject-btn:hover { background: #fef2f2; }
+
+/* Status messages */
+.dashboard .db-approved-msg {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid rgb(29 191 115 / 25%);
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.dashboard .db-rejected-msg {
+  font-size: 0.85rem;
+  color: #888;
+  background: #f9f9f9;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+/* Job cards grid */
+.dashboard .db-jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.dashboard .db-job-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 4%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard .db-job-title {
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.dashboard .db-job-meta { font-size: 0.78rem; color: #888; }
+
+.dashboard .db-job-desc {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.dashboard .db-job-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dashboard .db-skill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1dbf73;
+  background: #f0fdf7;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.dashboard .db-apply-btn {
+  margin-top: 4px;
+  padding: 9px 0;
+  background: #1dbf73;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.87rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dashboard .db-apply-btn:hover:not(:disabled) { background: #17a862; }
+
+.dashboard .db-apply-btn.applied {
+  background: #f0fdf7;
+  color: #1dbf73;
+  border: 1.5px solid rgb(29 191 115 / 30%);
+  cursor: default;
+}
+
+.dashboard .db-job-proposal-count {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1dbf73;
+  margin-top: 4px;
+}
+
+/* Empty state */
+.dashboard .db-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: #888;
+}
+.dashboard .db-empty p { margin-bottom: 20px; }
+
+/* Modal */
+#db-proposal-modal .db-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgb(0 0 0 / 55%);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+
+#db-proposal-modal .db-modal-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px;
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 18%);
+}
+
+#db-proposal-modal .db-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: none; border: none; font-size: 1.5rem;
+  color: #aaa; cursor: pointer;
+}
+#db-proposal-modal .db-modal-close:hover { color: #111; }
+
+#db-proposal-modal h2 {
+  font-family: var(--heading-font-family);
+  font-size: 1.4rem; font-weight: 800; color: #111;
+  margin: 0 0 4px; letter-spacing: -0.02em;
+}
+
+#db-proposal-modal .db-modal-job { font-size: 0.88rem; color: #888; margin: 0 0 20px; }
+
+#db-proposal-modal .db-modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+#db-proposal-modal .db-modal-field label { font-size: 0.85rem; font-weight: 700; color: #333; }
+
+#db-proposal-modal textarea,
+#db-proposal-modal input {
+  font-family: var(--body-font-family); font-size: 0.93rem;
+  padding: 10px 13px; border: 1.5px solid #e0e0e0;
+  border-radius: 8px; outline: none; resize: vertical; color: #111;
+  transition: border-color 0.15s;
+}
+
+#db-proposal-modal textarea:focus,
+#db-proposal-modal input:focus { border-color: #1dbf73; box-shadow: 0 0 0 3px rgb(29 191 115 / 10%); }
+
+#db-proposal-modal .db-modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+#db-proposal-modal .db-modal-err { font-size: 0.83rem; color: #dc2626; min-height: 1em; margin: 0 0 8px; }
+
+#db-proposal-modal .db-modal-submit {
+  width: 100%; padding: 13px; background: #1dbf73; color: #fff;
+  font-family: var(--body-font-family); font-size: 0.97rem; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer; transition: background 0.18s;
+}
+#db-proposal-modal .db-modal-submit:hover { background: #17a862; }

@@ -158,8 +158,28 @@ async function loadEager(doc) {
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
+function updateNavAuth() {
+  try {
+    const session = JSON.parse(localStorage.getItem('skillbridge_auth'));
+    const navTools = document.querySelector('.nav-tools');
+    if (!navTools) return;
+    if (session) {
+      navTools.innerHTML = `
+        <a href="/dashboard" class="button secondary">Dashboard</a>
+        <a href="#" class="button primary" id="nav-logout">Log Out</a>
+      `;
+      document.getElementById('nav-logout')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('skillbridge_auth');
+        window.location.href = '/';
+      });
+    }
+  } catch (e) { /* no session */ }
+}
+
 async function loadLazy(doc) {
-  loadHeader(doc.querySelector('header'));
+  const headerEl = doc.querySelector('header');
+  loadHeader(headerEl).then(() => { setTimeout(updateNavAuth, 100); });
 
   const main = doc.querySelector('main');
   await loadSections(main);

@@ -367,3 +367,92 @@
 .browse-projects .bp-empty-icon { color: #d0d0d0; }
 .browse-projects .bp-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: #111; margin: 0; }
 .browse-projects .bp-empty-state p { font-size: 0.88rem; color: #999; max-width: 300px; margin: 0 auto; }
+
+/* ── Apply button states ── */
+.browse-projects .bp-apply-btn.applied {
+  background: #f0fdf7;
+  color: #1dbf73;
+  border: 1.5px solid rgb(29 191 115 / 30%);
+  cursor: default;
+}
+
+/* ── Proposal modal ── */
+#bp-proposal-modal .bp-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgb(0 0 0 / 55%);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+
+#bp-proposal-modal .bp-modal-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px;
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 18%);
+}
+
+#bp-proposal-modal .bp-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: none; border: none; font-size: 1.5rem;
+  color: #aaa; cursor: pointer; line-height: 1;
+}
+#bp-proposal-modal .bp-modal-close:hover { color: #111; }
+
+#bp-proposal-modal h2 {
+  font-family: var(--heading-font-family);
+  font-size: 1.4rem; font-weight: 800; color: #111;
+  margin: 0 0 4px; letter-spacing: -0.02em;
+}
+
+#bp-proposal-modal .bp-modal-job-title {
+  font-size: 0.88rem; color: #888; margin: 0 0 22px;
+}
+
+#bp-proposal-modal .bp-modal-field {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
+}
+
+#bp-proposal-modal .bp-modal-field label {
+  font-size: 0.85rem; font-weight: 700; color: #333;
+}
+
+#bp-proposal-modal .bp-req { color: #dc2626; }
+
+#bp-proposal-modal textarea,
+#bp-proposal-modal input {
+  font-family: var(--body-font-family);
+  font-size: 0.93rem;
+  padding: 11px 13px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px; outline: none;
+  resize: vertical; color: #111;
+  transition: border-color 0.15s;
+}
+
+#bp-proposal-modal textarea:focus,
+#bp-proposal-modal input:focus {
+  border-color: #1dbf73;
+  box-shadow: 0 0 0 3px rgb(29 191 115 / 10%);
+}
+
+#bp-proposal-modal .bp-modal-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+
+#bp-proposal-modal .bp-modal-error {
+  font-size: 0.83rem; color: #dc2626; min-height: 1em; margin: 0 0 8px;
+}
+
+#bp-proposal-modal .bp-modal-submit {
+  width: 100%; padding: 13px;
+  background: #1dbf73; color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.97rem; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer;
+  transition: background 0.18s;
+}
+#bp-proposal-modal .bp-modal-submit:hover { background: #17a862; }
