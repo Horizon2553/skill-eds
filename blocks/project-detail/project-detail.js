@@ -1,3 +1,20 @@
+function extractImage(cell) {
+  if (!cell) return null;
+  const existing = cell.querySelector('picture, img');
+  if (existing) return existing.cloneNode(true);
+  const link = cell.querySelector('a');
+  const href = link?.href || '';
+  const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
+    ? href : cell.textContent.trim();
+  if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.loading = 'lazy';
+    return img;
+  }
+  return null;
+}
+
 const ICONS = {
   arrow: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
   back: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
@@ -27,8 +44,8 @@ export default async function decorate(block) {
       title = cells[1]?.textContent.trim() || '';
     } else if (label === 'images') {
       cells.slice(1).forEach((cell) => {
-        const img = cell.querySelector('picture, img');
-        if (img) images.push(img.cloneNode(true));
+        const img = extractImage(cell);
+        if (img) images.push(img);
       });
     } else if (label === 'tags') {
       tags = (cells[1]?.textContent.trim() || '').split(',').map((t) => t.trim()).filter(Boolean);
@@ -37,7 +54,7 @@ export default async function decorate(block) {
     } else if (label === 'author') {
       author = {
         name: cells[1]?.textContent.trim() || '',
-        avatarEl: cells[2]?.querySelector('picture, img')?.cloneNode(true) || null,
+        avatarEl: extractImage(cells[2]),
         role: cells[3]?.textContent.trim() || '',
         profileHref: cells[4]?.querySelector('a')?.href || '',
         views: cells[5]?.textContent.trim() || '',
