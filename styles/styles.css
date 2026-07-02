@@ -158,6 +158,29 @@ button {
   font: inherit;
 }
 
+/* Global cursor pointer for all interactive elements */
+button,
+[role="button"],
+a,
+label[for],
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+}
+
+/* Smooth page transitions */
+main {
+  animation: pagefadein 0.25s ease;
+}
+
+@keyframes pagefadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* links */
 a:any-link {
   color: var(--link-color);

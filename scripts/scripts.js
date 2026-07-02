@@ -161,19 +161,57 @@ async function loadEager(doc) {
 function updateNavAuth() {
   try {
     const session = JSON.parse(localStorage.getItem('skillbridge_auth'));
+    const navSections = document.querySelector('.nav-sections');
     const navTools = document.querySelector('.nav-tools');
     if (!navTools) return;
-    if (session) {
-      navTools.innerHTML = `
-        <a href="/dashboard" class="button secondary">Dashboard</a>
-        <a href="#" class="button primary" id="nav-logout">Log Out</a>
-      `;
-      document.getElementById('nav-logout')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('skillbridge_auth');
-        window.location.href = '/';
-      });
+
+    if (!session) {
+      // Guest: keep the da.live authored nav unchanged
+      return;
     }
+
+    const isClient = session.role === 'client';
+    const isFreelancer = session.role === 'freelancer';
+
+    // Replace nav sections based on role
+    if (navSections) {
+      const links = isClient
+        ? [
+          { href: '/', label: 'Home' },
+          { href: '/hire-talent', label: 'Hire Talent' },
+          { href: '/browse-projects', label: 'Browse Projects' },
+          { href: '/dashboard', label: 'Dashboard' },
+        ]
+        : [
+          { href: '/', label: 'Home' },
+          { href: '/browse-projects', label: 'Find Work' },
+          { href: '/hire-talent', label: 'Browse Talent' },
+          { href: '/dashboard', label: 'Dashboard' },
+        ];
+
+      const currentPath = window.location.pathname;
+      navSections.innerHTML = `
+        <div class="default-content-wrapper">
+          <ul>
+            ${links.map((l) => `<li><a href="${l.href}" ${currentPath === l.href ? 'style="color:#111;font-weight:700;"' : ''}>${l.label}</a></li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    // Replace right-side buttons
+    navTools.innerHTML = `
+      <div class="default-content-wrapper">
+        <p><em><a href="/dashboard" class="button secondary">Hi, ${session.name.split(' ')[0]}</a></em></p>
+        <p><strong><a href="#" class="button primary" id="nav-logout">Log Out</a></strong></p>
+      </div>
+    `;
+
+    document.getElementById('nav-logout')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('skillbridge_auth');
+      window.location.href = '/';
+    });
   } catch (e) { /* no session */ }
 }
 
