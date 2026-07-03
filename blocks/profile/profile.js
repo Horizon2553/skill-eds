@@ -1,3 +1,87 @@
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('skillbridge_auth')); } catch { return null; }
+}
+
+function getHireRequests() {
+  try { return JSON.parse(localStorage.getItem('sb_hire_requests')) || []; } catch { return []; }
+}
+
+function openHireModal(freelancerName, freelancerId) {
+  const existing = document.getElementById('pf-hire-modal');
+  if (existing) existing.remove();
+
+  const session = getSession();
+  if (!session) { window.location.href = '/login'; return; }
+
+  const modal = document.createElement('div');
+  modal.id = 'pf-hire-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:36px;width:100%;max-width:520px;position:relative;box-shadow:0 20px 60px rgb(0 0 0/18%)">
+      <button id="pf-hire-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;color:#aaa;cursor:pointer">&times;</button>
+      <h2 style="font-family:var(--heading-font-family);font-size:1.4rem;font-weight:800;color:#111;margin:0 0 4px;letter-spacing:-0.02em">Send Hire Request</h2>
+      <p style="font-size:0.88rem;color:#888;margin:0 0 22px">to <strong style="color:#111">${freelancerName}</strong></p>
+      <form id="pf-hire-form" novalidate>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Project / Job Title *</label>
+          <input type="text" id="pf-hire-title" placeholder="e.g. Build React E-Commerce Frontend" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Description *</label>
+          <textarea id="pf-hire-desc" rows="4" placeholder="Describe what you need..." style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;resize:vertical" required></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Budget *</label>
+            <input type="text" id="pf-hire-budget" placeholder="e.g. ₹25,000" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Timeline *</label>
+            <input type="text" id="pf-hire-timeline" placeholder="e.g. 30 days" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+          </div>
+        </div>
+        <p id="pf-hire-err" style="color:#dc2626;font-size:0.83rem;min-height:1em;margin:0 0 8px"></p>
+        <button type="submit" style="width:100%;padding:13px;background:#1dbf73;color:#fff;font-size:0.97rem;font-weight:700;border:none;border-radius:10px;cursor:pointer">Send Hire Request</button>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  document.getElementById('pf-hire-close').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  document.getElementById('pf-hire-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('pf-hire-title').value.trim();
+    const desc = document.getElementById('pf-hire-desc').value.trim();
+    const budget = document.getElementById('pf-hire-budget').value.trim();
+    const timeline = document.getElementById('pf-hire-timeline').value.trim();
+    const err = document.getElementById('pf-hire-err');
+    if (!title || !desc || !budget) { err.textContent = 'Please fill all required fields.'; return; }
+
+    const requests = getHireRequests();
+    requests.push({
+      id: `hire-${Date.now()}`,
+      fromClientId: session.id,
+      fromClientName: session.name,
+      toFreelancerId: freelancerId,
+      toFreelancerName: freelancerName,
+      title,
+      desc,
+      budget,
+      timeline,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem('sb_hire_requests', JSON.stringify(requests));
+    close();
+    const btn = document.getElementById('pf-hire-btn');
+    if (btn) { btn.textContent = 'Request Sent'; btn.disabled = true; btn.style.background = '#f0fdf7'; btn.style.color = '#1dbf73'; btn.style.border = '1.5px solid #1dbf73'; }
+  });
+}
+
 function extractImage(cell) {
   if (!cell) return null;
   const existing = cell.querySelector('picture, img');
@@ -69,6 +153,9 @@ export default async function decorate(block) {
   if (!hero) return;
 
   const isAvailable = hero.availability.toLowerCase() === 'available';
+  const session = getSession();
+  const isClient = session?.role === 'client';
+  const freelancerId = window.location.pathname.split('/').pop();
 
   block.innerHTML = `
     <div class="pf-hero">
@@ -86,6 +173,14 @@ export default async function decorate(block) {
             </div>
           ` : ''}
         </div>
+        ${isClient ? `
+          <button id="pf-hire-btn" class="pf-hire-cta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.63a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Hire ${hero.name.split(' ')[0]}
+          </button>
+        ` : !session ? `
+          <a href="/login" class="pf-hire-cta">Log in to Hire</a>
+        ` : ''}
       </div>
     </div>
 
@@ -143,5 +238,10 @@ export default async function decorate(block) {
   const thumbEls = block.querySelectorAll('.pf-project-thumb');
   thumbEls.forEach((thumb, i) => {
     if (projects[i]?.thumbEl) thumb.append(projects[i].thumbEl);
+  });
+
+  // Wire hire button
+  block.querySelector('#pf-hire-btn')?.addEventListener('click', () => {
+    openHireModal(hero.name, freelancerId);
   });
 }

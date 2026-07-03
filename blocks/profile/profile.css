@@ -317,3 +317,26 @@
     align-items: center;
   }
 }
+
+/* ── Hire CTA button (client only) ── */
+.profile .pf-hire-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1dbf73;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.93rem;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s, transform 0.15s;
+  margin-top: 16px;
+  align-self: flex-start;
+}
+
+.profile .pf-hire-cta:hover { background: #17a862; transform: translateY(-1px); }

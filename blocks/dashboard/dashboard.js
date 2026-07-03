@@ -6,6 +6,10 @@ function getProposals() {
   try { return JSON.parse(localStorage.getItem('sb_proposals')) || []; } catch { return []; }
 }
 function saveProposals(p) { localStorage.setItem('sb_proposals', JSON.stringify(p)); }
+function getHireRequests() {
+  try { return JSON.parse(localStorage.getItem('sb_hire_requests')) || []; } catch { return []; }
+}
+function saveHireRequests(r) { localStorage.setItem('sb_hire_requests', JSON.stringify(r)); }
 
 // Seed jobs — same content as browse-projects page
 const SEED_JOBS = [
@@ -46,6 +50,7 @@ function statusBadge(status) {
 function buildFreelancerDash(session) {
   seedDefaultProposals();
   const myProposals = getProposals().filter((p) => p.freelancerId === session.id);
+  const myHireRequests = getHireRequests().filter((r) => r.toFreelancerId === session.id);
   const jobs = SEED_JOBS;
   const appliedIds = new Set(myProposals.map((p) => p.jobId));
 
@@ -74,6 +79,7 @@ function buildFreelancerDash(session) {
 
     <div class="db-tabs">
       <button class="db-tab active" data-tab="proposals">My Proposals</button>
+      <button class="db-tab" data-tab="requests">Hire Requests${myHireRequests.length > 0 ? ` <span class="db-tab-badge">${myHireRequests.length}</span>` : ''}</button>
       <button class="db-tab" data-tab="jobs">Browse Jobs</button>
     </div>
 
@@ -95,6 +101,41 @@ function buildFreelancerDash(session) {
           <p class="db-proposal-cover">${p.coverLetter}</p>
           ${p.status === 'approved' ? `<div class="db-approved-msg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Congratulations! Your proposal was accepted. The client will contact you shortly.</div>` : ''}
           ${p.status === 'rejected' ? `<div class="db-rejected-msg">Your proposal wasn't selected this time. Keep applying!</div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="db-panel" id="db-panel-requests">
+      ${myHireRequests.length === 0 ? `
+        <div class="db-empty"><p>No hire requests yet. Clients will contact you directly when they want to hire you.</p></div>
+      ` : myHireRequests.map((r) => `
+        <div class="db-proposal-card" id="hr-${r.id}">
+          <div class="db-proposal-top">
+            <div>
+              <div class="db-proposal-title">${r.title}</div>
+              <div class="db-proposal-meta">From: ${r.fromClientName} · Budget: ${r.budget} · ${r.timeline} · ${timeAgo(r.createdAt)}</div>
+            </div>
+            ${statusBadge(r.status === 'counter_pending' ? 'pending' : r.status)}
+          </div>
+          <p class="db-proposal-cover">${r.desc}</p>
+          ${r.status === 'pending' ? `
+            <div class="db-action-row">
+              <button class="db-approve-btn" data-hr="${r.id}" data-action="accept">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accept
+              </button>
+              <button class="db-counter-btn" data-hr="${r.id}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Counter
+              </button>
+              <button class="db-reject-btn" data-hr="${r.id}" data-action="declined">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Decline
+              </button>
+            </div>
+          ` : ''}
+          ${r.status === 'accepted' ? `<div class="db-approved-msg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> You accepted this hire request. The client will be in touch.</div>` : ''}
+          ${r.status === 'declined' ? `<div class="db-rejected-msg">You declined this request.</div>` : ''}
+          ${r.status === 'counter_pending' ? `<div class="db-counter-msg">Counter sent: ${r.counterBudget} · ${r.counterTimeline}. Waiting for client response.</div>` : ''}
+          ${r.status === 'counter_accepted' ? `<div class="db-approved-msg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Client accepted your counter. You're hired!</div>` : ''}
+          ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">Client declined your counter offer.</div>` : ''}
         </div>
       `).join('')}
     </div>
@@ -122,6 +163,7 @@ function buildClientDash(session) {
   const myJobs = SEED_JOBS.filter((j) => j.clientId === session.id || session.id === 'client-jane');
   const allProposals = getProposals();
   const myProposals = allProposals.filter((p) => p.clientId === session.id || session.id === 'client-jane');
+  const sentRequests = getHireRequests().filter((r) => r.fromClientId === session.id);
 
   const stats = {
     jobs: myJobs.length,
@@ -147,6 +189,7 @@ function buildClientDash(session) {
 
     <div class="db-tabs">
       <button class="db-tab active" data-tab="review">Review Proposals</button>
+      <button class="db-tab" data-tab="sentrequests">Hire Requests Sent</button>
       <button class="db-tab" data-tab="myjobs">My Projects</button>
     </div>
 
@@ -190,6 +233,34 @@ function buildClientDash(session) {
         `;
   }).join('')}
       </div>
+    </div>
+
+    <div class="db-panel" id="db-panel-sentrequests">
+      ${sentRequests.length === 0 ? `
+        <div class="db-empty"><p>No hire requests sent yet. Visit a freelancer's profile and click "Hire [Name]" to send a request.</p></div>
+      ` : sentRequests.map((r) => `
+        <div class="db-proposal-card" id="sr-${r.id}">
+          <div class="db-proposal-top">
+            <div>
+              <div class="db-proposal-title">To: ${r.toFreelancerName}</div>
+              <div class="db-proposal-meta">${r.title} · ${r.budget} · ${r.timeline} · ${timeAgo(r.createdAt)}</div>
+            </div>
+            ${statusBadge(r.status === 'counter_pending' ? 'pending' : r.status === 'accepted' ? 'approved' : r.status === 'declined' ? 'rejected' : r.status)}
+          </div>
+          <p class="db-proposal-cover">${r.desc}</p>
+          ${r.status === 'counter_pending' ? `
+            <div class="db-counter-msg">Freelancer countered: <strong>${r.counterBudget}</strong> · ${r.counterTimeline}</div>
+            <div class="db-action-row" style="margin-top:12px">
+              <button class="db-approve-btn" data-hr="${r.id}" data-action="counter_accepted">Accept Counter</button>
+              <button class="db-reject-btn" data-hr="${r.id}" data-action="counter_declined">Decline Counter</button>
+            </div>
+          ` : ''}
+          ${r.status === 'accepted' ? `<div class="db-approved-msg">Freelancer accepted your request. Reach out to start!</div>` : ''}
+          ${r.status === 'declined' ? `<div class="db-rejected-msg">Freelancer declined this request.</div>` : ''}
+          ${r.status === 'counter_accepted' ? `<div class="db-approved-msg">You accepted the counter. Start working with ${r.toFreelancerName}!</div>` : ''}
+          ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">You declined the counter offer.</div>` : ''}
+        </div>
+      `).join('')}
     </div>
   `;
 }
@@ -315,4 +386,84 @@ export default async function decorate(block) {
       if (triggerBtn) { triggerBtn.textContent = '✓ Applied'; triggerBtn.disabled = true; triggerBtn.classList.add('applied'); }
     });
   }
+
+  // Hire request: freelancer accept/decline
+  block.querySelectorAll('[data-hr][data-action]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const hrId = btn.dataset.hr;
+      const action = btn.dataset.action;
+      const requests = getHireRequests();
+      const req = requests.find((r) => r.id === hrId);
+      if (!req) return;
+      req.status = action;
+      saveHireRequests(requests);
+      const card = block.querySelector(`#hr-${hrId}`) || block.querySelector(`#sr-${hrId}`);
+      if (card) {
+        card.querySelector('.db-action-row')?.remove();
+        card.querySelector('.db-counter-msg + .db-action-row')?.remove();
+        const msg = document.createElement('div');
+        const isGood = ['accepted', 'counter_accepted'].includes(action);
+        msg.className = isGood ? 'db-approved-msg' : 'db-rejected-msg';
+        const messages = {
+          accepted: 'You accepted this hire request. The client will be in touch.',
+          declined: 'You declined this request.',
+          counter_accepted: `You accepted the counter. Start working!`,
+          counter_declined: 'You declined the counter offer.',
+        };
+        msg.textContent = messages[action] || action;
+        card.append(msg);
+      }
+    });
+  });
+
+  // Hire request: freelancer counter
+  block.querySelectorAll('.db-counter-btn[data-hr]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const hrId = btn.dataset.hr;
+      const requests = getHireRequests();
+      const req = requests.find((r) => r.id === hrId);
+      if (!req) return;
+
+      const modal = document.createElement('div');
+      modal.innerHTML = `
+        <div class="db-modal-overlay">
+          <div class="db-modal-card">
+            <button class="db-modal-close">&times;</button>
+            <h2>Counter Offer</h2>
+            <p class="db-modal-job">${req.title}</p>
+            <div class="db-modal-row">
+              <div class="db-modal-field"><label>Your Budget *</label><input type="text" id="dc-budget" placeholder="e.g. ₹30,000" value="${req.budget}"></div>
+              <div class="db-modal-field"><label>Your Timeline</label><input type="text" id="dc-timeline" placeholder="e.g. 3 weeks" value="${req.timeline}"></div>
+            </div>
+            <div class="db-modal-field"><label>Message (optional)</label><textarea rows="3" id="dc-msg" placeholder="Explain your counter..."></textarea></div>
+            <p class="db-modal-err" id="dc-err"></p>
+            <button type="button" class="db-modal-submit" id="dc-submit">Send Counter Offer</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      document.body.style.overflow = 'hidden';
+      const close = () => { modal.remove(); document.body.style.overflow = ''; };
+      modal.querySelector('.db-modal-close').addEventListener('click', close);
+      modal.querySelector('.db-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
+      modal.querySelector('#dc-submit').addEventListener('click', () => {
+        const budget = modal.querySelector('#dc-budget').value.trim();
+        const timeline = modal.querySelector('#dc-timeline').value.trim();
+        if (!budget) { modal.querySelector('#dc-err').textContent = 'Please enter a budget.'; return; }
+        req.status = 'counter_pending';
+        req.counterBudget = budget;
+        req.counterTimeline = timeline;
+        saveHireRequests(requests);
+        close();
+        const card = block.querySelector(`#hr-${hrId}`);
+        if (card) {
+          card.querySelector('.db-action-row')?.remove();
+          const msg = document.createElement('div');
+          msg.className = 'db-counter-msg';
+          msg.textContent = `Counter sent: ${budget} · ${timeline}. Waiting for client response.`;
+          card.append(msg);
+        }
+      });
+    });
+  });
 }
