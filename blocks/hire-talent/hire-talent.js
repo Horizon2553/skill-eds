@@ -140,6 +140,26 @@ export default async function decorate(block) {
     });
   });
 
+  // Add dynamically registered freelancers from localStorage
+  try {
+    const localUsers = JSON.parse(localStorage.getItem('sb_users_v1')) || [];
+    localUsers.filter((u) => u.role === 'freelancer' && u.profileComplete).forEach((u) => {
+      const avatarEl = u.avatar ? (() => { const img = document.createElement('img'); img.src = u.avatar; img.loading = 'lazy'; return img; })() : null;
+      candidates.push({
+        avatarEl,
+        name: u.name || '',
+        role: u.skill || 'Freelancer',
+        rate: u.hourlyRate ? `₹${u.hourlyRate}/hr` : '',
+        rating: '',
+        reviews: '',
+        projects: '0',
+        bio: u.bio || '',
+        skills: Array.isArray(u.skills) ? u.skills : [],
+        profileHref: `/my-profile?id=${u.id}`,
+      });
+    });
+  } catch (e) { /* no local users */ }
+
   // Unique skill list across all candidates, alphabetical
   const allSkills = [...new Set(candidates.flatMap((c) => c.skills))].sort((a, b) => a.localeCompare(b));
 

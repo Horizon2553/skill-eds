@@ -276,13 +276,15 @@ export default async function decorate(block) {
     list.innerHTML = matches.map((j) => buildJobCard(j, session, appliedIds)).join('');
     list.querySelectorAll('.bp-apply-btn[data-job]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        const freshSession = getSession();
+        if (!freshSession) { window.location.href = '/login'; return; }
         const job = jobs.find((j) => j.id === btn.dataset.job);
         if (!job) return;
-        const proposalCount = getMyProposalCount(session);
+        const proposalCount = getMyProposalCount(freshSession);
         if (proposalCount >= 1) {
           showPaywallModal();
         } else {
-          openProposalModal(job, session);
+          openProposalModal(job, freshSession);
         }
       });
     });

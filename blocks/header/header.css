@@ -405,3 +405,12 @@ header .nav-dropdown-divider {
 }
 
 header .nav-avatar-dropdown a#nav-logout { color: #dc2626; }
+
+header .nav-avatar-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+header .nav-logout-link { color: #dc2626 !important; }
+header .nav-logout-link:hover { background: #fef2f2 !important; }

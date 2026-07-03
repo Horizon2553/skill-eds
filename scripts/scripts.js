@@ -179,7 +179,7 @@ function updateNavAuth() {
         ? [
           { href: '/', label: 'Home' },
           { href: '/hire-talent', label: 'Hire Talent' },
-          { href: '/browse-projects', label: 'Browse Projects' },
+          { href: '/#featured-work', label: 'Browse Work' },
           { href: '/dashboard', label: 'Dashboard' },
         ]
         : [
@@ -206,10 +206,21 @@ function updateNavAuth() {
         <span class="nav-avatar-name">${session.name.split(' ')[0]}</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         <div class="nav-avatar-dropdown" id="nav-avatar-dropdown">
-          <a href="/dashboard">Dashboard</a>
-          <a href="/browse-projects">${isFreelancer ? 'Find Work' : 'Browse Projects'}</a>
+          ${isFreelancer ? `
+            <a href="/my-profile">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              My Profile
+            </a>
+          ` : ''}
+          <a href="/dashboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
           <div class="nav-dropdown-divider"></div>
-          <a href="#" id="nav-logout">Log Out</a>
+          <a href="#" id="nav-logout" class="nav-logout-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+          </a>
         </div>
       </div>
     `;
