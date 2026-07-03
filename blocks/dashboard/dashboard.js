@@ -59,7 +59,7 @@ function buildFreelancerDash(session) {
   return `
     <div class="db-welcome">
       <div>
-        <h1 class="db-title">Welcome back, ${session.name.split(' ')[0]} 👋</h1>
+        <h1 class="db-title">Welcome back, ${session.name.split(' ')[0]}</h1>
         <p class="db-sub">${session.skill || 'Freelancer'} — Find work and track your proposals</p>
       </div>
       <a href="/browse-projects" class="db-cta-btn">Browse All Projects</a>
@@ -93,7 +93,7 @@ function buildFreelancerDash(session) {
             ${statusBadge(p.status)}
           </div>
           <p class="db-proposal-cover">${p.coverLetter}</p>
-          ${p.status === 'approved' ? `<div class="db-approved-msg">🎉 Congratulations! Your proposal was accepted. The client will be in touch shortly.</div>` : ''}
+          ${p.status === 'approved' ? `<div class="db-approved-msg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Congratulations! Your proposal was accepted. The client will contact you shortly.</div>` : ''}
           ${p.status === 'rejected' ? `<div class="db-rejected-msg">Your proposal wasn't selected this time. Keep applying!</div>` : ''}
         </div>
       `).join('')}
@@ -108,7 +108,7 @@ function buildFreelancerDash(session) {
             <p class="db-job-desc">${j.desc.slice(0, 120)}…</p>
             <div class="db-job-skills">${j.skills.map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>
             ${appliedIds.has(j.id)
-    ? `<button class="db-apply-btn applied" disabled>✓ Applied</button>`
+    ? `<button class="db-apply-btn applied" disabled><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Applied</button>`
     : `<button class="db-apply-btn" data-job="${j.id}">Apply Now</button>`}
           </div>
         `).join('')}
@@ -165,8 +165,8 @@ function buildClientDash(session) {
           <p class="db-proposal-cover">${p.coverLetter}</p>
           ${p.status === 'pending' ? `
             <div class="db-action-row">
-              <button class="db-approve-btn" data-prop="${p.id}">✓ Approve</button>
-              <button class="db-reject-btn" data-prop="${p.id}">✗ Reject</button>
+              <button class="db-approve-btn" data-prop="${p.id}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approve</button>
+              <button class="db-reject-btn" data-prop="${p.id}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </div>
           ` : ''}
           ${p.status === 'approved' ? `<div class="db-approved-msg">✓ You approved this proposal. The freelancer has been notified.</div>` : ''}
