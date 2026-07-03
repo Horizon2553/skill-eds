@@ -199,13 +199,31 @@ function updateNavAuth() {
       `;
     }
 
-    // Replace right-side buttons
+    // Replace right-side buttons with avatar dropdown
+    const first = session.name.charAt(0).toUpperCase();
     navTools.innerHTML = `
-      <div class="default-content-wrapper">
-        <p><em><a href="/dashboard" class="button secondary">Hi, ${session.name.split(' ')[0]}</a></em></p>
-        <p><strong><a href="#" class="button primary" id="nav-logout">Log Out</a></strong></p>
+      <div class="nav-avatar-wrap" id="nav-avatar-btn">
+        <div class="nav-avatar-circle">${first}</div>
+        <span class="nav-avatar-name">${session.name.split(' ')[0]}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="nav-avatar-dropdown" id="nav-avatar-dropdown">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/browse-projects">${isFreelancer ? 'Find Work' : 'Browse Projects'}</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" id="nav-logout">Log Out</a>
+        </div>
       </div>
     `;
+
+    const avatarBtn = document.getElementById('nav-avatar-btn');
+    const dropdown = document.getElementById('nav-avatar-dropdown');
+
+    avatarBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown?.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => dropdown?.classList.remove('open'));
 
     document.getElementById('nav-logout')?.addEventListener('click', (e) => {
       e.preventDefault();

@@ -333,3 +333,75 @@ main {
     padding: 0 32px;
   }
 }
+
+/* ── Auth avatar dropdown (injected by scripts.js when logged in) ── */
+header .nav-avatar-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  padding: 5px 10px 5px 5px;
+  border-radius: 99px;
+  border: 1.5px solid #e8e8e8;
+  background: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #111;
+  user-select: none;
+  transition: border-color 0.15s;
+}
+
+header .nav-avatar-wrap:hover { border-color: #1dbf73; }
+
+header .nav-avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1dbf73;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+header .nav-avatar-name { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+header .nav-avatar-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgb(0 0 0 / 12%);
+  min-width: 180px;
+  padding: 6px 0;
+  z-index: 2000;
+}
+
+header .nav-avatar-dropdown.open { display: block; }
+
+header .nav-avatar-dropdown a {
+  display: block;
+  padding: 10px 18px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+
+header .nav-avatar-dropdown a:hover { background: #f5f5f5; color: #111; }
+
+header .nav-dropdown-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 4px 0;
+}
+
+header .nav-avatar-dropdown a#nav-logout { color: #dc2626; }

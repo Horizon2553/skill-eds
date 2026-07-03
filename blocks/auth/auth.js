@@ -228,6 +228,6 @@ export default async function decorate(block) {
     users.push(newUser);
     saveUsers(users);
     setSession(newUser);
-    window.location.href = '/';
+    window.location.href = '/profile-setup';
   });
 }
