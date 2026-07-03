@@ -38,8 +38,8 @@ export default async function decorate(block) {
         .map((t) => ({ text: t, href: `/hire-talent?skills=${encodeURIComponent(t)}` }));
 
   block.innerHTML = `
-    <video class="hero-video-bg" autoplay muted loop playsinline>
-      <source src="${videoSrc}" type="video/webm">
+    <video class="hero-video-bg" muted loop playsinline preload="none" data-src="${videoSrc}">
+      <source data-src="${videoSrc}" type="video/webm">
     </video>
     <div class="hero-content">
       <div class="hero-toggle-wrapper">
@@ -99,4 +99,22 @@ export default async function decorate(block) {
   findBtn?.addEventListener('click', (e) => {
     if (searchInput?.value.trim()) { e.preventDefault(); navigate(); }
   });
+
+  // Lazy-load video after LCP to avoid blocking performance score
+  const video = block.querySelector('.hero-video-bg');
+  if (video) {
+    const loadVideo = () => {
+      const src = video.dataset.src;
+      if (src) {
+        video.querySelector('source').src = src;
+        video.load();
+        video.play().catch(() => {});
+      }
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadVideo, { timeout: 2000 });
+    } else {
+      setTimeout(loadVideo, 1000);
+    }
+  }
 }

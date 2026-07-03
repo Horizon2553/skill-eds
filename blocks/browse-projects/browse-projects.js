@@ -99,10 +99,9 @@ function openProposalModal(job, session) {
     });
     localStorage.setItem('sb_proposals', JSON.stringify(proposals));
     close();
-
-    const btn = document.querySelector(`.bp-apply-btn[data-job="${job.id}"]`);
-    if (btn) { btn.textContent = '✓ Applied'; btn.disabled = true; btn.classList.add('applied'); }
-    alert('Your proposal has been submitted successfully!');
+    if (typeof window.bpShowToast === 'function') window.bpShowToast('Proposal submitted successfully!');
+    // Re-render so all buttons update + event listeners reattach with fresh paywall check
+    setTimeout(() => { if (typeof window.bpRender === 'function') window.bpRender(); }, 100);
   });
 }
 
@@ -242,6 +241,18 @@ export default async function decorate(block) {
   const categoryBtns = [...block.querySelectorAll('.bp-category-btn')];
   const list = block.querySelector('.bp-jobs-list');
   const countLabel = block.querySelector('.bp-job-count');
+
+  // Expose render globally so openProposalModal can call it after submission
+  window.bpRender = () => render();
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:13px 24px;border-radius:99px;font-size:0.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgb(0 0 0/25%)';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+  window.bpShowToast = showToast;
 
   function render() {
     const q = searchInput.value.toLowerCase().trim();

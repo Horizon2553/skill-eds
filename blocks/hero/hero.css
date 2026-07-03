@@ -27,7 +27,7 @@ main > .section:has(.hero-container) {
   justify-content: center;
   overflow: hidden;
   margin-top: -64px;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
 }
 
 /* Dark overlay matching the screenshot */
@@ -76,7 +76,7 @@ main > .section:has(.hero-container) {
   display: inline-flex;
   background: rgb(255 255 255 / 20%);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   padding: 4px;
   border-radius: 99px;
   border: 1px solid rgb(255 255 255 / 30%);
@@ -90,7 +90,7 @@ main > .section:has(.hero-container) {
   border-radius: 99px;
   font-size: 1rem;
   font-weight: 500;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -118,7 +118,7 @@ main > .section:has(.hero-container) {
 }
 
 .hero .hero-subtext-new {
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.5;
@@ -151,7 +151,7 @@ main > .section:has(.hero-container) {
   background: transparent;
   padding: 0 20px;
   font-size: 1.05rem;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   outline: none;
   color: #111;
 }
@@ -169,7 +169,7 @@ main > .section:has(.hero-container) {
   padding: 14px 28px;
   font-size: 1rem;
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   color: white;
   cursor: pointer;
   text-decoration: none;
@@ -196,7 +196,7 @@ main > .section:has(.hero-container) {
 .hero .trending-label {
   color: rgb(255 255 255 / 75%);
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
 }
 
 .hero .trending-tag {
@@ -206,7 +206,7 @@ main > .section:has(.hero-container) {
   border-radius: 99px;
   padding: 5px 16px;
   font-size: 0.85rem;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }

@@ -1,1 +1,14 @@
 /* add global styles that can be loaded post LCP here */
+
+/* ── Performance: prevent CLS from dynamically injected images ── */
+.fw-project-thumb,
+.pf-project-thumb,
+.pd-main-image,
+.ht-avatar-wrap {
+  contain: layout;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
