@@ -25,8 +25,15 @@ const ICONS = {
 };
 
 function buildCard(c) {
-  const card = document.createElement('div');
+  const hasLink = c.profileHref && c.profileHref !== '#';
+  const card = document.createElement(hasLink ? 'a' : 'div');
   card.className = 'ht-card';
+  if (hasLink) {
+    card.href = c.profileHref;
+    card.style.textDecoration = 'none';
+    card.style.color = 'inherit';
+    card.style.display = 'block';
+  }
 
   const visibleSkills = c.skills.slice(0, 4);
   const extraCount = c.skills.length - visibleSkills.length;

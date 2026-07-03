@@ -5,6 +5,35 @@ function getProposals() {
   try { return JSON.parse(localStorage.getItem('sb_proposals')) || []; } catch { return []; }
 }
 
+function getMyProposalCount(session) {
+  if (!session) return 0;
+  return getProposals().filter((p) => p.freelancerId === session.id).length;
+}
+
+function showPaywallModal() {
+  const existing = document.getElementById('bp-paywall-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'bp-paywall-modal';
+  modal.innerHTML = `
+    <div class="bp-modal-overlay">
+      <div class="bp-modal-card" style="text-align:center;padding:48px 40px">
+        <div style="font-size:2.5rem;margin-bottom:16px">🔒</div>
+        <h2 style="font-family:var(--heading-font-family);font-size:1.5rem;font-weight:800;color:#111;margin:0 0 10px;letter-spacing:-0.02em">Upgrade to Pro</h2>
+        <p style="color:#888;font-size:0.95rem;margin:0 0 24px;line-height:1.6">You've used your 1 free proposal.<br>Upgrade to submit unlimited proposals and get hired faster.</p>
+        <button class="bp-modal-submit" style="max-width:280px;margin:0 auto" onclick="alert('Payment flow coming soon!')">Upgrade — ₹499/month</button>
+        <p style="margin-top:14px;font-size:0.8rem;color:#aaa">Cancel anytime. No hidden fees.</p>
+        <button class="bp-modal-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;color:#aaa;cursor:pointer">&times;</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  modal.querySelector('.bp-modal-close').addEventListener('click', close);
+  modal.querySelector('.bp-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
+}
+
 function openProposalModal(job, session) {
   const existing = document.getElementById('bp-proposal-modal');
   if (existing) existing.remove();
@@ -134,7 +163,7 @@ function buildJobCard(j, session, appliedIds) {
 export default async function decorate(block) {
   const rows = [...block.children];
   let pageTitle = 'Browse Projects';
-  let pageSubtitle = 'Discover live projects posted by clients. Submit your proposal and start earning.';
+  let pageSubtitle = 'Browse real client projects and apply — first one for free.';
   let ctaText = '';
   let ctaHref = '';
   const jobs = [];
@@ -192,12 +221,15 @@ export default async function decorate(block) {
         <span class="bp-filter-label">Category</span>
         <button type="button" class="bp-category-btn active" data-cat="">All Projects</button>
         ${categories.map((c) => `<button type="button" class="bp-category-btn" data-cat="${c}">${c}</button>`).join('')}
+        ${session?.role === 'freelancer' ? `
         <hr class="bp-filter-divider">
-        <div class="bp-post-cta-banner">
-          <h3>Have a project?</h3>
-          <p>Post it for free and receive proposals from skilled freelancers.</p>
-          <a href="/post-project" class="bp-post-cta-btn">Post a Project</a>
-        </div>
+        <div class="bp-free-badge">
+          <span>🎁</span>
+          <div>
+            <strong>1 free proposal</strong>
+            <p>Your first proposal is free. Upgrade to Pro for unlimited.</p>
+          </div>
+        </div>` : ''}
       </aside>
       <div class="bp-main">
         <p class="bp-job-count"></p>
@@ -245,7 +277,13 @@ export default async function decorate(block) {
     list.querySelectorAll('.bp-apply-btn[data-job]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const job = jobs.find((j) => j.id === btn.dataset.job);
-        if (job) openProposalModal(job, session);
+        if (!job) return;
+        const proposalCount = getMyProposalCount(session);
+        if (proposalCount >= 1) {
+          showPaywallModal();
+        } else {
+          openProposalModal(job, session);
+        }
       });
     });
   }

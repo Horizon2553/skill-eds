@@ -65,8 +65,13 @@
   transition: transform 0.3s ease;
 }
 
+.faq details[open] .faq-question {
+  color: #1dbf73;
+}
+
 .faq details[open] .faq-chevron {
   transform: rotate(180deg);
+  color: #1dbf73;
 }
 
 .faq .faq-answer {
