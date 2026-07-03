@@ -24,11 +24,23 @@ const SVG = {
   star: '<svg viewBox="0 0 24 24" fill="#f59e0b" width="13" height="13"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
 };
 
+function getLiked() {
+  try { return new Set(JSON.parse(localStorage.getItem('fw_liked')) || []); } catch { return new Set(); }
+}
+function toggleLike(id) {
+  const liked = getLiked();
+  if (liked.has(id)) liked.delete(id); else liked.add(id);
+  localStorage.setItem('fw_liked', JSON.stringify([...liked]));
+  return liked.has(id);
+}
+
 function buildProjectCard(p) {
   const card = document.createElement('a');
   card.className = 'fw-project-card';
   card.href = p.href || '#';
+  if (!p.href || p.href === '#') card.style.cursor = 'default';
 
+  const liked = getLiked().has(p.id || p.title);
   const thumb = document.createElement('div');
   thumb.className = 'fw-project-thumb';
   if (p.imgEl) thumb.append(p.imgEl);
@@ -37,7 +49,11 @@ function buildProjectCard(p) {
   overlay.className = 'fw-project-overlay';
   overlay.innerHTML = `
     <span class="fw-project-overlay-title">${p.title}</span>
-    <button class="fw-project-save-btn" onclick="event.preventDefault()">${SVG.bookmark} Save</button>
+    <button class="fw-project-save-btn ${liked ? 'liked' : ''}" data-id="${p.id || p.title}">
+      ${liked
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Liked'
+    : `${SVG.bookmark} Save`}
+    </button>
   `;
   thumb.append(overlay);
 
@@ -50,16 +66,35 @@ function buildProjectCard(p) {
     author.append(p.avatarEl);
   }
   author.insertAdjacentHTML('beforeend', `<span class="fw-project-author-name">${p.author}</span>`);
-  footer.innerHTML = `<div class="fw-project-stats"><span>${SVG.heart} ${p.likes}</span><span>${SVG.eye} ${p.views}</span></div>`;
+  footer.innerHTML = `<div class="fw-project-stats"><span>${SVG.heart} <span class="fw-likes-count">${p.likes}</span></span><span>${SVG.eye} ${p.views}</span></div>`;
   footer.prepend(author);
 
   card.append(thumb, footer);
+
+  // Like button — stop link propagation
+  const saveBtn = card.querySelector('.fw-project-save-btn');
+  saveBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = saveBtn.dataset.id;
+    const nowLiked = toggleLike(id);
+    saveBtn.classList.toggle('liked', nowLiked);
+    saveBtn.innerHTML = nowLiked
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Liked'
+      : `${SVG.bookmark} Save`;
+  });
+
   return card;
 }
 
 function buildFreelancerCard(f) {
-  const card = document.createElement('div');
+  const card = document.createElement(f.profileHref && f.profileHref !== '#' ? 'a' : 'div');
   card.className = 'fw-freelancer-card';
+  if (f.profileHref && f.profileHref !== '#') {
+    card.href = f.profileHref;
+    card.style.textDecoration = 'none';
+    card.style.color = 'inherit';
+  }
 
   const avatarWrap = document.createElement('div');
   avatarWrap.className = 'fw-fl-avatar-wrap';
@@ -145,14 +180,16 @@ export default async function decorate(block) {
     } else if (hasImage && currentSection) {
       const imgEl = extractImage(firstCell);
       if (currentSection.label.toLowerCase().includes('project')) {
+        const projTitle = cells[1]?.textContent.trim() || '';
         currentSection.cards.push({
+          id: projTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           imgEl,
           href: cells[1]?.querySelector('a')?.href || '#',
-          title: cells[1]?.textContent.trim() || '',
+          title: projTitle,
           author: cells[2]?.textContent.trim() || '',
           avatarEl: extractImage(cells[3]),
-          likes: cells[4]?.textContent.trim() || '',
-          views: cells[5]?.textContent.trim() || '',
+          likes: cells[4]?.textContent.trim() || '0',
+          views: cells[5]?.textContent.trim() || '0',
         });
       } else {
         // Extract only text nodes from skills cell — AEM may inject picture elements
@@ -173,8 +210,8 @@ export default async function decorate(block) {
           rating: cells[4]?.textContent.trim() || '',
           reviews: cells[5]?.textContent.trim() || '',
           bio: cells[6]?.textContent.trim() || '',
-          skills: skillsText.split(',').map((s) => s.trim()).filter((s) => s.length > 0),
-          profileHref: cells[8]?.querySelector('a')?.href || '#',
+          skills: skillsText.split(',').map((s) => s.trim()).filter((s) => s.length > 1 && !/^https?:\/\//.test(s)),
+          profileHref: cells[8]?.querySelector('a')?.href || cells[8]?.textContent.trim() || '#',
         });
       }
     }

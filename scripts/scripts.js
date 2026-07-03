@@ -233,9 +233,28 @@ function updateNavAuth() {
   } catch (e) { /* no session */ }
 }
 
+function highlightActiveNavLinks() {
+  const path = window.location.pathname;
+  document.querySelectorAll('header nav a[href]').forEach((a) => {
+    try {
+      const linkPath = new URL(a.href, window.location.origin).pathname;
+      const isActive = linkPath === path || (linkPath !== '/' && path.startsWith(linkPath));
+      if (isActive) {
+        a.style.color = '#111';
+        a.style.fontWeight = '700';
+      }
+    } catch (e) { /* ignore */ }
+  });
+}
+
 async function loadLazy(doc) {
   const headerEl = doc.querySelector('header');
-  loadHeader(headerEl).then(() => { setTimeout(updateNavAuth, 100); });
+  loadHeader(headerEl).then(() => {
+    setTimeout(() => {
+      updateNavAuth();
+      highlightActiveNavLinks();
+    }, 100);
+  });
 
   const main = doc.querySelector('main');
   await loadSections(main);
