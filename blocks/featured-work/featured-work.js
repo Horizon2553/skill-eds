@@ -38,7 +38,7 @@ function buildProjectCard(p) {
   const card = document.createElement('a');
   card.className = 'fw-project-card';
   card.href = p.href || '#';
-  if (!p.href || p.href === '#') card.style.cursor = 'default';
+  if (!p.href || p.href === '#') { card.style.cursor = 'default'; card.addEventListener('click', (e) => e.preventDefault()); }
 
   const liked = getLiked().has(p.id || p.title);
   const thumb = document.createElement('div');
@@ -181,10 +181,16 @@ export default async function decorate(block) {
       const imgEl = extractImage(firstCell);
       if (currentSection.label.toLowerCase().includes('project')) {
         const projTitle = cells[1]?.textContent.trim() || '';
+        const rawHref = cells[1]?.querySelector('a')?.href || '';
+        // Ignore VS Code internal URLs or invalid hrefs
+        const validHref = rawHref && !rawHref.startsWith('vscode-') && !rawHref.startsWith('about:')
+          && !rawHref.includes('localhost') ? rawHref : '';
+        // Fallback: use profile link so card is always clickable
+        const profileHref = cells[8]?.querySelector('a')?.href || cells[8]?.textContent.trim() || '';
         currentSection.cards.push({
           id: projTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           imgEl,
-          href: cells[1]?.querySelector('a')?.href || '#',
+          href: validHref || profileHref || '#',
           title: projTitle,
           author: cells[2]?.textContent.trim() || '',
           avatarEl: extractImage(cells[3]),
