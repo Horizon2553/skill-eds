@@ -48,7 +48,7 @@ export default async function decorate(block) {
     <div class="footer-top">
       <div class="footer-inner">
         <div class="footer-brand">
-          <a href="/" class="footer-logo">SkillBridge<span class="footer-dot">•</span></a>
+          <a href="/" class="footer-logo">SkillHire<span class="footer-dot">•</span></a>
           <p class="footer-tagline">The freelance platform for the highly-skilled and AI-fluent.</p>
           <div class="footer-socials">
             ${SOCIALS.map((s) => `<a href="${s.href}" target="_blank" rel="noopener" class="footer-social" aria-label="${s.label}">${s.icon}</a>`).join('')}
@@ -68,7 +68,7 @@ export default async function decorate(block) {
     </div>
     <div class="footer-bottom">
       <div class="footer-inner">
-        <span>© 2026 SkillBridge. All rights reserved.</span>
+        <span>© 2026 SkillHire. All rights reserved.</span>
         <div class="footer-bottom-links">
           <a href="/policies">Privacy</a>
           <a href="/policies">Terms</a>

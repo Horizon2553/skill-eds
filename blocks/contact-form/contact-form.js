@@ -5,7 +5,7 @@ export default async function decorate(block) {
   const rows = [...block.children];
   const heading = rows[0]?.children[0]?.textContent.trim() || 'Get in touch';
   const subtext = rows[1]?.children[0]?.textContent.trim() || '';
-  const subject = rows[2]?.children[0]?.textContent.trim() || 'New inquiry from SkillBridge';
+  const subject = rows[2]?.children[0]?.textContent.trim() || 'New inquiry from SkillHire';
 
   block.innerHTML = `
     <div class="cf-wrap">

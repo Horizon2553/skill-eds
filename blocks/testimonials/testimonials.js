@@ -7,7 +7,7 @@ export default async function decorate(block) {
   header.className = 'testimonials-header';
   header.innerHTML = `
     <h2>Trusted by leaders &amp; freelancers</h2>
-    <p>Here's what people are saying about working on SkillBridge.</p>
+    <p>Here's what people are saying about working on SkillHire.</p>
   `;
 
   const grid = document.createElement('div');

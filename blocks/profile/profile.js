@@ -82,6 +82,25 @@ function openHireModal(freelancerName, freelancerId) {
   });
 }
 
+// Map project titles → EDS project pages (so clicking always works)
+const PROJECT_TITLE_TO_URL = {
+  'devflow developer platform': '/projects/devflow',
+  'promptkit canvas': '/projects/promptkit',
+  'shoplens e-commerce ui': '/projects/shoplens',
+  'atlas design system': '/projects/atlas-design',
+  'novabrand identity kit': '/projects/novabrand',
+  'pulse dashboard ui': '/projects/pulse-dashboard',
+  'fintech edge dashboard': '/projects/fintech-edge',
+  'cloudcart api gateway': '/projects/cloudcart',
+  'tasksphere saas mockup': '/projects/tasksphere',
+  'orbit portfolio builder': '/projects/orbit-builder',
+};
+
+function getProjectUrl(title, fallbackLink) {
+  const key = title?.toLowerCase().trim();
+  return PROJECT_TITLE_TO_URL[key] || (fallbackLink && !fallbackLink.includes('vscode-') && fallbackLink !== '#' ? fallbackLink : null);
+}
+
 function extractImage(cell) {
   if (!cell) return null;
   const existing = cell.querySelector('picture, img');
@@ -214,7 +233,7 @@ export default async function decorate(block) {
         <h2>Projects &amp; Work <span class="pf-project-count">${projects.length} total</span></h2>
         <div class="pf-projects-list">
           ${projects.length === 0 ? '<p class="pf-no-projects">No projects yet.</p>' : projects.map((p) => `
-            <a ${p.link ? `href="${p.link}"` : 'href="#" onclick="return false;"'} class="pf-project-card">
+            <a href="${getProjectUrl(p.title, p.link) || '#'}" class="pf-project-card" ${!getProjectUrl(p.title, p.link) ? 'onclick="return false;"' : ''}>
               <div class="pf-project-thumb"></div>
               <div class="pf-project-info">
                 ${p.tech.length ? `<div class="pf-project-tags">${p.tech.map((t) => `<span class="pf-tech-tag">${t}</span>`).join('')}</div>` : ''}

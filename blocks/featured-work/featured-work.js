@@ -57,14 +57,25 @@ const SVG = {
   star: '<svg viewBox="0 0 24 24" fill="#f59e0b" width="13" height="13"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
 };
 
-function getLiked() {
-  try { return new Set(JSON.parse(localStorage.getItem('fw_liked')) || []); } catch { return new Set(); }
+function getSaved() {
+  try { return new Set(JSON.parse(localStorage.getItem('fw_saved')) || []); } catch { return new Set(); }
 }
-function toggleLike(id) {
-  const liked = getLiked();
-  if (liked.has(id)) liked.delete(id); else liked.add(id);
-  localStorage.setItem('fw_liked', JSON.stringify([...liked]));
-  return liked.has(id);
+function getSavedData() {
+  try { return JSON.parse(localStorage.getItem('fw_saved_data')) || []; } catch { return []; }
+}
+function toggleSave(id, title, href, author) {
+  const saved = getSaved();
+  const data = getSavedData();
+  if (saved.has(id)) {
+    saved.delete(id);
+    localStorage.setItem('fw_saved_data', JSON.stringify(data.filter((p) => p.id !== id)));
+  } else {
+    saved.add(id);
+    data.push({ id, title, href, author });
+    localStorage.setItem('fw_saved_data', JSON.stringify(data));
+  }
+  localStorage.setItem('fw_saved', JSON.stringify([...saved]));
+  return saved.has(id);
 }
 
 function buildProjectCard(p) {
@@ -73,7 +84,7 @@ function buildProjectCard(p) {
   card.href = p.href || '#';
   if (!p.href || p.href === '#') { card.style.cursor = 'default'; card.addEventListener('click', (e) => e.preventDefault()); }
 
-  const liked = getLiked().has(p.id || p.title);
+  const liked = getSaved().has(p.id || p.title);
   const thumb = document.createElement('div');
   thumb.className = 'fw-project-thumb';
   if (p.imgEl) thumb.append(p.imgEl);
@@ -82,9 +93,9 @@ function buildProjectCard(p) {
   overlay.className = 'fw-project-overlay';
   overlay.innerHTML = `
     <span class="fw-project-overlay-title">${p.title}</span>
-    <button class="fw-project-save-btn ${liked ? 'liked' : ''}" data-id="${p.id || p.title}">
+    <button class="fw-project-save-btn ${liked ? 'saved' : ''}" data-id="${p.id || p.title}" data-title="${p.title}" data-href="${p.href}" data-author="${p.author}">
       ${liked
-    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Liked'
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Saved'
     : `${SVG.bookmark} Save`}
     </button>
   `;
@@ -110,10 +121,10 @@ function buildProjectCard(p) {
     e.preventDefault();
     e.stopPropagation();
     const id = saveBtn.dataset.id;
-    const nowLiked = toggleLike(id);
-    saveBtn.classList.toggle('liked', nowLiked);
-    saveBtn.innerHTML = nowLiked
-      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Liked'
+    const nowSaved = toggleSave(id, saveBtn.dataset.title, saveBtn.dataset.href, saveBtn.dataset.author);
+    saveBtn.classList.toggle('saved', nowSaved);
+    saveBtn.innerHTML = nowSaved
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1dbf73" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Saved'
       : `${SVG.bookmark} Save`;
   });
 

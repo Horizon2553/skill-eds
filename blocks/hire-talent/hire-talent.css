@@ -214,19 +214,9 @@
 .hire-talent .ht-checkbox-label input[type="checkbox"]:checked {
   background: #1dbf73;
   border-color: #1dbf73;
-}
-
-.hire-talent .ht-checkbox-label input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 0;
-  width: 5px;
-  height: 8px;
-  border: 1.5px solid #fff;
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg);
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .hire-talent .ht-checkbox-label span {

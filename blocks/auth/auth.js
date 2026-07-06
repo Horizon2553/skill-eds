@@ -25,7 +25,7 @@ export default async function decorate(block) {
     <div class="auth-page">
       <div class="auth-card">
 
-        <div class="auth-brand">SkillBridge<span class="auth-brand-dot">•</span></div>
+        <div class="auth-brand">SkillHire<span class="auth-brand-dot">•</span></div>
 
         <div class="auth-tabs">
           <button class="auth-tab${startTab === 'login' ? ' active' : ''}" data-tab="login">Log In</button>

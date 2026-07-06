@@ -115,7 +115,7 @@ export default async function decorate(block) {
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h2>You're all set, ${firstName}!</h2>
-            <p>${isClient ? 'Start posting projects and find the right talent.' : 'Your profile is ready. Start exploring SkillBridge and make your first move.'}</p>
+            <p>${isClient ? 'Start posting projects and find the right talent.' : 'Your profile is ready. Start exploring SkillHire and make your first move.'}</p>
             <div class="ps-done-btns">
               <a href="${isClient ? '/browse-projects' : '/browse-projects'}" class="ps-btn-primary">${isClient ? 'Post a Project' : 'Find Work'}</a>
               <a href="/dashboard" class="ps-btn-secondary">Go to Dashboard</a>
