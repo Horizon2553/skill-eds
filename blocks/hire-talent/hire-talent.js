@@ -33,14 +33,18 @@ function getFavs(clientId) {
 function getFavIds(clientId) {
   return getFavs(clientId).map((f) => (typeof f === 'string' ? f : f.id));
 }
+function toRelative(href) {
+  try { return new URL(href).pathname; } catch { return href || '#'; }
+}
 function toggleFav(clientId, candidate) {
   const favs = getFavs(clientId);
-  const id = candidate.userId || candidate.profileHref;
+  const profileHref = toRelative(candidate.profileHref);
+  const id = candidate.userId || profileHref;
   const idx = favs.findIndex((f) => (typeof f === 'string' ? f : f.id) === id);
   if (idx > -1) {
     favs.splice(idx, 1);
   } else {
-    favs.push({ id, name: candidate.name, role: candidate.role, rate: candidate.rate, profileHref: candidate.profileHref });
+    favs.push({ id, name: candidate.name, role: candidate.role, rate: candidate.rate, profileHref });
   }
   localStorage.setItem(`sb_fav_${clientId}`, JSON.stringify(favs));
   return idx === -1;

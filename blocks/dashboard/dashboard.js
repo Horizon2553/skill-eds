@@ -13,8 +13,15 @@ function saveHireRequests(r) { localStorage.setItem('sb_hire_requests', JSON.str
 function getFavourites(clientId) {
   try {
     const raw = JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || [];
-    // Handle both old format (array of ID strings) and new format (array of objects)
-    return raw.map((f) => (typeof f === 'string' ? { id: f, name: f, role: 'Freelancer', rate: '', profileHref: f } : f));
+    return raw.map((f) => {
+      if (typeof f !== 'string') return f;
+      // Old format: string was a URL — extract name from path slug
+      let href = f;
+      try { href = new URL(f).pathname; } catch { /* already relative */ }
+      const slug = href.split('/').filter(Boolean).pop() || '';
+      const name = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || href;
+      return { id: href, name, role: 'Freelancer', rate: '', profileHref: href };
+    });
   } catch { return []; }
 }
 
