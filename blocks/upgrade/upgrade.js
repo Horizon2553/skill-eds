@@ -46,17 +46,14 @@ export default async function decorate(block) {
       <div class="up-cards">
         ${plans.map((p) => `
           <div class="up-card ${p.popular ? 'up-card-popular' : ''}">
-            ${p.popular ? '<span class="up-popular-badge">Popular</span>' : ''}
-            <div class="up-card-name">${p.name}</div>
+            <div class="up-card-header">
+              <span class="up-card-name">${p.name}</span>
+              ${p.popular ? '<span class="up-popular-badge">Popular</span>' : ''}
+            </div>
             <div class="up-card-price">${p.price}<span class="up-period">${p.period}</span></div>
             <div class="up-card-highlight">${p.highlight}</div>
             <ul class="up-card-features">
-              ${p.features.map((f) => `
-                <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  ${f}
-                </li>
-              `).join('')}
+              ${p.features.map((f) => `<li>${f}</li>`).join('')}
             </ul>
             <button class="up-cta-btn ${p.popular ? 'up-cta-primary' : 'up-cta-secondary'}" data-plan="${p.name}">
               ${p.cta}
