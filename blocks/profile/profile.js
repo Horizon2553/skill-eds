@@ -82,8 +82,9 @@ function openHireModal(freelancerName, freelancerId) {
   });
 }
 
-// Map project titles → EDS project pages (so clicking always works)
+// Map project titles → EDS project pages (title is the source of truth, ignores da.live link)
 const PROJECT_TITLE_TO_URL = {
+  // Candidate portfolio projects
   'devflow developer platform': '/projects/devflow',
   'promptkit canvas': '/projects/promptkit',
   'shoplens e-commerce ui': '/projects/shoplens',
@@ -94,6 +95,13 @@ const PROJECT_TITLE_TO_URL = {
   'cloudcart api gateway': '/projects/cloudcart',
   'tasksphere saas mockup': '/projects/tasksphere',
   'orbit portfolio builder': '/projects/orbit-builder',
+  // Showcase / featured work projects
+  'spectra — analytics dashboard': '/projects/spectra',
+  'spectra': '/projects/spectra',
+  'aatma — brand identity': '/projects/aatma',
+  'aatma': '/projects/aatma',
+  'plate — food delivery app': '/projects/plate',
+  'plate': '/projects/plate',
 };
 
 function getProjectUrl(title, fallbackLink) {
