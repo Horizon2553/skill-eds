@@ -179,6 +179,7 @@ function updateNavAuth() {
         ? [
           { href: '/', label: 'Home' },
           { href: '/hire-talent', label: 'Hire Talent' },
+          { href: '/post-project', label: 'Create Project Brief' },
           { href: '/dashboard', label: 'Dashboard' },
         ]
         : [

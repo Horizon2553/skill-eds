@@ -1,0 +1,396 @@
+.post-project .pp-hero {
+  background: linear-gradient(135deg, #0d1b2a 0%, #0a2617 100%);
+  padding: 56px 0;
+}
+
+.post-project .pp-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.post-project .pp-hero-text h1 {
+  font-family: var(--heading-font-family);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.post-project .pp-hero-text p {
+  font-size: 1rem;
+  color: rgb(255 255 255 / 75%);
+  margin: 0;
+}
+
+.post-project .pp-view-plans-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  background: #1dbf73;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.post-project .pp-view-plans-btn:hover { background: #17a862; }
+
+/* Body layout */
+.post-project .pp-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 36px;
+  align-items: start;
+}
+
+@media (width < 900px) {
+  .post-project .pp-body { grid-template-columns: 1fr; }
+  .post-project .pp-sidebar { order: -1; }
+  .post-project .pp-hero-inner { padding: 0 24px; }
+  .post-project .pp-body { padding: 32px 24px 60px; }
+}
+
+/* Gate */
+.post-project .pp-gate {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 48px;
+  text-align: center;
+}
+
+.post-project .pp-gate-freelancer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-project .pp-gate h3 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.post-project .pp-gate p { font-size: 0.9rem; color: #888; margin: 0; }
+.post-project .pp-gate-link { color: #1dbf73; font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+
+/* Form card */
+.post-project .pp-form-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 40px 44px;
+}
+
+.post-project .pp-form-card h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: #111;
+}
+
+.post-project .pp-form-sub {
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0 0 32px;
+}
+
+.post-project .pp-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 28px 0 16px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.post-project .pp-section-label:first-of-type { margin-top: 0; }
+
+.post-project .pp-group { margin-bottom: 20px; }
+
+.post-project .pp-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 7px;
+}
+
+.post-project .pp-req { color: #dc2626; }
+.post-project .pp-opt { color: #aaa; font-weight: 400; font-size: 0.82rem; }
+.post-project .pp-hint { font-size: 0.78rem; color: #aaa; margin-top: 5px; }
+
+.post-project .pp-group input,
+.post-project .pp-group select,
+.post-project .pp-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-family: var(--body-font-family);
+  font-size: 0.93rem;
+  color: #111;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.post-project .pp-group input:focus,
+.post-project .pp-group select:focus,
+.post-project .pp-group textarea:focus {
+  border-color: #1dbf73;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(29 191 115 / 8%);
+}
+
+.post-project .pp-group textarea { resize: vertical; min-height: 150px; }
+
+/* Skills tag input */
+.post-project .pp-skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fafafa;
+  cursor: text;
+  min-height: 50px;
+  align-items: center;
+  transition: border-color 0.15s;
+}
+
+.post-project .pp-skills-wrap:focus-within {
+  border-color: #1dbf73;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(29 191 115 / 8%);
+}
+
+.post-project .pp-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdf7;
+  border: 1px solid rgb(29 191 115 / 25%);
+  color: #15803d;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.post-project .pp-skill-chip button {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.post-project .pp-skills-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  padding: 2px 4px;
+  flex: 1;
+  min-width: 140px;
+  box-shadow: none;
+}
+
+.post-project .pp-skills-wrap input:focus { box-shadow: none; border-color: transparent; }
+
+/* Two column */
+.post-project .pp-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Error */
+.post-project .pp-err {
+  font-size: 0.85rem;
+  color: #dc2626;
+  min-height: 1em;
+  margin: 0 0 8px;
+}
+
+/* Submit */
+.post-project .pp-submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: #1dbf73;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--body-font-family);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  margin-top: 8px;
+}
+
+.post-project .pp-submit-btn:hover {
+  background: #16a060;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(29 191 115 / 30%);
+}
+
+/* Success screen */
+.post-project .pp-success {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 60px 44px;
+  text-align: center;
+}
+
+.post-project .pp-success-icon {
+  width: 72px;
+  height: 72px;
+  background: #f0fdf7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.post-project .pp-success h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: #111;
+}
+
+.post-project .pp-success p {
+  font-size: 0.95rem;
+  color: #888;
+  max-width: 400px;
+  margin: 0 auto 28px;
+}
+
+.post-project .pp-success-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.post-project .pp-browse-btn {
+  padding: 12px 28px;
+  border-radius: 99px;
+  border: 1.5px solid #d0d0d0;
+  background: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+.post-project .pp-browse-btn:hover { border-color: #888; }
+
+.post-project .pp-another-btn {
+  padding: 12px 28px;
+  border-radius: 99px;
+  border: none;
+  background: #1dbf73;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.post-project .pp-another-btn:hover { background: #17a862; }
+
+/* Sidebar */
+.post-project .pp-sidebar {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 28px;
+  position: sticky;
+  top: 84px;
+}
+
+.post-project .pp-sidebar h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 20px;
+}
+
+.post-project .pp-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-project .pp-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 0 0 20px;
+  position: relative;
+  font-size: 0.88rem;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.post-project .pp-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 1.5px;
+  background: #e8e8e8;
+}
+
+.post-project .pp-step-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  background: #fff;
+  color: #aaa;
+}
+
+.post-project .pp-step-active {
+  color: #111;
+  font-weight: 700;
+}
+
+.post-project .pp-step-active .pp-step-num {
+  border-color: #1dbf73;
+  background: #f0fdf7;
+  color: #1dbf73;
+}
