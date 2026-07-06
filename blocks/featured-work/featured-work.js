@@ -228,16 +228,8 @@ export default async function decorate(block) {
           views: cells[5]?.textContent.trim() || '0',
         });
       } else {
-        // Extract only text nodes from skills cell — AEM may inject picture elements
-        const skillsCell = cells[7];
-        const skillsText = skillsCell
-          ? [...skillsCell.childNodes]
-            .filter((n) => n.nodeType === Node.TEXT_NODE
-              || (n.nodeType === Node.ELEMENT_NODE && !['IMG', 'PICTURE', 'SOURCE'].includes(n.tagName?.toUpperCase())))
-            .map((n) => n.textContent)
-            .join('')
-            .trim()
-          : '';
+        // Use textContent directly — most reliable extraction regardless of AEM injections
+        const skillsRaw = cells[7]?.textContent?.trim() || '';
         currentSection.cards.push({
           avatarEl: imgEl,
           name: cells[1]?.textContent.trim() || '',
@@ -246,7 +238,7 @@ export default async function decorate(block) {
           rating: cells[4]?.textContent.trim() || '',
           reviews: cells[5]?.textContent.trim() || '',
           bio: cells[6]?.textContent.trim() || '',
-          skills: skillsText.split(',').map((s) => s.trim()).filter((s) => s.length > 1 && /\w/.test(s) && !/^https?:\/\//.test(s)),
+          skills: skillsRaw.split(',').map((s) => s.trim()).filter((s) => s.length > 1 && /[a-zA-Z0-9]/.test(s) && !/^https?:\/\//.test(s) && !/^\//.test(s)),
           profileHref: getProfileUrl(cells[1]?.textContent.trim()),
         });
       }

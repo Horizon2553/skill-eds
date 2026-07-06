@@ -460,3 +460,9 @@ main .section:has(.featured-work) {
     gap: 20px;
   }
 }
+
+/* Ensure skill pills never render as circles — hide empty ones */
+.featured-work .fw-fl-skill:empty { display: none; }
+.featured-work .fw-fl-skills picture,
+.featured-work .fw-fl-skills img,
+.featured-work .fw-fl-skills source { display: none !important; }
