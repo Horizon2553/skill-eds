@@ -9,10 +9,17 @@ function getUserKey(session) {
   return session?.id || session?.email || null;
 }
 
+function getPlanLimit(session) {
+  const plan = (session?.activePlan || '').toLowerCase();
+  if (plan === 'business') return Infinity;
+  if (plan === 'pro') return 15;
+  if (plan === 'starter') return 5;
+  return 1; // free tier
+}
+
 function getMyProposalCount(session) {
   const key = getUserKey(session);
   if (!key) return 0;
-  if (localStorage.getItem(`bp_used_free_${key}`) === '1') return 1;
   return getProposals().filter((p) => p.freelancerId === key).length;
 }
 
@@ -22,8 +29,8 @@ function markProposalUsed(session) {
 }
 
 function openProposalModal(job, session) {
-  // Hard paywall guard — even if button state was stale
-  if (getMyProposalCount(session) >= 1) {
+  // Hard paywall guard — checks actual count vs plan limit
+  if (getMyProposalCount(session) >= getPlanLimit(session)) {
     window.location.href = '/upgrade';
     return;
   }
@@ -279,7 +286,7 @@ export default async function decorate(block) {
 
     const freshSess = getSession();
     const userKey = getUserKey(freshSess);
-    const freeUsed = getMyProposalCount(freshSess) >= 1;
+    const freeUsed = getMyProposalCount(freshSess) >= getPlanLimit(freshSess);
     const appliedIds = new Set(
       getProposals().filter((p) => p.freelancerId === userKey).map((p) => p.jobId),
     );

@@ -184,12 +184,17 @@ export default async function decorate(block) {
   block.querySelector('#pay-now').addEventListener('click', () => {
     block.querySelector('#pay-form-wrap').style.display = 'none';
     block.querySelector('#pay-success').style.display = 'block';
-    // Save plan + clear paywall flag
+    // Save plan to session + users list + clear old flag
     try {
       const session = JSON.parse(localStorage.getItem('skillbridge_auth'));
       if (session) {
         session.activePlan = plan.name;
         localStorage.setItem('skillbridge_auth', JSON.stringify(session));
+        // Also persist plan in sb_users_v1 so it survives re-login
+        const users = JSON.parse(localStorage.getItem('sb_users_v1') || '[]');
+        const idx = users.findIndex((u) => u.id === session.id || u.email === session.email);
+        if (idx > -1) { users[idx].activePlan = plan.name; localStorage.setItem('sb_users_v1', JSON.stringify(users)); }
+        // Clear old free-tier flag
         const key = session.id || session.email;
         if (key) localStorage.removeItem(`bp_used_free_${key}`);
       }
