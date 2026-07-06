@@ -27,15 +27,23 @@ const ICONS = {
 function getSession() {
   try { return JSON.parse(localStorage.getItem('skillbridge_auth')); } catch { return null; }
 }
-function getFavIds(clientId) {
+function getFavs(clientId) {
   try { return JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || []; } catch { return []; }
 }
-function toggleFav(clientId, freelancerId) {
-  const favs = getFavIds(clientId);
-  const idx = favs.indexOf(freelancerId);
-  if (idx > -1) favs.splice(idx, 1); else favs.push(freelancerId);
+function getFavIds(clientId) {
+  return getFavs(clientId).map((f) => (typeof f === 'string' ? f : f.id));
+}
+function toggleFav(clientId, candidate) {
+  const favs = getFavs(clientId);
+  const id = candidate.userId || candidate.profileHref;
+  const idx = favs.findIndex((f) => (typeof f === 'string' ? f : f.id) === id);
+  if (idx > -1) {
+    favs.splice(idx, 1);
+  } else {
+    favs.push({ id, name: candidate.name, role: candidate.role, rate: candidate.rate, profileHref: candidate.profileHref });
+  }
   localStorage.setItem(`sb_fav_${clientId}`, JSON.stringify(favs));
-  return idx === -1; // true = added
+  return idx === -1;
 }
 
 function buildCard(c) {
@@ -98,13 +106,14 @@ function buildCard(c) {
     favBtn.type = 'button';
     favBtn.className = `ht-fav-btn${isSaved ? ' saved' : ''}`;
     favBtn.title = isSaved ? 'Remove from saved' : 'Save freelancer';
-    favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${isSaved ? '#f59e0b' : 'none'}" stroke="${isSaved ? '#f59e0b' : '#ccc'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    const starSVG = (filled) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? '#f59e0b' : 'none'}" stroke="${filled ? '#f59e0b' : '#ccc'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    favBtn.innerHTML = starSVG(isSaved);
     favBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const added = toggleFav(session.id, c.userId || c.profileHref);
+      const added = toggleFav(session.id, c);
       favBtn.classList.toggle('saved', added);
-      favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${added ? '#f59e0b' : 'none'}" stroke="${added ? '#f59e0b' : '#ccc'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+      favBtn.innerHTML = starSVG(added);
     });
     card.appendChild(favBtn);
   }

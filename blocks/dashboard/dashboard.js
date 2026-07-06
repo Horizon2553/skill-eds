@@ -11,7 +11,11 @@ function getHireRequests() {
 }
 function saveHireRequests(r) { localStorage.setItem('sb_hire_requests', JSON.stringify(r)); }
 function getFavourites(clientId) {
-  try { return JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || []; } catch { return []; }
+  try {
+    const raw = JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || [];
+    // Handle both old format (array of ID strings) and new format (array of objects)
+    return raw.map((f) => (typeof f === 'string' ? { id: f, name: f, role: 'Freelancer', rate: '', profileHref: f } : f));
+  } catch { return []; }
 }
 
 // Seed jobs
@@ -215,11 +219,7 @@ function buildClientDash(session) {
   const myProposals = allProposals.filter((p) => p.clientId === session.id || isJane);
   const sentRequests = getHireRequests().filter((r) => r.fromClientId === session.id);
   const activeResponses = sentRequests.filter((r) => r.status !== 'pending');
-  const favIds = getFavourites(session.id);
-  const savedFreelancers = favIds.map((id) => {
-    const u = allUsers.find((x) => x.id === id);
-    return u ? { ...u, profileHref: `/my-profile?id=${id}` } : null;
-  }).filter(Boolean);
+  const savedFreelancers = getFavourites(session.id);
 
   const avatar = session.avatar
     ? `<img src="${session.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
@@ -355,11 +355,11 @@ function buildClientDash(session) {
         ` : `
           <div class="db-jobs-grid">
             ${savedFreelancers.map((u) => `
-              <a href="/my-profile?id=${u.id}" class="db-saved-card" style="text-decoration:none;color:inherit">
-                <div class="db-saved-avatar">${u.avatar ? `<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span>${(u.name||'?').charAt(0).toUpperCase()}</span>`}</div>
+              <a href="${u.profileHref || '#'}" class="db-saved-card" style="text-decoration:none;color:inherit">
+                <div class="db-saved-avatar"><span>${(u.name||'?').charAt(0).toUpperCase()}</span></div>
                 <div class="db-saved-name">${u.name}</div>
-                <div class="db-saved-role">${u.skill || 'Freelancer'}</div>
-                ${u.hourlyRate ? `<div class="db-saved-rate">₹${u.hourlyRate}/hr</div>` : ''}
+                <div class="db-saved-role">${u.role || 'Freelancer'}</div>
+                ${u.rate ? `<div class="db-saved-rate">${u.rate}</div>` : ''}
                 <div class="db-saved-btn">View Profile →</div>
               </a>
             `).join('')}
