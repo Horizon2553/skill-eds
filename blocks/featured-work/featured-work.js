@@ -223,9 +223,9 @@ function buildFreelancerCard(f) {
     skillsWrap.append(more);
   }
 
-  const btn = document.createElement('a');
+  // Use span not <a> — card itself is already an <a>, nested anchors break navigation
+  const btn = document.createElement('span');
   btn.className = 'fw-fl-profile-btn';
-  btn.href = f.profileHref;
   btn.textContent = 'See Profile';
 
   card.append(top, bio, skillsWrap, btn);
