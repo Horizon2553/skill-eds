@@ -102,6 +102,21 @@ const PROJECT_TITLE_TO_URL = {
   'aatma': '/projects/aatma',
   'plate — food delivery app': '/projects/plate',
   'plate': '/projects/plate',
+  // Rahul showcase
+  'pix — creative portfolio template': '/projects/pix',
+  'pix': '/projects/pix',
+  'mapsi — location intelligence ui': '/projects/mapsi',
+  'mapsi': '/projects/mapsi',
+  // Aditi showcase
+  'matcha — e-commerce ui kit': '/projects/matcha',
+  'matcha': '/projects/matcha',
+  'personal branding shoot': '/projects/personal-branding',
+  'personal branding shoot — visuals': '/projects/personal-branding',
+  // Aman showcase
+  'steer — project management': '/projects/steer',
+  'steer': '/projects/steer',
+  'port — developer portfolio site': '/projects/port',
+  'port': '/projects/port',
 };
 
 function getProjectUrl(title, fallbackLink) {
