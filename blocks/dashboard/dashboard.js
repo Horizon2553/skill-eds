@@ -10,25 +10,26 @@ function getHireRequests() {
   try { return JSON.parse(localStorage.getItem('sb_hire_requests')) || []; } catch { return []; }
 }
 function saveHireRequests(r) { localStorage.setItem('sb_hire_requests', JSON.stringify(r)); }
+function getFavourites(clientId) {
+  try { return JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || []; } catch { return []; }
+}
 
-// Seed jobs — same content as browse-projects page
+// Seed jobs
 const SEED_JOBS = [
-  { id: 'react-ecommerce-frontend', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Build a React E-Commerce Frontend', desc: 'Looking for an experienced React developer to build the frontend for our e-commerce platform. Product listing, cart, checkout, and user profile pages. Must be responsive.', budget: '₹25,000', budgetType: 'fixed', skills: ['React', 'JavaScript', 'CSS', 'HTML'], deadline: '30 days', category: 'Web Development', postedAt: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: 'uiux-saas-dashboard', clientId: 'client-jane', clientName: 'Jane Doe', title: 'UI/UX Designer for SaaS Dashboard', desc: 'We need a UI/UX designer to redesign our analytics dashboard. Wireframes, high-fidelity mockups, and a complete design system.', budget: '₹15,000', budgetType: 'fixed', skills: ['UI/UX', 'AI', 'Prototyping', 'Design Systems'], deadline: '21 days', category: 'Design', postedAt: new Date(Date.now() - 86400000).toISOString() },
-  { id: 'python-backend-api', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Python Backend API Development', desc: 'Need a skilled Python developer to build REST APIs using Django/FastAPI for our mobile application.', budget: '₹800/hr', budgetType: 'hourly', skills: ['Python', 'Django', 'REST API', 'PostgreSQL'], deadline: '45 days', category: 'Backend Development', postedAt: new Date(Date.now() - 3 * 86400000).toISOString() },
-  { id: 'mobile-app-react-native', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Mobile App UI — React Native', desc: 'Building a fitness tracking app. Need a React Native developer to implement 12 UI screens from our designs.', budget: '₹20,000', budgetType: 'fixed', skills: ['React Native', 'JavaScript', 'Mobile', 'Expo'], deadline: '20 days', category: 'Mobile Development', postedAt: new Date(Date.now() - 5 * 3600000).toISOString() },
-  { id: 'fullstack-nodejs', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Full-Stack Web App with Node.js', desc: 'Need a full-stack developer to build a web application with Node.js backend and React frontend. Auth, dashboard, and data export.', budget: '₹40,000', budgetType: 'fixed', skills: ['Node.js', 'React', 'MongoDB', 'Express'], deadline: '60 days', category: 'Web Development', postedAt: new Date(Date.now() - 4 * 86400000).toISOString() },
-  { id: 'brand-identity-logo', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Brand Identity & Logo Design', desc: 'Need a creative designer to create a complete brand identity for our startup. Logo, color palette, typography, and brand guidelines.', budget: '₹8,000', budgetType: 'fixed', skills: ['Branding', 'Illustrator', 'Typography'], deadline: '14 days', category: 'Design', postedAt: new Date(Date.now() - 6 * 3600000).toISOString() },
+  { id: 'react-ecommerce-frontend', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Build a React E-Commerce Frontend', desc: 'Looking for an experienced React developer to build the frontend for our e-commerce platform.', budget: '₹25,000', budgetType: 'fixed', skills: ['React', 'JavaScript', 'CSS'], deadline: '30 days', category: 'Web Development', postedAt: new Date(Date.now() - 2 * 86400000).toISOString() },
+  { id: 'uiux-saas-dashboard', clientId: 'client-jane', clientName: 'Jane Doe', title: 'UI/UX Designer for SaaS Dashboard', desc: 'We need a UI/UX designer to redesign our analytics dashboard.', budget: '₹15,000', budgetType: 'fixed', skills: ['UI/UX', 'Figma', 'Prototyping'], deadline: '21 days', category: 'Design', postedAt: new Date(Date.now() - 86400000).toISOString() },
+  { id: 'python-backend-api', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Python Backend API Development', desc: 'Need a skilled Python developer to build REST APIs.', budget: '₹800/hr', budgetType: 'hourly', skills: ['Python', 'Django', 'REST API'], deadline: '45 days', category: 'Backend Development', postedAt: new Date(Date.now() - 3 * 86400000).toISOString() },
+  { id: 'mobile-app-react-native', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Mobile App UI — React Native', desc: 'Building a fitness tracking app. Need a React Native developer.', budget: '₹20,000', budgetType: 'fixed', skills: ['React Native', 'JavaScript', 'Mobile'], deadline: '20 days', category: 'Mobile Development', postedAt: new Date(Date.now() - 5 * 3600000).toISOString() },
+  { id: 'brand-identity-logo', clientId: 'client-jane', clientName: 'Jane Doe', title: 'Brand Identity & Logo Design', desc: 'Need a creative designer to create a complete brand identity.', budget: '₹8,000', budgetType: 'fixed', skills: ['Branding', 'Illustrator'], deadline: '14 days', category: 'Design', postedAt: new Date(Date.now() - 6 * 3600000).toISOString() },
 ];
 
-// Seed default proposals so the demo isn't empty
 function seedDefaultProposals() {
   const existing = getProposals();
   if (existing.length > 0) return;
   saveProposals([
-    { id: 'prop-seed-1', jobId: 'react-ecommerce-frontend', jobTitle: 'Build a React E-Commerce Frontend', clientId: 'client-jane', freelancerId: 'rahul-sharma', freelancerName: 'Rahul Sharma', freelancerRole: 'Frontend Developer', coverLetter: 'I have 3+ years of React experience and have built similar e-commerce platforms. I can deliver a pixel-perfect, responsive storefront with smooth cart animations and fast load times.', budget: '₹22,000', timeline: '25 days', status: 'pending', createdAt: new Date(Date.now() - 86400000).toISOString() },
-    { id: 'prop-seed-2', jobId: 'uiux-saas-dashboard', jobTitle: 'UI/UX Designer for SaaS Dashboard', clientId: 'client-jane', freelancerId: 'aditi-rao', freelancerName: 'Aditi Rao', freelancerRole: 'UI/UX Designer', coverLetter: 'I specialize in SaaS dashboard design and have built several analytics UIs. I work with Figma, Webflow, and can deliver a complete design system with component library.', budget: '₹13,500', timeline: '18 days', status: 'pending', createdAt: new Date(Date.now() - 2 * 3600000).toISOString() },
-    { id: 'prop-seed-3', jobId: 'mobile-app-react-native', jobTitle: 'Mobile App UI — React Native', clientId: 'client-jane', freelancerId: 'rahul-sharma', freelancerName: 'Rahul Sharma', freelancerRole: 'Frontend Developer', coverLetter: 'I have experience with React Native and can implement all 12 screens with smooth animations and proper state management.', budget: '₹18,000', timeline: '15 days', status: 'approved', createdAt: new Date(Date.now() - 3 * 86400000).toISOString() },
+    { id: 'prop-seed-1', jobId: 'react-ecommerce-frontend', jobTitle: 'Build a React E-Commerce Frontend', clientId: 'client-jane', freelancerId: 'rahul-sharma', freelancerName: 'Rahul Sharma', freelancerRole: 'Frontend Developer', coverLetter: 'I have 3+ years of React experience and have built similar e-commerce platforms.', budget: '₹22,000', timeline: '25 days', status: 'pending', createdAt: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'prop-seed-2', jobId: 'uiux-saas-dashboard', jobTitle: 'UI/UX Designer for SaaS Dashboard', clientId: 'client-jane', freelancerId: 'aditi-rao', freelancerName: 'Aditi Rao', freelancerRole: 'UI/UX Designer', coverLetter: 'I specialize in SaaS dashboard design and have built several analytics UIs.', budget: '₹13,500', timeline: '18 days', status: 'pending', createdAt: new Date(Date.now() - 2 * 3600000).toISOString() },
+    { id: 'prop-seed-3', jobId: 'mobile-app-react-native', jobTitle: 'Mobile App UI — React Native', clientId: 'client-jane', freelancerId: 'rahul-sharma', freelancerName: 'Rahul Sharma', freelancerRole: 'Frontend Developer', coverLetter: 'I have experience with React Native and can implement all 12 screens.', budget: '₹18,000', timeline: '15 days', status: 'approved', createdAt: new Date(Date.now() - 3 * 86400000).toISOString() },
   ]);
 }
 
@@ -41,260 +42,360 @@ function timeAgo(iso) {
   return `${Math.floor(h / 24)}d ago`;
 }
 
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return `${d.getDate()} ${d.toLocaleString('en', { month: 'short' })}, ${d.toLocaleString('en', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+}
+
 function statusBadge(status) {
   const map = { pending: ['#f59e0b', '#fffbeb', 'Pending'], approved: ['#1dbf73', '#f0fdf7', 'Approved'], rejected: ['#dc2626', '#fef2f2', 'Rejected'] };
   const [color, bg, label] = map[status] || ['#888', '#f5f5f5', status];
   return `<span class="db-status-badge" style="color:${color};background:${bg}">${label}</span>`;
 }
 
+// ── FREELANCER DASHBOARD ──────────────────────────────────────────────────────
 function buildFreelancerDash(session) {
   seedDefaultProposals();
-  const myProposals = getProposals().filter((p) => p.freelancerId === session.id);
-  const myHireRequests = getHireRequests().filter((r) => r.toFreelancerId === session.id);
-  const jobs = SEED_JOBS;
-  const appliedIds = new Set(myProposals.map((p) => p.jobId));
+  const myProposals = getProposals().filter((p) => p.freelancerId === (session.id || session.email));
+  const invites = getHireRequests().filter((r) => r.toFreelancerId === (session.id || session.email));
+  const pendingInvites = invites.filter((r) => r.status === 'pending' || r.status === 'counter_pending');
 
-  const stats = {
-    sent: myProposals.length,
-    approved: myProposals.filter((p) => p.status === 'approved').length,
-    pending: myProposals.filter((p) => p.status === 'pending').length,
-    rejected: myProposals.filter((p) => p.status === 'rejected').length,
-  };
+  const avatar = session.avatar
+    ? `<img src="${session.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    : `<span style="font-size:1.4rem;font-weight:800;color:#fff">${session.name?.charAt(0).toUpperCase()}</span>`;
 
   return `
-    <div class="db-welcome">
-      <div>
-        <h1 class="db-title">Welcome back, ${session.name.split(' ')[0]}</h1>
-        <p class="db-sub">${session.skill || 'Freelancer'} — Find work and track your proposals</p>
+    <div class="db-hero">
+      <div class="db-hero-left">
+        <div class="db-hero-avatar">${avatar}</div>
+        <div>
+          <h1 class="db-title">Welcome back, ${session.name}!</h1>
+          <p class="db-sub">${session.skill || 'Freelancer'}</p>
+        </div>
       </div>
-      <a href="/browse-projects" class="db-cta-btn">Browse All Projects</a>
+      <span class="db-mode-badge">● Freelancer Mode</span>
     </div>
 
     <div class="db-stats">
-      <div class="db-stat-card"><div class="db-stat-num">${stats.sent}</div><div class="db-stat-label">Proposals Sent</div></div>
-      <div class="db-stat-card"><div class="db-stat-num" style="color:#1dbf73">${stats.approved}</div><div class="db-stat-label">Approved</div></div>
-      <div class="db-stat-card"><div class="db-stat-num" style="color:#f59e0b">${stats.pending}</div><div class="db-stat-label">Pending Review</div></div>
-      <div class="db-stat-card"><div class="db-stat-num" style="color:#dc2626">${stats.rejected}</div><div class="db-stat-label">Rejected</div></div>
-    </div>
-
-    <div class="db-tabs">
-      <button class="db-tab active" data-tab="proposals">My Proposals</button>
-      <button class="db-tab" data-tab="requests">Hire Requests${myHireRequests.length > 0 ? ` <span class="db-tab-badge">${myHireRequests.length}</span>` : ''}</button>
-      <button class="db-tab" data-tab="jobs">Browse Jobs</button>
-    </div>
-
-    <div class="db-panel active" id="db-panel-proposals">
-      ${myProposals.length === 0 ? `
-        <div class="db-empty">
-          <p>No proposals yet. Browse open projects and apply!</p>
-          <a href="/browse-projects" class="db-cta-btn">Browse Projects</a>
+      <div class="db-stat-card">
+        <div class="db-stat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-      ` : myProposals.map((p) => `
-        <div class="db-proposal-card">
-          <div class="db-proposal-top">
-            <div>
-              <div class="db-proposal-title">${p.jobTitle}</div>
-              <div class="db-proposal-meta">Budget: ${p.budget} · Timeline: ${p.timeline} · ${timeAgo(p.createdAt)}</div>
-            </div>
-            ${statusBadge(p.status)}
-          </div>
-          <p class="db-proposal-cover">${p.coverLetter}</p>
-          ${p.status === 'approved' ? `<div class="db-approved-msg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Congratulations! Your proposal was accepted. The client will contact you shortly.</div>` : ''}
-          ${p.status === 'rejected' ? `<div class="db-rejected-msg">Your proposal wasn't selected this time. Keep applying!</div>` : ''}
+        <div class="db-stat-num">${myProposals.length}</div>
+        <div class="db-stat-label">Proposals Sent</div>
+      </div>
+      <div class="db-stat-card">
+        <div class="db-stat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
-      `).join('')}
+        <div class="db-stat-num">${invites.length}</div>
+        <div class="db-stat-label">Invites Received</div>
+      </div>
+      <div class="db-stat-card">
+        <div class="db-stat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="db-stat-num">0</div>
+        <div class="db-stat-label">Messages</div>
+      </div>
     </div>
 
-    <div class="db-panel" id="db-panel-requests">
-      ${myHireRequests.length === 0 ? `
-        <div class="db-empty"><p>No hire requests yet. Clients will contact you directly when they want to hire you.</p></div>
-      ` : myHireRequests.map((r) => `
-        <div class="db-proposal-card" id="hr-${r.id}">
-          <div class="db-proposal-top">
-            <div>
-              <div class="db-proposal-title">${r.title}</div>
-              <div class="db-proposal-meta">From: ${r.fromClientName} · Budget: ${r.budget} · ${r.timeline} · ${timeAgo(r.createdAt)}</div>
-            </div>
-            ${statusBadge(r.status === 'counter_pending' ? 'pending' : r.status)}
-          </div>
-          <p class="db-proposal-cover">${r.desc}</p>
-          ${r.status === 'pending' ? `
-            <div class="db-action-row">
-              <button class="db-approve-btn" data-hr="${r.id}" data-action="accept">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accept
-              </button>
-              <button class="db-counter-btn" data-hr="${r.id}">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Counter
-              </button>
-              <button class="db-reject-btn" data-hr="${r.id}" data-action="declined">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Decline
-              </button>
-            </div>
-          ` : ''}
-          ${r.status === 'accepted' ? `<div class="db-approved-msg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> You accepted this hire request. The client will be in touch.</div>` : ''}
-          ${r.status === 'declined' ? `<div class="db-rejected-msg">You declined this request.</div>` : ''}
-          ${r.status === 'counter_pending' ? `<div class="db-counter-msg">Counter sent: ${r.counterBudget} · ${r.counterTimeline}. Waiting for client response.</div>` : ''}
-          ${r.status === 'counter_accepted' ? `<div class="db-approved-msg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Client accepted your counter. You're hired!</div>` : ''}
-          ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">Client declined your counter offer.</div>` : ''}
-        </div>
-      `).join('')}
-    </div>
+    <a href="/browse-projects" class="db-browse-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Browse Projects
+    </a>
 
-    <div class="db-panel" id="db-panel-jobs">
-      <div class="db-jobs-grid">
-        ${jobs.map((j) => `
-          <div class="db-job-card">
-            <div class="db-job-title">${j.title}</div>
-            <div class="db-job-meta">${j.clientName} · ${j.budget} · ${j.deadline}</div>
-            <p class="db-job-desc">${j.desc.slice(0, 120)}…</p>
-            <div class="db-job-skills">${j.skills.map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>
-            ${appliedIds.has(j.id)
-    ? `<button class="db-apply-btn applied" disabled><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Applied</button>`
-    : `<button class="db-apply-btn" data-job="${j.id}">Apply Now</button>`}
+    <div class="db-tabs-wrap">
+      <div class="db-tabs">
+        <button class="db-tab active" data-tab="invites">
+          Invites${pendingInvites.length > 0 ? ` <span class="db-tab-badge-red">${pendingInvites.length}</span>` : ''}
+        </button>
+        <button class="db-tab" data-tab="proposals">My Proposals</button>
+        <button class="db-tab" data-tab="messages">Messages${pendingInvites.length > 0 ? ` <span class="db-tab-badge-red">1</span>` : ''}</button>
+        <button class="db-tab" data-tab="saved">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Saved Projects
+        </button>
+        <button class="db-tab" data-tab="contracts">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          My Contracts
+        </button>
+      </div>
+
+      <div class="db-panel active" id="db-panel-invites">
+        ${invites.length === 0 ? `
+          <div class="db-empty"><p>No invites yet. Complete your profile so clients can find and hire you!</p></div>
+        ` : invites.map((r) => `
+          <div class="db-invite-card ${r.status !== 'pending' ? 'db-invite-responded' : ''}" id="inv-${r.id}">
+            <div class="db-invite-header">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#1dbf73" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              PROJECT INVITE FROM ${r.fromClientName?.toUpperCase() || 'CLIENT'}
+            </div>
+            <h3 class="db-invite-title">${r.title}</h3>
+            <div class="db-invite-meta">${r.freelancerRole || session.skill || 'Freelancer'} · ${r.budget} · ${r.timeline}</div>
+            ${r.skills?.length ? `<div class="db-invite-skills">${r.skills.map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>` : ''}
+            ${r.status === 'pending' ? `
+              <div class="db-invite-actions">
+                <button class="db-view-btn" data-hr-view="${r.id}">View Details</button>
+                <button class="db-approve-btn" data-hr="${r.id}" data-action="accepted">Accept</button>
+                <button class="db-counter-toggle" data-hr-counter="${r.id}">Counter</button>
+                <button class="db-reject-btn" data-hr="${r.id}" data-action="declined">Reject</button>
+              </div>
+              <div class="db-counter-form" id="counter-${r.id}" style="display:none">
+                <h4 class="db-counter-title">Counter Offer</h4>
+                <div class="db-counter-row">
+                  <div class="db-counter-field">
+                    <label>Your Price (₹) *</label>
+                    <input type="text" class="db-counter-price" placeholder="e.g. 18000">
+                  </div>
+                  <div class="db-counter-field">
+                    <label>Timeline *</label>
+                    <input type="text" class="db-counter-time" placeholder="e.g. 3 weeks">
+                  </div>
+                </div>
+                <div class="db-counter-field">
+                  <label>Note to client</label>
+                  <textarea class="db-counter-note" rows="3" placeholder="Explain why you're adjusting the price or timeline..."></textarea>
+                </div>
+                <div class="db-counter-btns">
+                  <button class="db-counter-submit" data-hr="${r.id}">Send Counter Offer</button>
+                  <button class="db-counter-cancel" data-hr-cancel="${r.id}">Cancel</button>
+                </div>
+              </div>
+            ` : ''}
+            ${r.status === 'accepted' ? `<div class="db-approved-msg">✓ You accepted this invite. Get in touch with ${r.fromClientName} to start!</div>` : ''}
+            ${r.status === 'declined' ? `<div class="db-rejected-msg">You declined this invite.</div>` : ''}
+            ${r.status === 'counter_pending' ? `<div class="db-counter-sent-msg">Counter sent — ${r.counterBudget} · ${r.counterTimeline}. Client is reviewing.</div>` : ''}
+            ${r.status === 'counter_accepted' ? `<div class="db-approved-msg">✓ Client accepted your counter. You're hired! Get in touch: ${r.fromClientName}</div>` : ''}
+            ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">Client declined your counter offer.</div>` : ''}
           </div>
         `).join('')}
+      </div>
+
+      <div class="db-panel" id="db-panel-proposals">
+        ${myProposals.length === 0 ? `
+          <div class="db-empty"><p>No proposals yet. <a href="/browse-projects">Browse open projects</a> and apply!</p></div>
+        ` : myProposals.map((p) => `
+          <div class="db-proposal-card">
+            <div class="db-proposal-top">
+              <div>
+                <div class="db-proposal-title">${p.jobTitle}</div>
+                <div class="db-proposal-meta">Proposed: ${p.budget} · ${p.timeline} · ${timeAgo(p.createdAt)}</div>
+              </div>
+              ${statusBadge(p.status)}
+            </div>
+            <p class="db-proposal-cover">${p.coverLetter}</p>
+            ${p.status === 'approved' ? `<div class="db-approved-msg">✓ Congratulations! Your proposal was accepted.</div>` : ''}
+            ${p.status === 'rejected' ? `<div class="db-rejected-msg">This proposal wasn't selected. Keep applying!</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="db-panel" id="db-panel-messages">
+        <div class="db-empty"><p>Messages will appear here when clients communicate with you.</p></div>
+      </div>
+
+      <div class="db-panel" id="db-panel-saved">
+        <div class="db-empty"><p>Save projects from Browse Projects to track them here.</p></div>
+      </div>
+
+      <div class="db-panel" id="db-panel-contracts">
+        <div class="db-empty"><p>Contracts will appear here once a hire is finalised.</p></div>
       </div>
     </div>
   `;
 }
 
-function getFavourites(clientId) {
-  try { return JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || []; } catch { return []; }
-}
-
+// ── CLIENT DASHBOARD ──────────────────────────────────────────────────────────
 function buildClientDash(session) {
   seedDefaultProposals();
-  const myJobs = SEED_JOBS.filter((j) => j.clientId === session.id || session.id === 'client-jane');
-  const allProposals = getProposals();
-  const myProposals = allProposals.filter((p) => p.clientId === session.id || session.id === 'client-jane');
-  const sentRequests = getHireRequests().filter((r) => r.fromClientId === session.id);
-  const favIds = getFavourites(session.id);
-
-  // Load saved freelancers from sb_users_v1 + demo names for IDs
   const allUsers = (() => { try { return JSON.parse(localStorage.getItem('sb_users_v1')) || []; } catch { return []; } })();
-  const DEMO_NAMES = { 'rahul-sharma': 'Rahul Sharma', 'aditi-rao': 'Aditi Rao', 'client-jane': 'Jane Doe' };
+  const isJane = session.id === 'client-jane';
+  const myJobsFromSeed = isJane ? SEED_JOBS : [];
+  const myJobsFromLS = (() => { try { return JSON.parse(localStorage.getItem(`sb_posted_jobs_${session.id}`) || '[]'); } catch { return []; } })();
+  const myJobs = [...myJobsFromSeed, ...myJobsFromLS];
+
+  const allProposals = getProposals();
+  const myProposals = allProposals.filter((p) => p.clientId === session.id || isJane);
+  const sentRequests = getHireRequests().filter((r) => r.fromClientId === session.id);
+  const activeResponses = sentRequests.filter((r) => r.status !== 'pending');
+  const favIds = getFavourites(session.id);
   const savedFreelancers = favIds.map((id) => {
     const u = allUsers.find((x) => x.id === id);
-    return u || { id, name: DEMO_NAMES[id] || id, skill: 'Freelancer', profileHref: `/my-profile?id=${id}` };
-  }).filter((u) => u.name);
+    return u ? { ...u, profileHref: `/my-profile?id=${id}` } : null;
+  }).filter(Boolean);
 
-  const stats = {
-    jobs: myJobs.length,
-    total: myProposals.length,
-    pending: myProposals.filter((p) => p.status === 'pending').length,
-    hired: sentRequests.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').length,
-    requests: sentRequests.length,
-  };
+  const avatar = session.avatar
+    ? `<img src="${session.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    : `<span style="font-size:1.4rem;font-weight:800;color:#fff">${session.name?.charAt(0).toUpperCase()}</span>`;
 
-  const defaultTab = sentRequests.length > 0 && myProposals.length === 0 ? 'sentrequests' : 'review';
+  const defaultTab = activeResponses.length > 0 ? 'responses' : 'projects';
 
   return `
-    <div class="db-welcome">
-      <div>
-        <h1 class="db-title">Welcome back, ${session.name.split(' ')[0]} 👋</h1>
-        <p class="db-sub">Client Dashboard — Manage your projects and hire talent</p>
+    <div class="db-hero">
+      <div class="db-hero-left">
+        <div class="db-hero-avatar">${avatar}</div>
+        <div>
+          <h1 class="db-title">Welcome back, ${session.name.split(' ')[0]}!</h1>
+          <p class="db-sub">Manage your projects and proposals</p>
+        </div>
       </div>
+      <span class="db-mode-badge db-mode-client">● Client Mode</span>
     </div>
 
     <div class="db-stats">
-      <div class="db-stat-card"><div class="db-stat-num">${stats.requests}</div><div class="db-stat-label">Hire Requests Sent</div></div>
-      <div class="db-stat-card"><div class="db-stat-num" style="color:#1dbf73">${stats.hired}</div><div class="db-stat-label">Hired</div></div>
-      <div class="db-stat-card"><div class="db-stat-num">${stats.total}</div><div class="db-stat-label">Proposals Received</div></div>
-      <div class="db-stat-card"><div class="db-stat-num">${savedFreelancers.length}</div><div class="db-stat-label">Saved Freelancers</div></div>
+      <div class="db-stat-card"><div class="db-stat-num">${myJobs.length}</div><div class="db-stat-label">Projects Posted</div></div>
+      <div class="db-stat-card"><div class="db-stat-num">${myProposals.length}</div><div class="db-stat-label">Total Proposals</div></div>
+      <div class="db-stat-card"><div class="db-stat-num">${savedFreelancers.length}</div><div class="db-stat-label">Favourite Freelancers</div></div>
     </div>
 
-    <div class="db-tabs">
-      <button class="db-tab ${defaultTab === 'sentrequests' ? 'active' : ''}" data-tab="sentrequests">
-        Hire Requests${sentRequests.length > 0 ? ` <span class="db-tab-badge">${sentRequests.length}</span>` : ''}
-      </button>
-      <button class="db-tab ${defaultTab === 'review' ? 'active' : ''}" data-tab="review">Proposals Received</button>
-      <button class="db-tab" data-tab="saved">Saved Freelancers${savedFreelancers.length > 0 ? ` <span class="db-tab-badge">${savedFreelancers.length}</span>` : ''}</button>
-      <button class="db-tab" data-tab="myjobs">My Projects</button>
-    </div>
+    <div class="db-tabs-wrap">
+      <div class="db-tabs">
+        <button class="db-tab ${defaultTab === 'projects' ? 'active' : ''}" data-tab="projects">My Posted Projects</button>
+        <button class="db-tab ${defaultTab === 'responses' ? 'active' : ''}" data-tab="responses">
+          Responses${activeResponses.length > 0 ? ` <span class="db-tab-badge-red">${activeResponses.length}</span>` : ''}
+        </button>
+        <button class="db-tab" data-tab="favourites">Favourite Freelancers</button>
+        <button class="db-tab" data-tab="escrow">Payments &amp; Escrow</button>
+        <button class="db-tab" data-tab="contracts">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          My Contracts
+        </button>
+      </div>
 
-    <div class="db-panel ${defaultTab === 'sentrequests' ? 'active' : ''}" id="db-panel-sentrequests">
-      ${sentRequests.length === 0 ? `
-        <div class="db-empty"><p>No hire requests sent yet. Visit a freelancer's profile and click "Hire [Name]" to send a request.</p></div>
-      ` : sentRequests.map((r) => `
-        <div class="db-proposal-card" id="sr-${r.id}">
-          <div class="db-proposal-top">
-            <div>
-              <div class="db-proposal-title">To: ${r.toFreelancerName}</div>
-              <div class="db-proposal-meta">${r.title} · ${r.budget} · ${r.timeline} · ${timeAgo(r.createdAt)}</div>
-            </div>
-            ${statusBadge(r.status === 'counter_pending' ? 'pending' : r.status === 'accepted' ? 'approved' : r.status === 'declined' ? 'rejected' : r.status)}
-          </div>
-          <p class="db-proposal-cover">${r.desc}</p>
-          ${r.status === 'counter_pending' ? `
-            <div class="db-counter-msg">Freelancer countered: <strong>${r.counterBudget}</strong> · ${r.counterTimeline}</div>
-            <div class="db-action-row" style="margin-top:12px">
-              <button class="db-approve-btn" data-hr="${r.id}" data-action="counter_accepted">Accept Counter</button>
-              <button class="db-reject-btn" data-hr="${r.id}" data-action="counter_declined">Decline Counter</button>
-            </div>
-          ` : ''}
-          ${r.status === 'accepted' ? `<div class="db-approved-msg">Freelancer accepted your request. Reach out to start!</div>` : ''}
-          ${r.status === 'declined' ? `<div class="db-rejected-msg">Freelancer declined this request.</div>` : ''}
-          ${r.status === 'counter_accepted' ? `<div class="db-approved-msg">You accepted the counter. Start working with ${r.toFreelancerName}!</div>` : ''}
-          ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">You declined the counter offer.</div>` : ''}
-        </div>
-      `).join('')}
-    </div>
-
-    <div class="db-panel ${defaultTab === 'review' ? 'active' : ''}" id="db-panel-review">
-      ${myProposals.length === 0 ? `
-        <div class="db-empty"><p>No proposals received yet. Your projects are live at <a href="/browse-projects">/browse-projects</a>.</p></div>
-      ` : myProposals.map((p) => `
-        <div class="db-proposal-card" id="prop-${p.id}">
-          <div class="db-proposal-top">
-            <div>
-              <div class="db-proposal-title">${p.freelancerName} <span class="db-fl-role">· ${p.freelancerRole}</span></div>
-              <div class="db-proposal-meta">For: ${p.jobTitle} · Proposed: ${p.budget} · ${p.timeline} · ${timeAgo(p.createdAt)}</div>
-            </div>
-            ${statusBadge(p.status)}
-          </div>
-          <p class="db-proposal-cover">${p.coverLetter}</p>
-          ${p.status === 'pending' ? `
-            <div class="db-action-row">
-              <button class="db-approve-btn" data-prop="${p.id}">Approve</button>
-              <button class="db-reject-btn" data-prop="${p.id}">Reject</button>
-            </div>
-          ` : ''}
-        </div>
-      `).join('')}
-    </div>
-
-    <div class="db-panel" id="db-panel-saved">
-      ${savedFreelancers.length === 0 ? `
-        <div class="db-empty"><p>No saved freelancers yet. Click the ★ bookmark on any freelancer card to save them here.</p></div>
-      ` : `
-        <div class="db-jobs-grid">
-          ${savedFreelancers.map((u) => `
-            <a href="/my-profile?id=${u.id}" class="db-saved-card" style="text-decoration:none;color:inherit">
-              <div class="db-saved-avatar">${u.avatar ? `<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span>${(u.name||'?').charAt(0).toUpperCase()}</span>`}</div>
-              <div class="db-saved-name">${u.name}</div>
-              <div class="db-saved-role">${u.skill || 'Freelancer'}</div>
-              ${u.hourlyRate ? `<div class="db-saved-rate">₹${u.hourlyRate}/hr</div>` : ''}
-              <div class="db-saved-btn">View Profile →</div>
-            </a>
-          `).join('')}
-        </div>
-      `}
-    </div>
-
-    <div class="db-panel" id="db-panel-myjobs">
-      <div class="db-jobs-grid">
-        ${myJobs.length === 0 ? `<div class="db-empty"><p>No projects posted yet.</p></div>` : myJobs.map((j) => {
+      <!-- My Posted Projects -->
+      <div class="db-panel ${defaultTab === 'projects' ? 'active' : ''}" id="db-panel-projects">
+        ${myJobs.length === 0 ? `<div class="db-empty"><p>No projects posted yet. <a href="/hire-talent">Browse talent</a> and hire someone!</p></div>` : myJobs.map((j) => {
     const count = allProposals.filter((p) => p.jobId === j.id).length;
     return `
-          <div class="db-job-card">
-            <div class="db-job-title">${j.title}</div>
-            <div class="db-job-meta">${j.budget} · ${j.budgetType} · ${j.deadline}</div>
-            <p class="db-job-desc">${j.desc.slice(0, 120)}…</p>
-            <div class="db-job-skills">${j.skills.map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>
-            <div class="db-job-proposal-count">${count} proposal${count !== 1 ? 's' : ''} received</div>
+          <div class="db-posted-card">
+            <div class="db-posted-top">
+              <div>
+                <div class="db-posted-title">${j.title}</div>
+                <div class="db-posted-meta">
+                  <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> ${j.budget}</span>
+                  <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${j.deadline}</span>
+                  <span>Posted ${j.postedAt ? fmtDate(j.postedAt).split(',')[0] : 'recently'} Jul 2026</span>
+                </div>
+                <div class="db-job-skills">${(j.skills||[]).map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>
+              </div>
+              <div class="db-posted-right">
+                <span class="db-proposals-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  ${count} proposal${count !== 1 ? 's' : ''}
+                </span>
+                <span class="db-open-badge">Open</span>
+              </div>
+            </div>
           </div>
         `;
   }).join('')}
+      </div>
+
+      <!-- Responses -->
+      <div class="db-panel ${defaultTab === 'responses' ? 'active' : ''}" id="db-panel-responses">
+        ${sentRequests.length === 0 ? `
+          <div class="db-empty"><p>No responses yet. Visit a freelancer's profile and send a hire request.</p></div>
+        ` : sentRequests.map((r) => {
+    const freelancer = allUsers.find((u) => u.id === r.toFreelancerId);
+    const avatarSrc = freelancer?.avatar;
+    const fl = avatarSrc
+      ? `<img src="${avatarSrc}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0">`
+      : `<div style="width:40px;height:40px;border-radius:50%;background:#1dbf73;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0">${r.toFreelancerName?.charAt(0)}</div>`;
+    return `
+          <div class="db-response-card" id="resp-${r.id}">
+            <div class="db-response-top">
+              <div style="display:flex;align-items:center;gap:12px">
+                ${fl}
+                <div>
+                  <div class="db-response-name">${r.toFreelancerName}</div>
+                  <div class="db-response-meta">${r.title} · ${fmtDate(r.createdAt)}</div>
+                </div>
+              </div>
+              ${r.status === 'counter_pending' ? `<span class="db-counter-badge">↔ Counter Offer</span>` : ''}
+            </div>
+            ${r.status === 'counter_pending' ? `
+              <div class="db-response-counter">
+                <span class="db-counter-amount">${r.counterBudget}</span>
+                <span> &nbsp; Timeline: ${r.counterTimeline}</span>
+              </div>
+              <p class="db-response-note">Counter offer from ${r.toFreelancerName}.</p>
+              <div class="db-invite-actions">
+                <button class="db-approve-btn" data-resp="${r.id}" data-action="counter_accepted">Accept</button>
+                <button class="db-counter-toggle" data-resp-counter="${r.id}">Counter</button>
+                <button class="db-reject-btn" data-resp="${r.id}" data-action="counter_declined">Decline</button>
+              </div>
+              <div class="db-counter-form" id="resp-counter-${r.id}" style="display:none">
+                <h4 class="db-counter-title">Counter Offer</h4>
+                <div class="db-counter-row">
+                  <div class="db-counter-field"><label>Your Budget *</label><input type="text" class="db-counter-price" placeholder="e.g. ₹20,000"></div>
+                  <div class="db-counter-field"><label>Timeline *</label><input type="text" class="db-counter-time" placeholder="e.g. 3 weeks"></div>
+                </div>
+                <div class="db-counter-btns">
+                  <button class="db-counter-submit db-resp-counter-submit" data-resp="${r.id}">Send Counter</button>
+                  <button class="db-counter-cancel" data-resp-cancel="${r.id}">Cancel</button>
+                </div>
+              </div>
+            ` : ''}
+            ${r.status === 'pending' ? `<div class="db-response-note" style="color:#888">Invite sent. Waiting for ${r.toFreelancerName} to respond.</div>` : ''}
+            ${r.status === 'accepted' || r.status === 'counter_accepted' ? `
+              <div class="db-accepted-msg">
+                ✓ Accepted — Get in touch with <strong>${r.toFreelancerName}</strong>
+                ${r.toFreelancerEmail ? ` via <a href="mailto:${r.toFreelancerEmail}" style="color:#1dbf73">${r.toFreelancerEmail}</a>` : ''}
+                ${r.toFreelancerLinkedin ? ` · <a href="${r.toFreelancerLinkedin}" target="_blank" style="color:#1dbf73">LinkedIn</a>` : ''}
+              </div>
+            ` : ''}
+            ${r.status === 'declined' ? `<div class="db-rejected-msg">${r.toFreelancerName} declined this invite.</div>` : ''}
+            ${r.status === 'counter_declined' ? `<div class="db-rejected-msg">You declined ${r.toFreelancerName}'s counter offer.</div>` : ''}
+          </div>
+        `;
+  }).join('')}
+      </div>
+
+      <!-- Favourite Freelancers -->
+      <div class="db-panel" id="db-panel-favourites">
+        ${savedFreelancers.length === 0 ? `
+          <div class="db-empty"><p>No saved freelancers yet. Click ★ Save to Favourites on any profile to add them here.</p></div>
+        ` : `
+          <div class="db-jobs-grid">
+            ${savedFreelancers.map((u) => `
+              <a href="/my-profile?id=${u.id}" class="db-saved-card" style="text-decoration:none;color:inherit">
+                <div class="db-saved-avatar">${u.avatar ? `<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span>${(u.name||'?').charAt(0).toUpperCase()}</span>`}</div>
+                <div class="db-saved-name">${u.name}</div>
+                <div class="db-saved-role">${u.skill || 'Freelancer'}</div>
+                ${u.hourlyRate ? `<div class="db-saved-rate">₹${u.hourlyRate}/hr</div>` : ''}
+                <div class="db-saved-btn">View Profile →</div>
+              </a>
+            `).join('')}
+          </div>
+        `}
+      </div>
+
+      <!-- Payments & Escrow -->
+      <div class="db-panel" id="db-panel-escrow">
+        ${sentRequests.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').length === 0 ? `
+          <div class="db-empty"><p>No active engagements yet. Once a freelancer accepts your invite, their contact details will appear here.</p></div>
+        ` : sentRequests.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').map((r) => `
+          <div class="db-proposal-card">
+            <div class="db-proposal-top">
+              <div>
+                <div class="db-proposal-title">${r.title}</div>
+                <div class="db-proposal-meta">with ${r.toFreelancerName} · ${r.budget}</div>
+              </div>
+              <span class="db-status-badge" style="color:#1dbf73;background:#f0fdf7">Active</span>
+            </div>
+            <div class="db-accepted-msg" style="margin-top:12px">
+              Get in touch with <strong>${r.toFreelancerName}</strong>
+              ${r.toFreelancerEmail ? ` via <a href="mailto:${r.toFreelancerEmail}" style="color:#1dbf73">${r.toFreelancerEmail}</a>` : ''}
+              ${r.toFreelancerLinkedin ? ` · <a href="${r.toFreelancerLinkedin}" target="_blank" style="color:#1dbf73">LinkedIn Profile</a>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- My Contracts -->
+      <div class="db-panel" id="db-panel-contracts">
+        <div class="db-empty"><p>Formal contracts will appear here once both parties agree on terms.</p></div>
       </div>
     </div>
   `;
@@ -302,11 +403,7 @@ function buildClientDash(session) {
 
 export default async function decorate(block) {
   const session = getSession();
-
-  if (!session) {
-    window.location.href = '/login';
-    return;
-  }
+  if (!session) { window.location.href = '/login'; return; }
 
   block.innerHTML = `<div class="db-container">${session.role === 'client' ? buildClientDash(session) : buildFreelancerDash(session)}</div>`;
 
@@ -322,183 +419,145 @@ export default async function decorate(block) {
     });
   });
 
-  // Approve / Reject buttons (client)
-  block.querySelectorAll('.db-approve-btn, .db-reject-btn').forEach((btn) => {
+  // ── FREELANCER: Invite actions ────────────────────────────────────────────
+  block.querySelectorAll('[data-hr]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const propId = btn.dataset.prop;
-      const newStatus = btn.classList.contains('db-approve-btn') ? 'approved' : 'rejected';
+      const reqs = getHireRequests();
+      const idx = reqs.findIndex((r) => r.id === btn.dataset.hr);
+      if (idx === -1) return;
+      reqs[idx].status = btn.dataset.action;
+      saveHireRequests(reqs);
+      block.innerHTML = `<div class="db-container">${buildFreelancerDash(session)}</div>`;
+      decorate(block); // re-wire
+    });
+  });
+
+  // Counter toggle (show/hide form)
+  block.querySelectorAll('[data-hr-counter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#counter-${btn.dataset.hrCounter}`);
+      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+
+  block.querySelectorAll('[data-hr-cancel]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#counter-${btn.dataset.hrCancel}`);
+      if (form) form.style.display = 'none';
+    });
+  });
+
+  // Submit counter offer (freelancer)
+  block.querySelectorAll('.db-counter-submit:not(.db-resp-counter-submit)').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = btn.closest('.db-counter-form');
+      const price = form.querySelector('.db-counter-price').value.trim();
+      const time = form.querySelector('.db-counter-time').value.trim();
+      const note = form.querySelector('.db-counter-note')?.value.trim() || '';
+      if (!price || !time) return;
+      const reqs = getHireRequests();
+      const idx = reqs.findIndex((r) => r.id === btn.dataset.hr);
+      if (idx === -1) return;
+      reqs[idx].status = 'counter_pending';
+      reqs[idx].counterBudget = `₹${price.replace(/[^0-9]/g, '')}`;
+      reqs[idx].counterTimeline = time;
+      reqs[idx].counterNote = note;
+      saveHireRequests(reqs);
+      block.innerHTML = `<div class="db-container">${buildFreelancerDash(session)}</div>`;
+      decorate(block);
+    });
+  });
+
+  // ── CLIENT: Response actions ──────────────────────────────────────────────
+  block.querySelectorAll('[data-resp]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const reqs = getHireRequests();
+      const idx = reqs.findIndex((r) => r.id === btn.dataset.resp);
+      if (idx === -1) return;
+      reqs[idx].status = btn.dataset.action;
+      saveHireRequests(reqs);
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
+    });
+  });
+
+  block.querySelectorAll('[data-resp-counter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#resp-counter-${btn.dataset.respCounter}`);
+      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+
+  block.querySelectorAll('[data-resp-cancel]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#resp-counter-${btn.dataset.respCancel}`);
+      if (form) form.style.display = 'none';
+    });
+  });
+
+  block.querySelectorAll('.db-resp-counter-submit').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = btn.closest('.db-counter-form');
+      const price = form.querySelector('.db-counter-price').value.trim();
+      const time = form.querySelector('.db-counter-time').value.trim();
+      if (!price || !time) return;
+      const reqs = getHireRequests();
+      const idx = reqs.findIndex((r) => r.id === btn.dataset.resp);
+      if (idx === -1) return;
+      reqs[idx].status = 'pending'; // back to pending so freelancer can respond
+      reqs[idx].counterBudget = price;
+      reqs[idx].counterTimeline = time;
+      saveHireRequests(reqs);
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
+    });
+  });
+
+  // Approve/reject proposals (client)
+  block.querySelectorAll('.db-approve-btn[data-prop]').forEach((btn) => {
+    btn.addEventListener('click', () => {
       const proposals = getProposals();
-      const prop = proposals.find((p) => p.id === propId);
-      if (!prop) return;
-      prop.status = newStatus;
-
-      // If approving, reject all others for same job
-      if (newStatus === 'approved') {
-        proposals.filter((p) => p.jobId === prop.jobId && p.id !== propId).forEach((p) => { p.status = 'rejected'; });
-      }
+      const idx = proposals.findIndex((p) => p.id === btn.dataset.prop);
+      if (idx === -1) return;
+      proposals[idx].status = 'approved';
       saveProposals(proposals);
-
-      // Update UI without reload
-      const card = block.querySelector(`#prop-${propId}`);
-      if (card) {
-        card.querySelector('.db-action-row')?.remove();
-        card.querySelector('.db-status-badge')?.outerHTML;
-        const badge = card.querySelector('.db-status-badge');
-        if (badge) badge.outerHTML = statusBadge(newStatus);
-        const msg = document.createElement('div');
-        msg.className = newStatus === 'approved' ? 'db-approved-msg' : 'db-rejected-msg';
-        msg.textContent = newStatus === 'approved' ? '✓ You approved this proposal. The freelancer has been notified.' : '✗ You rejected this proposal.';
-        card.append(msg);
-      }
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
     });
   });
 
-  // Browse jobs apply (freelancer)
-  block.querySelectorAll('.db-apply-btn[data-job]').forEach((btn) => {
+  block.querySelectorAll('.db-reject-btn[data-prop]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const job = SEED_JOBS.find((j) => j.id === btn.dataset.job);
-      if (!job) return;
-      openProposalModal(job, session, btn);
-    });
-  });
-
-  function openProposalModal(job, sess, triggerBtn) {
-    const modal = document.createElement('div');
-    modal.id = 'db-proposal-modal';
-    modal.innerHTML = `
-      <div class="db-modal-overlay">
-        <div class="db-modal-card">
-          <button class="db-modal-close">&times;</button>
-          <h2>Submit Proposal</h2>
-          <p class="db-modal-job">${job.title}</p>
-          <form novalidate>
-            <div class="db-modal-field">
-              <label>Cover Letter *</label>
-              <textarea rows="5" id="dm-cover" placeholder="Why are you the best fit?" required></textarea>
-            </div>
-            <div class="db-modal-row">
-              <div class="db-modal-field">
-                <label>Your Budget *</label>
-                <input type="text" id="dm-budget" placeholder="e.g. ₹15,000" required>
-              </div>
-              <div class="db-modal-field">
-                <label>Timeline</label>
-                <input type="text" id="dm-timeline" placeholder="e.g. 2 weeks">
-              </div>
-            </div>
-            <p class="db-modal-err" id="dm-err"></p>
-            <button type="submit" class="db-modal-submit">Submit Proposal</button>
-          </form>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    document.body.style.overflow = 'hidden';
-
-    const close = () => { modal.remove(); document.body.style.overflow = ''; };
-    modal.querySelector('.db-modal-close').addEventListener('click', close);
-    modal.querySelector('.db-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
-
-    modal.querySelector('form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const cover = modal.querySelector('#dm-cover').value.trim();
-      const budget = modal.querySelector('#dm-budget').value.trim();
-      const timeline = modal.querySelector('#dm-timeline').value.trim();
-      const err = modal.querySelector('#dm-err');
-      if (!cover || !budget) { err.textContent = 'Please fill all required fields.'; return; }
-
       const proposals = getProposals();
-      proposals.push({
-        id: `prop-${Date.now()}`,
-        jobId: job.id, jobTitle: job.title,
-        clientId: job.clientId,
-        freelancerId: sess.id, freelancerName: sess.name, freelancerRole: sess.skill || 'Freelancer',
-        coverLetter: cover, budget, timeline,
-        status: 'pending', createdAt: new Date().toISOString(),
-      });
+      const idx = proposals.findIndex((p) => p.id === btn.dataset.prop);
+      if (idx === -1) return;
+      proposals[idx].status = 'rejected';
       saveProposals(proposals);
-      close();
-      if (triggerBtn) { triggerBtn.textContent = '✓ Applied'; triggerBtn.disabled = true; triggerBtn.classList.add('applied'); }
-    });
-  }
-
-  // Hire request: freelancer accept/decline
-  block.querySelectorAll('[data-hr][data-action]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const hrId = btn.dataset.hr;
-      const action = btn.dataset.action;
-      const requests = getHireRequests();
-      const req = requests.find((r) => r.id === hrId);
-      if (!req) return;
-      req.status = action;
-      saveHireRequests(requests);
-      const card = block.querySelector(`#hr-${hrId}`) || block.querySelector(`#sr-${hrId}`);
-      if (card) {
-        card.querySelector('.db-action-row')?.remove();
-        card.querySelector('.db-counter-msg + .db-action-row')?.remove();
-        const msg = document.createElement('div');
-        const isGood = ['accepted', 'counter_accepted'].includes(action);
-        msg.className = isGood ? 'db-approved-msg' : 'db-rejected-msg';
-        const messages = {
-          accepted: 'You accepted this hire request. The client will be in touch.',
-          declined: 'You declined this request.',
-          counter_accepted: `You accepted the counter. Start working!`,
-          counter_declined: 'You declined the counter offer.',
-        };
-        msg.textContent = messages[action] || action;
-        card.append(msg);
-      }
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
     });
   });
 
-  // Hire request: freelancer counter
-  block.querySelectorAll('.db-counter-btn[data-hr]').forEach((btn) => {
+  // View Details modal
+  block.querySelectorAll('[data-hr-view]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const hrId = btn.dataset.hr;
-      const requests = getHireRequests();
-      const req = requests.find((r) => r.id === hrId);
-      if (!req) return;
-
-      const modal = document.createElement('div');
-      modal.innerHTML = `
-        <div class="db-modal-overlay">
-          <div class="db-modal-card">
-            <button class="db-modal-close">&times;</button>
-            <h2>Counter Offer</h2>
-            <p class="db-modal-job">${req.title}</p>
-            <div class="db-modal-row">
-              <div class="db-modal-field"><label>Your Budget *</label><input type="text" id="dc-budget" placeholder="e.g. ₹30,000" value="${req.budget}"></div>
-              <div class="db-modal-field"><label>Your Timeline</label><input type="text" id="dc-timeline" placeholder="e.g. 3 weeks" value="${req.timeline}"></div>
-            </div>
-            <div class="db-modal-field"><label>Message (optional)</label><textarea rows="3" id="dc-msg" placeholder="Explain your counter..."></textarea></div>
-            <p class="db-modal-err" id="dc-err"></p>
-            <button type="button" class="db-modal-submit" id="dc-submit">Send Counter Offer</button>
-          </div>
+      const r = getHireRequests().find((x) => x.id === btn.dataset.hrView);
+      if (!r) return;
+      const m = document.createElement('div');
+      m.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+      m.innerHTML = `<div style="background:#fff;border-radius:16px;padding:36px;max-width:520px;width:100%;position:relative">
+        <button onclick="this.closest('div[style]').remove();document.body.style.overflow=''" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;color:#aaa;cursor:pointer">&times;</button>
+        <h2 style="font-size:1.3rem;font-weight:800;margin:0 0 16px">${r.title}</h2>
+        <p style="font-size:0.9rem;color:#666;margin:0 0 12px">${r.desc}</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.88rem;color:#444">
+          <span><strong>Budget:</strong> ${r.budget}</span>
+          <span><strong>Timeline:</strong> ${r.timeline}</span>
+          <span><strong>From:</strong> ${r.fromClientName}</span>
         </div>
-      `;
-      document.body.appendChild(modal);
+      </div>`;
+      document.body.appendChild(m);
       document.body.style.overflow = 'hidden';
-      const close = () => { modal.remove(); document.body.style.overflow = ''; };
-      modal.querySelector('.db-modal-close').addEventListener('click', close);
-      modal.querySelector('.db-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
-      modal.querySelector('#dc-submit').addEventListener('click', () => {
-        const budget = modal.querySelector('#dc-budget').value.trim();
-        const timeline = modal.querySelector('#dc-timeline').value.trim();
-        if (!budget) { modal.querySelector('#dc-err').textContent = 'Please enter a budget.'; return; }
-        req.status = 'counter_pending';
-        req.counterBudget = budget;
-        req.counterTimeline = timeline;
-        saveHireRequests(requests);
-        close();
-        const card = block.querySelector(`#hr-${hrId}`);
-        if (card) {
-          card.querySelector('.db-action-row')?.remove();
-          const msg = document.createElement('div');
-          msg.className = 'db-counter-msg';
-          msg.textContent = `Counter sent: ${budget} · ${timeline}. Waiting for client response.`;
-          card.append(msg);
-        }
-      });
+      m.addEventListener('click', (e) => { if (e.target === m) { m.remove(); document.body.style.overflow = ''; } });
     });
   });
 }

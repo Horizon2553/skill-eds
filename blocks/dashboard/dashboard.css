@@ -436,3 +436,396 @@
   font-weight: 600;
   color: #1dbf73;
 }
+
+/* ── Hero ── */
+.dashboard .db-hero {
+  background: linear-gradient(135deg, #0d1b2a 0%, #0a2617 100%);
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard .db-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard .db-hero-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1dbf73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dashboard .db-title { color: #fff; font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 800; margin: 0 0 4px; }
+.dashboard .db-sub { color: rgb(255 255 255 / 70%); font-size: 0.88rem; margin: 0; }
+
+.dashboard .db-mode-badge {
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1.5px solid #1dbf73;
+  color: #1dbf73;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dashboard .db-mode-client { border-color: #60a5fa; color: #60a5fa; }
+
+/* ── Browse button ── */
+.dashboard .db-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #1dbf73;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: background 0.15s;
+}
+
+.dashboard .db-browse-btn:hover { background: #17a862; }
+
+/* ── Tabs wrap ── */
+.dashboard .db-tabs-wrap {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.dashboard .db-tabs {
+  display: flex;
+  border-bottom: 1px solid #e8e8e8;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dashboard .db-tabs::-webkit-scrollbar { display: none; }
+
+.dashboard .db-tab {
+  padding: 14px 20px;
+  font-family: var(--body-font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+
+.dashboard .db-tab.active { color: #1dbf73; border-bottom-color: #1dbf73; }
+.dashboard .db-tab:hover:not(.active) { color: #333; }
+
+.dashboard .db-tab-badge-red {
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+}
+
+.dashboard .db-panel { display: none; padding: 24px; }
+.dashboard .db-panel.active { display: block; }
+
+/* ── Invite cards (freelancer) ── */
+.dashboard .db-invite-card {
+  border: 1.5px solid #1dbf73;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.dashboard .db-invite-responded { border-color: #e8e8e8; }
+
+.dashboard .db-invite-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1dbf73;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.dashboard .db-invite-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 6px;
+}
+
+.dashboard .db-invite-meta {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.dashboard .db-invite-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.dashboard .db-invite-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dashboard .db-view-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.dashboard .db-view-btn:hover { border-color: #aaa; }
+
+.dashboard .db-counter-toggle {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #111;
+  background: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dashboard .db-counter-toggle:hover { background: #f5f5f5; }
+
+/* ── Counter form ── */
+.dashboard .db-counter-form {
+  background: #f8f8f8;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.dashboard .db-counter-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: #111;
+}
+
+.dashboard .db-counter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.dashboard .db-counter-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.dashboard .db-counter-field input,
+.dashboard .db-counter-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.dashboard .db-counter-field input:focus,
+.dashboard .db-counter-field textarea:focus { border-color: #1dbf73; }
+
+.dashboard .db-counter-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.dashboard .db-counter-submit {
+  flex: 1;
+  padding: 11px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dashboard .db-counter-submit:hover { background: #333; }
+
+.dashboard .db-counter-cancel {
+  padding: 11px 20px;
+  background: #fff;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+}
+
+.dashboard .db-counter-sent-msg {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+
+/* ── Response cards (client) ── */
+.dashboard .db-response-card {
+  background: #fff;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.dashboard .db-response-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard .db-response-name { font-weight: 700; font-size: 0.95rem; color: #111; }
+.dashboard .db-response-meta { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+.dashboard .db-counter-badge {
+  padding: 4px 10px;
+  background: #f0f0ff;
+  color: #4f46e5;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dashboard .db-response-counter {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.dashboard .db-counter-amount { font-weight: 800; font-size: 1.1rem; color: #1dbf73; }
+
+.dashboard .db-response-note { font-size: 0.88rem; color: #666; margin: 0 0 14px; }
+
+.dashboard .db-accepted-msg {
+  font-size: 0.9rem;
+  color: #15803d;
+  font-weight: 600;
+  background: #f0fdf7;
+  border-left: 3px solid #1dbf73;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 12px;
+}
+
+/* ── Posted project cards ── */
+.dashboard .db-posted-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+}
+
+.dashboard .db-posted-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dashboard .db-posted-title { font-weight: 700; font-size: 1rem; color: #111; margin-bottom: 8px; }
+.dashboard .db-posted-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.82rem;
+  color: #666;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.dashboard .db-posted-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+
+.dashboard .db-proposals-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: #f0fdf7;
+  color: #15803d;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dashboard .db-open-badge {
+  padding: 3px 10px;
+  background: #f0fdf7;
+  color: #15803d;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Stat icons */
+.dashboard .db-stat-card { position: relative; }
+.dashboard .db-stat-icon {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}

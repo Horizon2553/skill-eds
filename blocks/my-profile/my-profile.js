@@ -35,6 +35,31 @@ export default async function decorate(block) {
   renderEditView(block, session);
 }
 
+function showInviteSentModal(freelancerName) {
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;padding:48px 40px;max-width:500px;width:100%;text-align:center;box-shadow:0 20px 60px rgb(0 0 0/18%)">
+      <div style="width:64px;height:64px;background:#f0fdf7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 style="font-family:var(--heading-font-family);font-size:1.4rem;font-weight:800;color:#111;margin:0 0 14px">Invite Sent!</h2>
+      <p style="font-size:0.92rem;color:#555;line-height:1.7;margin:0 0 10px">
+        <strong>${freelancerName}</strong> has been notified. The invite will appear in their dashboard under <strong>Invites Received</strong> — it is private and not listed publicly.
+      </p>
+      <p style="font-size:0.88rem;color:#888;margin:0 0 28px">
+        You'll be notified in your <strong>Responses</strong> tab when they Accept, Counter, or Reject.
+      </p>
+      <button id="mp-invite-done" style="padding:13px 40px;background:#1dbf73;color:#fff;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer">Done</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  document.getElementById('mp-invite-done').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+}
+
 function openHireModal(user) {
   const existing = document.getElementById('mp-hire-modal');
   if (existing) existing.remove();
@@ -47,29 +72,29 @@ function openHireModal(user) {
   modal.innerHTML = `
     <div style="background:#fff;border-radius:16px;padding:36px;width:100%;max-width:520px;position:relative;box-shadow:0 20px 60px rgb(0 0 0/18%)">
       <button id="mp-hire-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;color:#aaa;cursor:pointer">&times;</button>
-      <h2 style="font-family:var(--heading-font-family);font-size:1.4rem;font-weight:800;color:#111;margin:0 0 4px;letter-spacing:-0.02em">Send Hire Request</h2>
+      <h2 style="font-family:var(--heading-font-family);font-size:1.4rem;font-weight:800;color:#111;margin:0 0 4px;letter-spacing:-0.02em">Send Hire Invite</h2>
       <p style="font-size:0.88rem;color:#888;margin:0 0 22px">to <strong style="color:#111">${user.name}</strong></p>
       <form id="mp-hire-form" novalidate>
         <div style="margin-bottom:14px">
           <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Project / Job Title *</label>
-          <input type="text" id="mp-hire-title" placeholder="e.g. Build React E-Commerce Frontend" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+          <input type="text" id="mp-hire-title" placeholder="e.g. Build React E-Commerce Frontend" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;font-family:var(--body-font-family)" required>
         </div>
         <div style="margin-bottom:14px">
           <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Description *</label>
-          <textarea id="mp-hire-desc" rows="4" placeholder="Describe what you need..." style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;resize:vertical" required></textarea>
+          <textarea id="mp-hire-desc" rows="3" placeholder="Describe what you need..." style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;resize:vertical;font-family:var(--body-font-family)" required></textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
           <div>
             <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Budget *</label>
-            <input type="text" id="mp-hire-budget" placeholder="e.g. ₹25,000" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+            <input type="text" id="mp-hire-budget" placeholder="e.g. ₹25,000" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;font-family:var(--body-font-family)" required>
           </div>
           <div>
             <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Timeline *</label>
-            <input type="text" id="mp-hire-timeline" placeholder="e.g. 30 days" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+            <input type="text" id="mp-hire-timeline" placeholder="e.g. 2 weeks" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;font-family:var(--body-font-family)" required>
           </div>
         </div>
         <p id="mp-hire-err" style="color:#dc2626;font-size:0.83rem;min-height:1em;margin:0 0 8px"></p>
-        <button type="submit" style="width:100%;padding:13px;background:#1dbf73;color:#fff;font-size:0.97rem;font-weight:700;border:none;border-radius:10px;cursor:pointer">Send Hire Request</button>
+        <button type="submit" style="width:100%;padding:13px;background:#1dbf73;color:#fff;font-size:0.97rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:var(--body-font-family)">Send Invite</button>
       </form>
     </div>
   `;
@@ -94,17 +119,17 @@ function openHireModal(user) {
       fromClientName: session.name,
       toFreelancerId: user.id,
       toFreelancerName: user.name,
+      toFreelancerEmail: user.email || '',
+      toFreelancerLinkedin: user.links?.linkedin || '',
+      freelancerRole: user.skill || 'Freelancer',
+      skills: Array.isArray(user.skills) ? user.skills.slice(0, 4) : [],
       title, desc, budget, timeline,
       status: 'pending',
       createdAt: new Date().toISOString(),
     });
     localStorage.setItem('sb_hire_requests', JSON.stringify(requests));
     close();
-    const toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:13px 24px;border-radius:99px;font-size:0.88rem;font-weight:600;z-index:9999';
-    toast.textContent = `Hire request sent to ${user.name}!`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    showInviteSentModal(user.name);
   });
 }
 
@@ -131,10 +156,14 @@ function renderPublicView(block, user) {
           </div>
         </div>
         ${isClient ? `
-          <button class="mp-hire-cta" id="mp-hire-cta">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
-            Hire ${firstName}
-          </button>` : ''}
+          <div class="mp-cta-group">
+            <button class="mp-fav-cta" id="mp-fav-cta">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Save to Favourites
+            </button>
+            <button class="mp-contact-cta" id="mp-contact-cta">Contact Candidate</button>
+            <button class="mp-hire-cta" id="mp-hire-cta">Hire Candidate</button>
+          </div>` : ''}
       </div>
       <div class="mp-grid">
         <aside class="mp-sidebar">
@@ -178,6 +207,37 @@ function renderPublicView(block, user) {
   `;
 
   if (isClient) {
+    // Save to Favourites
+    const favBtn = block.querySelector('#mp-fav-cta');
+    const favKey = `sb_fav_${viewer.id}`;
+    const getFavs = () => { try { return JSON.parse(localStorage.getItem(favKey)) || []; } catch { return []; } };
+    const isFaved = getFavs().includes(user.id);
+    if (isFaved) { favBtn.textContent = '★ Saved'; favBtn.style.borderColor = '#1dbf73'; favBtn.style.color = '#1dbf73'; }
+    favBtn?.addEventListener('click', () => {
+      const favs = getFavs();
+      const idx = favs.indexOf(user.id);
+      if (idx > -1) { favs.splice(idx, 1); favBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Save to Favourites`; favBtn.style.color = '#555'; favBtn.style.borderColor = '#d0d0d0'; }
+      else { favs.push(user.id); favBtn.textContent = '★ Saved'; favBtn.style.borderColor = '#1dbf73'; favBtn.style.color = '#1dbf73'; }
+      localStorage.setItem(favKey, JSON.stringify(favs));
+    });
+
+    // Contact Candidate
+    block.querySelector('#mp-contact-cta')?.addEventListener('click', () => {
+      const cm = document.createElement('div');
+      cm.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+      cm.innerHTML = `<div style="background:#fff;border-radius:16px;padding:36px;max-width:400px;width:100%;text-align:center;position:relative">
+        <button onclick="this.closest('div[style*=fixed]').remove();document.body.style.overflow=''" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;color:#aaa;cursor:pointer">&times;</button>
+        <h3 style="margin:0 0 16px;font-size:1.1rem;font-weight:800">Contact ${user.name}</h3>
+        ${user.email ? `<p style="margin:0 0 10px;font-size:0.9rem"><a href="mailto:${user.email}" style="color:#1dbf73">${user.email}</a></p>` : ''}
+        ${user.links?.linkedin ? `<p style="margin:0;font-size:0.9rem"><a href="${user.links.linkedin}" target="_blank" style="color:#1dbf73">LinkedIn Profile →</a></p>` : ''}
+        ${!user.email && !user.links?.linkedin ? `<p style="color:#888;font-size:0.9rem">No contact details provided yet.</p>` : ''}
+      </div>`;
+      document.body.appendChild(cm);
+      document.body.style.overflow = 'hidden';
+      cm.addEventListener('click', (e) => { if (e.target === cm) { cm.remove(); document.body.style.overflow = ''; } });
+    });
+
+    // Hire Candidate
     block.querySelector('#mp-hire-cta')?.addEventListener('click', () => openHireModal(user));
   }
 }
