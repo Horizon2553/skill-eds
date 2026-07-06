@@ -270,6 +270,11 @@
   border-radius: 20px;
   padding: 40px;
   margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .my-profile .mp-hero-left {
@@ -277,6 +282,29 @@
   align-items: center;
   gap: 28px;
   flex-wrap: wrap;
+}
+
+.my-profile .mp-hire-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: #1dbf73;
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  font-family: var(--body-font-family);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.my-profile .mp-hire-cta:hover {
+  background: #17a862;
+  box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
 }
 
 .my-profile .mp-avatar {

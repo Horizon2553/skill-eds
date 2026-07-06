@@ -35,10 +35,88 @@ export default async function decorate(block) {
   renderEditView(block, session);
 }
 
+function openHireModal(user) {
+  const existing = document.getElementById('mp-hire-modal');
+  if (existing) existing.remove();
+  const session = getSession();
+  if (!session) { window.location.href = '/login'; return; }
+
+  const modal = document.createElement('div');
+  modal.id = 'mp-hire-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:36px;width:100%;max-width:520px;position:relative;box-shadow:0 20px 60px rgb(0 0 0/18%)">
+      <button id="mp-hire-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;color:#aaa;cursor:pointer">&times;</button>
+      <h2 style="font-family:var(--heading-font-family);font-size:1.4rem;font-weight:800;color:#111;margin:0 0 4px;letter-spacing:-0.02em">Send Hire Request</h2>
+      <p style="font-size:0.88rem;color:#888;margin:0 0 22px">to <strong style="color:#111">${user.name}</strong></p>
+      <form id="mp-hire-form" novalidate>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Project / Job Title *</label>
+          <input type="text" id="mp-hire-title" placeholder="e.g. Build React E-Commerce Frontend" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Description *</label>
+          <textarea id="mp-hire-desc" rows="4" placeholder="Describe what you need..." style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none;resize:vertical" required></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Budget *</label>
+            <input type="text" id="mp-hire-budget" placeholder="e.g. ₹25,000" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:700;color:#333;margin-bottom:6px">Timeline *</label>
+            <input type="text" id="mp-hire-timeline" placeholder="e.g. 30 days" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.93rem;outline:none" required>
+          </div>
+        </div>
+        <p id="mp-hire-err" style="color:#dc2626;font-size:0.83rem;min-height:1em;margin:0 0 8px"></p>
+        <button type="submit" style="width:100%;padding:13px;background:#1dbf73;color:#fff;font-size:0.97rem;font-weight:700;border:none;border-radius:10px;cursor:pointer">Send Hire Request</button>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  document.getElementById('mp-hire-close').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  document.getElementById('mp-hire-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('mp-hire-title').value.trim();
+    const desc = document.getElementById('mp-hire-desc').value.trim();
+    const budget = document.getElementById('mp-hire-budget').value.trim();
+    const timeline = document.getElementById('mp-hire-timeline').value.trim();
+    const err = document.getElementById('mp-hire-err');
+    if (!title || !desc || !budget) { err.textContent = 'Please fill all required fields.'; return; }
+    const requests = JSON.parse(localStorage.getItem('sb_hire_requests') || '[]');
+    requests.push({
+      id: `hire-${Date.now()}`,
+      fromClientId: session.id,
+      fromClientName: session.name,
+      toFreelancerId: user.id,
+      toFreelancerName: user.name,
+      title, desc, budget, timeline,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem('sb_hire_requests', JSON.stringify(requests));
+    close();
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:13px 24px;border-radius:99px;font-size:0.88rem;font-weight:600;z-index:9999';
+    toast.textContent = `Hire request sent to ${user.name}!`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  });
+}
+
 function renderPublicView(block, user) {
+  const viewer = getSession();
+  const isClient = viewer?.role === 'client' && viewer?.id !== user.id;
+
   const avatar = user.avatar
     ? `<img src="${user.avatar}" alt="${user.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
     : `<div style="width:100%;height:100%;border-radius:50%;background:#1dbf73;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;font-weight:800">${user.name?.charAt(0).toUpperCase()}</div>`;
+
+  const firstName = user.name?.split(' ')[0] || user.name;
 
   block.innerHTML = `
     <div class="mp-view">
@@ -52,6 +130,11 @@ function renderPublicView(block, user) {
             ${user.hourlyRate ? `<div class="mp-rate">₹${user.hourlyRate}/hr</div>` : ''}
           </div>
         </div>
+        ${isClient ? `
+          <button class="mp-hire-cta" id="mp-hire-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+            Hire ${firstName}
+          </button>` : ''}
       </div>
       <div class="mp-grid">
         <aside class="mp-sidebar">
@@ -93,6 +176,10 @@ function renderPublicView(block, user) {
       </div>
     </div>
   `;
+
+  if (isClient) {
+    block.querySelector('#mp-hire-cta')?.addEventListener('click', () => openHireModal(user));
+  }
 }
 
 function renderEditView(block, session) {

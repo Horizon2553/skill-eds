@@ -152,7 +152,7 @@ export default async function decorate(block) {
         rate: u.hourlyRate ? `₹${u.hourlyRate}/hr` : '',
         rating: '',
         reviews: '',
-        projects: '0',
+        projects: String(u.projects?.length || 0),
         bio: u.bio || '',
         skills: Array.isArray(u.skills) ? u.skills : [],
         profileHref: `/my-profile?id=${u.id}`,
