@@ -6,6 +6,18 @@ const AUTHOR_PROFILES = {
   'aman verma': '/profile/aman-verma',
 };
 
+// Hardcoded project title → EDS project page URL
+const PROJECT_URLS = {
+  'diseño web — aatma': '/projects/aatma',
+  'aatma — brand identity': '/projects/aatma',
+  'aatma': '/projects/aatma',
+  'spectra — analytics dashboard': '/projects/spectra',
+  'spectra': '/projects/spectra',
+  'ux/ui app design': '/projects/plate',
+  'plate — food delivery app': '/projects/plate',
+  'plate': '/projects/plate',
+};
+
 function getProfileUrl(name) {
   return AUTHOR_PROFILES[name?.toLowerCase().trim()] || '#';
 }
@@ -202,8 +214,9 @@ export default async function decorate(block) {
         const projTitle = cells[1]?.textContent.trim() || '';
         const authorName = cells[2]?.textContent.trim() || '';
         const rawHref = cells[1]?.querySelector('a')?.href || '';
-        // Use valid project link OR fall back to author's profile page
-        const projectHref = isValidHref(rawHref) ? rawHref : getProfileUrl(authorName);
+        // Use hardcoded project page, then valid da.live link, then profile fallback
+        const projectHref = PROJECT_URLS[projTitle.toLowerCase()]
+          || (isValidHref(rawHref) ? rawHref : getProfileUrl(authorName));
         currentSection.cards.push({
           id: projTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           imgEl,
