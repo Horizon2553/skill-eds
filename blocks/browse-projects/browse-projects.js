@@ -133,7 +133,7 @@ function buildJobCard(j, session, appliedIds, freeUsed) {
   if (hasApplied) {
     applyBtn = `<button class="bp-apply-btn applied" disabled><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Applied</button>`;
   } else if (isFreelancer && freeUsed) {
-    applyBtn = `<button class="bp-apply-btn pro-required" disabled>Pro Required — Upgrade</button>`;
+    applyBtn = `<a href="/upgrade" class="bp-apply-btn pro-required">Upgrade to Apply →</a>`;
   } else if (isFreelancer) {
     applyBtn = `<button class="bp-apply-btn" data-job="${j.id}">Submit Proposal</button>`;
   } else if (!session) {
