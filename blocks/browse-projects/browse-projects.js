@@ -5,46 +5,29 @@ function getProposals() {
   try { return JSON.parse(localStorage.getItem('sb_proposals')) || []; } catch { return []; }
 }
 
+function getUserKey(session) {
+  return session?.id || session?.email || null;
+}
+
 function getMyProposalCount(session) {
-  if (!session) return 0;
-  // Primary: simple flag stored per user
-  const flagKey = `bp_used_free_${session.id || session.email}`;
-  if (localStorage.getItem(flagKey) === '1') return 1;
-  // Fallback: count from proposals array
-  return getProposals().filter((p) => p.freelancerId === (session.id || session.email)).length;
+  const key = getUserKey(session);
+  if (!key) return 0;
+  if (localStorage.getItem(`bp_used_free_${key}`) === '1') return 1;
+  return getProposals().filter((p) => p.freelancerId === key).length;
 }
 
 function markProposalUsed(session) {
-  if (!session) return;
-  const flagKey = `bp_used_free_${session.id || session.email}`;
-  localStorage.setItem(flagKey, '1');
-}
-
-function showPaywallModal() {
-  const existing = document.getElementById('bp-paywall-modal');
-  if (existing) existing.remove();
-  const modal = document.createElement('div');
-  modal.id = 'bp-paywall-modal';
-  modal.innerHTML = `
-    <div class="bp-modal-overlay">
-      <div class="bp-modal-card" style="text-align:center;padding:48px 40px">
-        <div style="font-size:2.5rem;margin-bottom:16px">🔒</div>
-        <h2 style="font-family:var(--heading-font-family);font-size:1.5rem;font-weight:800;color:#111;margin:0 0 10px;letter-spacing:-0.02em">Upgrade to Pro</h2>
-        <p style="color:#888;font-size:0.95rem;margin:0 0 24px;line-height:1.6">You've used your 1 free proposal.<br>Upgrade to submit unlimited proposals and get hired faster.</p>
-        <button class="bp-modal-submit" style="max-width:280px;margin:0 auto" onclick="alert('Payment flow coming soon!')">Upgrade — ₹499/month</button>
-        <p style="margin-top:14px;font-size:0.8rem;color:#aaa">Cancel anytime. No hidden fees.</p>
-        <button class="bp-modal-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;color:#aaa;cursor:pointer">&times;</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  document.body.style.overflow = 'hidden';
-  const close = () => { modal.remove(); document.body.style.overflow = ''; };
-  modal.querySelector('.bp-modal-close').addEventListener('click', close);
-  modal.querySelector('.bp-modal-overlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) close(); });
+  const key = getUserKey(session);
+  if (key) localStorage.setItem(`bp_used_free_${key}`, '1');
 }
 
 function openProposalModal(job, session) {
+  // Hard paywall guard — even if button state was stale
+  if (getMyProposalCount(session) >= 1) {
+    window.location.href = '/upgrade';
+    return;
+  }
+
   const existing = document.getElementById('bp-proposal-modal');
   if (existing) existing.remove();
 
@@ -92,13 +75,14 @@ function openProposalModal(job, session) {
     const err = modal.querySelector('#bp-modal-err');
     if (!cover || !budget) { err.textContent = 'Please fill in all required fields.'; return; }
 
+    const key = getUserKey(session);
     const proposals = getProposals();
     proposals.push({
       id: `prop-${Date.now()}`,
       jobId: job.id,
       jobTitle: job.title,
       clientId: job.clientId || 'client-jane',
-      freelancerId: session.id,
+      freelancerId: key,
       freelancerName: session.name,
       freelancerRole: session.skill || 'Freelancer',
       coverLetter: cover,
@@ -108,10 +92,9 @@ function openProposalModal(job, session) {
       createdAt: new Date().toISOString(),
     });
     localStorage.setItem('sb_proposals', JSON.stringify(proposals));
-    markProposalUsed(session); // mark free proposal used — triggers paywall on next attempt
+    markProposalUsed(session);
     close();
-    if (typeof window.bpShowToast === 'function') window.bpShowToast('Proposal submitted successfully!');
-    // Re-render so all buttons update + event listeners reattach with fresh paywall check
+    if (typeof window.bpShowToast === 'function') window.bpShowToast('Proposal submitted! This was your free proposal.');
     setTimeout(() => { if (typeof window.bpRender === 'function') window.bpRender(); }, 100);
   });
 }
@@ -139,7 +122,7 @@ function buildJobCard(j, session, appliedIds, freeUsed) {
   } else if (!session) {
     applyBtn = `<a href="/login" class="bp-apply-btn">Log in to Apply</a>`;
   } else {
-    applyBtn = ``;
+    applyBtn = '';
   }
 
   return `
@@ -192,6 +175,7 @@ export default async function decorate(block) {
     }
     const skillsText = cells[8]?.textContent.trim() || '';
     const jobTitle = cells[0]?.textContent.trim() || '';
+    if (!jobTitle) return;
     jobs.push({
       id: jobTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       clientId: 'client-jane',
@@ -205,7 +189,6 @@ export default async function decorate(block) {
       desc: cells[7]?.textContent.trim() || '',
       skills: skillsText.split(',').map((s) => s.trim()).filter(Boolean),
       category: cells[9]?.textContent.trim() || 'General',
-      applyHref: cells[10]?.querySelector('a')?.href || '/signup',
     });
   });
 
@@ -255,7 +238,6 @@ export default async function decorate(block) {
   const list = block.querySelector('.bp-jobs-list');
   const countLabel = block.querySelector('.bp-job-count');
 
-  // Expose render globally so openProposalModal can call it after submission
   window.bpRender = () => render();
 
   function showToast(msg) {
@@ -263,7 +245,7 @@ export default async function decorate(block) {
     t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:13px 24px;border-radius:99px;font-size:0.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgb(0 0 0/25%)';
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
+    setTimeout(() => t.remove(), 3500);
   }
   window.bpShowToast = showToast;
 
@@ -294,12 +276,16 @@ export default async function decorate(block) {
       `;
       return;
     }
+
     const freshSess = getSession();
+    const userKey = getUserKey(freshSess);
     const freeUsed = getMyProposalCount(freshSess) >= 1;
     const appliedIds = new Set(
-      getProposals().filter((p) => p.freelancerId === freshSess?.id).map((p) => p.jobId),
+      getProposals().filter((p) => p.freelancerId === userKey).map((p) => p.jobId),
     );
+
     list.innerHTML = matches.map((j) => buildJobCard(j, freshSess, appliedIds, freeUsed)).join('');
+
     list.querySelectorAll('.bp-apply-btn[data-job]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const s = getSession();
@@ -319,6 +305,17 @@ export default async function decorate(block) {
       render();
     });
   });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const skillParam = urlParams.get('skills');
+  if (skillParam) {
+    const preSelect = skillParam.split(',').map((s) => s.trim().toLowerCase());
+    let matched = false;
+    block.querySelectorAll('.bp-skill-filter').forEach((cb) => {
+      if (preSelect.includes(cb.value.toLowerCase())) { cb.checked = true; matched = true; }
+    });
+    if (!matched) searchInput.value = skillParam;
+  }
 
   render();
 }
