@@ -7,6 +7,7 @@ export default async function decorate(block) {
   rows.forEach((row) => {
     const cells = [...row.children];
     const firstCell = cells[0];
+    if (!firstCell) return;
     const isBold = !!firstCell.querySelector('strong, b');
 
     if (isBold) {
