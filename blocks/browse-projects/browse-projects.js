@@ -7,7 +7,17 @@ function getProposals() {
 
 function getMyProposalCount(session) {
   if (!session) return 0;
-  return getProposals().filter((p) => p.freelancerId === session.id).length;
+  // Primary: simple flag stored per user
+  const flagKey = `bp_used_free_${session.id || session.email}`;
+  if (localStorage.getItem(flagKey) === '1') return 1;
+  // Fallback: count from proposals array
+  return getProposals().filter((p) => p.freelancerId === (session.id || session.email)).length;
+}
+
+function markProposalUsed(session) {
+  if (!session) return;
+  const flagKey = `bp_used_free_${session.id || session.email}`;
+  localStorage.setItem(flagKey, '1');
 }
 
 function showPaywallModal() {
@@ -98,6 +108,7 @@ function openProposalModal(job, session) {
       createdAt: new Date().toISOString(),
     });
     localStorage.setItem('sb_proposals', JSON.stringify(proposals));
+    markProposalUsed(session); // mark free proposal used — triggers paywall on next attempt
     close();
     if (typeof window.bpShowToast === 'function') window.bpShowToast('Proposal submitted successfully!');
     // Re-render so all buttons update + event listeners reattach with fresh paywall check
