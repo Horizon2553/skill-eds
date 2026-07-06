@@ -192,6 +192,14 @@ export default async function decorate(block) {
 
     const user = [...DEMO, ...getUsers()].find((u) => u.email.toLowerCase() === email && u.password === pw);
     if (!user) { errEl.textContent = 'Invalid email or password.'; return; }
+    // Correct role if it was saved wrong — also persists fix to sb_users_v1
+    const ROLE_FIX = { 'vanshi00@gmail.com': 'freelancer', 'vanshi11@gmail.com': 'client' };
+    if (ROLE_FIX[user.email.toLowerCase()]) {
+      user.role = ROLE_FIX[user.email.toLowerCase()];
+      const allUsers = getUsers();
+      const idx = allUsers.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
+      if (idx > -1) { allUsers[idx].role = user.role; saveUsers(allUsers); }
+    }
     setSession(user);
     window.location.href = '/';
   });

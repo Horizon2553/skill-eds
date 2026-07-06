@@ -290,12 +290,22 @@ export default async function decorate(block) {
     inp?.addEventListener('change', () => {
       const file = inp.files[0];
       if (!file) return;
-      if (file.size > 4 * 1024 * 1024) { block.querySelector('#ps-err').textContent = 'File too large. Max 4MB.'; return; }
       const reader = new FileReader();
       reader.onload = (e) => {
-        data.photo = e.target.result;
-        preview.innerHTML = `<img src="${e.target.result}" alt="Profile photo">`;
-        preview.classList.add('has-photo');
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX = 320;
+          const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.75);
+          data.photo = compressed;
+          preview.innerHTML = `<img src="${compressed}" alt="Profile photo">`;
+          preview.classList.add('has-photo');
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     });

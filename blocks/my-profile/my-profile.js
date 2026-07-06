@@ -253,9 +253,19 @@ function renderEditView(block, session) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
-      newAvatarBase64 = e.target.result;
-      const avatarEl = block.querySelector('.mp-edit-avatar');
-      avatarEl.innerHTML = `<img src="${newAvatarBase64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 320;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        newAvatarBase64 = canvas.toDataURL('image/jpeg', 0.75);
+        const avatarEl = block.querySelector('.mp-edit-avatar');
+        avatarEl.innerHTML = `<img src="${newAvatarBase64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+      };
+      img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   });
