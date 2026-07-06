@@ -57,6 +57,22 @@ const SVG = {
   star: '<svg viewBox="0 0 24 24" fill="#f59e0b" width="13" height="13"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
 };
 
+function addOne(countStr) {
+  const n = parseFloat(String(countStr).replace('k', '')) * (String(countStr).includes('k') ? 1000 : 1);
+  const total = n + 1;
+  return total >= 1000 ? `${(total / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(total);
+}
+
+function getLiked() {
+  try { return new Set(JSON.parse(localStorage.getItem('fw_liked')) || []); } catch { return new Set(); }
+}
+function toggleLike(id) {
+  const liked = getLiked();
+  if (liked.has(id)) liked.delete(id); else liked.add(id);
+  localStorage.setItem('fw_liked', JSON.stringify([...liked]));
+  return liked.has(id);
+}
+
 function getSaved() {
   try { return new Set(JSON.parse(localStorage.getItem('fw_saved')) || []); } catch { return new Set(); }
 }
@@ -110,8 +126,31 @@ function buildProjectCard(p) {
     author.append(p.avatarEl);
   }
   author.insertAdjacentHTML('beforeend', `<span class="fw-project-author-name">${p.author}</span>`);
-  footer.innerHTML = `<div class="fw-project-stats"><span>${SVG.heart} <span class="fw-likes-count">${p.likes}</span></span><span>${SVG.eye} ${p.views}</span></div>`;
+  const isLiked = getLiked().has(p.id || p.title);
+  const heartFilled = '<svg viewBox="0 0 24 24" fill="#e11d48" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const heartEmpty = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  footer.innerHTML = `
+    <div class="fw-project-stats">
+      <button class="fw-like-btn ${isLiked ? 'liked' : ''}" data-id="${p.id || p.title}" data-likes="${p.likes}">
+        ${isLiked ? heartFilled : heartEmpty}
+        <span class="fw-likes-count">${isLiked ? addOne(p.likes) : p.likes}</span>
+      </button>
+      <span>${SVG.eye} ${p.views}</span>
+    </div>
+  `;
   footer.prepend(author);
+
+  // Wire like button — stop propagation so card link doesn't trigger
+  const likeBtn = footer.querySelector('.fw-like-btn');
+  likeBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = likeBtn.dataset.id;
+    const baseLikes = likeBtn.dataset.likes;
+    const nowLiked = toggleLike(id);
+    likeBtn.classList.toggle('liked', nowLiked);
+    likeBtn.innerHTML = `${nowLiked ? heartFilled : heartEmpty}<span class="fw-likes-count">${nowLiked ? addOne(baseLikes) : baseLikes}</span>`;
+  });
 
   card.append(thumb, footer);
 

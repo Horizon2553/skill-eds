@@ -466,3 +466,29 @@ main .section:has(.featured-work) {
 .featured-work .fw-fl-skills picture,
 .featured-work .fw-fl-skills img,
 .featured-work .fw-fl-skills source { display: none !important; }
+
+/* ── Like button ── */
+.featured-work .fw-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #888;
+  font-size: 0.78rem;
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  transition: color 0.15s, background 0.12s;
+}
+
+.featured-work .fw-like-btn:hover { color: #e11d48; background: rgb(225 29 72 / 6%); }
+.featured-work .fw-like-btn.liked { color: #e11d48; }
+
+.featured-work .fw-project-stats {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
