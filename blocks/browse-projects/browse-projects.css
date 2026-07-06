@@ -472,3 +472,11 @@
 .browse-projects .bp-free-badge span { font-size: 1.2rem; flex-shrink: 0; }
 .browse-projects .bp-free-badge strong { display: block; color: #111; font-size: 0.85rem; margin-bottom: 2px; }
 .browse-projects .bp-free-badge p { margin: 0; color: #666; line-height: 1.4; }
+
+.browse-projects .bp-apply-btn.pro-required {
+  background: #f5f5f5;
+  color: #999;
+  border: 1.5px solid #e0e0e0;
+  cursor: not-allowed;
+  font-size: 0.83rem;
+}

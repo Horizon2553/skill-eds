@@ -123,7 +123,7 @@ const ICONS = {
   empty: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d0d0d0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
 };
 
-function buildJobCard(j, session, appliedIds) {
+function buildJobCard(j, session, appliedIds, freeUsed) {
   const badgeClass = j.budgetType.toLowerCase() === 'hourly' ? 'bp-badge-hourly' : 'bp-badge-fixed';
   const initial = j.client.charAt(0).toUpperCase();
   const hasApplied = appliedIds.has(j.id);
@@ -131,7 +131,9 @@ function buildJobCard(j, session, appliedIds) {
 
   let applyBtn;
   if (hasApplied) {
-    applyBtn = `<button class="bp-apply-btn applied" disabled>✓ Applied</button>`;
+    applyBtn = `<button class="bp-apply-btn applied" disabled><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Applied</button>`;
+  } else if (isFreelancer && freeUsed) {
+    applyBtn = `<button class="bp-apply-btn pro-required" disabled>Pro Required — Upgrade</button>`;
   } else if (isFreelancer) {
     applyBtn = `<button class="bp-apply-btn" data-job="${j.id}">Submit Proposal</button>`;
   } else if (!session) {
@@ -292,22 +294,19 @@ export default async function decorate(block) {
       `;
       return;
     }
+    const freshSess = getSession();
+    const freeUsed = getMyProposalCount(freshSess) >= 1;
     const appliedIds = new Set(
-      getProposals().filter((p) => p.freelancerId === session?.id).map((p) => p.jobId),
+      getProposals().filter((p) => p.freelancerId === freshSess?.id).map((p) => p.jobId),
     );
-    list.innerHTML = matches.map((j) => buildJobCard(j, session, appliedIds)).join('');
+    list.innerHTML = matches.map((j) => buildJobCard(j, freshSess, appliedIds, freeUsed)).join('');
     list.querySelectorAll('.bp-apply-btn[data-job]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const freshSession = getSession();
-        if (!freshSession) { window.location.href = '/login'; return; }
+        const s = getSession();
+        if (!s) { window.location.href = '/login'; return; }
         const job = jobs.find((j) => j.id === btn.dataset.job);
         if (!job) return;
-        const proposalCount = getMyProposalCount(freshSession);
-        if (proposalCount >= 1) {
-          showPaywallModal();
-        } else {
-          openProposalModal(job, freshSession);
-        }
+        openProposalModal(job, s);
       });
     });
   }
