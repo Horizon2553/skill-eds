@@ -174,6 +174,21 @@ export default async function decorate(block) {
 
   if (!session || isFreelancer) return;
 
+  // If free slot already used and no plan — show upgrade prompt inline
+  if (!canPostFree(session)) {
+    block.querySelector('#pp-form-card').innerHTML = `
+      <div style="text-align:center;padding:48px 0">
+        <div style="width:64px;height:64px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h2 style="font-size:1.3rem;font-weight:800;margin:0 0 10px">You've used your free project post</h2>
+        <p style="font-size:0.95rem;color:#888;margin:0 0 28px;line-height:1.6">Upgrade to post unlimited projects and receive more proposals.</p>
+        <a href="/upgrade" style="display:inline-block;padding:13px 32px;background:#1dbf73;color:#fff;border-radius:99px;font-weight:700;font-size:0.95rem;text-decoration:none">View Plans →</a>
+      </div>
+    `;
+    return;
+  }
+
   // Poster toggle
   const toggleBtns = [...block.querySelectorAll('.pp-toggle-btn')];
   const companyGroup = block.querySelector('#pp-company-group');
@@ -281,8 +296,13 @@ export default async function decorate(block) {
     block.querySelector('#pp-success').style.display = 'block';
     stepEls.forEach((s, i) => s.classList.toggle('pp-step-active', i === 5));
 
-    // Post Another resets form
+    // Post Another — check paywall first
     block.querySelector('#pp-post-another').addEventListener('click', () => {
+      const freshSession = getSession();
+      if (!canPostFree(freshSession)) {
+        window.location.href = '/upgrade';
+        return;
+      }
       block.querySelector('#pp-form-card').style.display = 'block';
       block.querySelector('#pp-success').style.display = 'none';
       block.querySelector('#pp-form').reset();
