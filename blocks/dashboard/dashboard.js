@@ -58,7 +58,8 @@ function buildFreelancerDash(session) {
   seedDefaultProposals();
   const myProposals = getProposals().filter((p) => p.freelancerId === (session.id || session.email));
   const invites = getHireRequests().filter((r) => r.toFreelancerId === (session.id || session.email));
-  const pendingInvites = invites.filter((r) => r.status === 'pending' || r.status === 'counter_pending');
+  // Badge only for truly new invites needing freelancer action
+  const pendingInvites = invites.filter((r) => r.status === 'pending');
 
   const avatar = session.avatar
     ? `<img src="${session.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
@@ -93,10 +94,10 @@ function buildFreelancerDash(session) {
       </div>
       <div class="db-stat-card">
         <div class="db-stat-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="db-stat-num">0</div>
-        <div class="db-stat-label">Messages</div>
+        <div class="db-stat-num" style="color:#1dbf73">${invites.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').length}</div>
+        <div class="db-stat-label">Hired</div>
       </div>
     </div>
 
@@ -111,7 +112,6 @@ function buildFreelancerDash(session) {
           Invites${pendingInvites.length > 0 ? ` <span class="db-tab-badge-red">${pendingInvites.length}</span>` : ''}
         </button>
         <button class="db-tab" data-tab="proposals">My Proposals</button>
-        <button class="db-tab" data-tab="messages">Messages${pendingInvites.length > 0 ? ` <span class="db-tab-badge-red">1</span>` : ''}</button>
         <button class="db-tab" data-tab="saved">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
           Saved Projects
@@ -189,10 +189,6 @@ function buildFreelancerDash(session) {
             ${p.status === 'rejected' ? `<div class="db-rejected-msg">This proposal wasn't selected. Keep applying!</div>` : ''}
           </div>
         `).join('')}
-      </div>
-
-      <div class="db-panel" id="db-panel-messages">
-        <div class="db-empty"><p>Messages will appear here when clients communicate with you.</p></div>
       </div>
 
       <div class="db-panel" id="db-panel-saved">
