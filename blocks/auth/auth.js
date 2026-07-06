@@ -52,11 +52,6 @@ export default async function decorate(block) {
             <button type="submit" class="auth-btn">Continue</button>
           </form>
           <p class="auth-switch">Don't have an account? <button class="auth-link" data-goto="register">Sign up free</button></p>
-          <div class="auth-demo">
-            <strong>Demo credentials:</strong><br>
-            Freelancer: rahul@skillbridge.com / demo123<br>
-            Client: client@skillbridge.com / demo123
-          </div>
         </div>
 
         <!-- REGISTER PANEL -->
