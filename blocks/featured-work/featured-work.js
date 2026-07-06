@@ -1,3 +1,24 @@
+// Hardcoded author → profile URL mapping (no da.live linking needed)
+const AUTHOR_PROFILES = {
+  'aditi rao': '/profile/aditi-rao',
+  'rahul sharma': '/profile/rahul-sharma',
+  'sarah jenkins': '/profile/sarah-jenkins',
+  'aman verma': '/profile/aman-verma',
+};
+
+function getProfileUrl(name) {
+  return AUTHOR_PROFILES[name?.toLowerCase().trim()] || '#';
+}
+
+function isValidHref(href) {
+  return href
+    && !href.startsWith('vscode-')
+    && !href.startsWith('about:')
+    && !href.includes('localhost')
+    && href !== '#'
+    && href.length > 1;
+}
+
 function extractImage(cell) {
   if (!cell) return null;
   const existing = cell.querySelector('picture, img');
@@ -88,13 +109,11 @@ function buildProjectCard(p) {
 }
 
 function buildFreelancerCard(f) {
-  const card = document.createElement(f.profileHref && f.profileHref !== '#' ? 'a' : 'div');
+  const card = document.createElement('a');
   card.className = 'fw-freelancer-card';
-  if (f.profileHref && f.profileHref !== '#') {
-    card.href = f.profileHref;
-    card.style.textDecoration = 'none';
-    card.style.color = 'inherit';
-  }
+  card.href = f.profileHref || '#';
+  card.style.textDecoration = 'none';
+  card.style.color = 'inherit';
 
   const avatarWrap = document.createElement('div');
   avatarWrap.className = 'fw-fl-avatar-wrap';
@@ -181,18 +200,16 @@ export default async function decorate(block) {
       const imgEl = extractImage(firstCell);
       if (currentSection.label.toLowerCase().includes('project')) {
         const projTitle = cells[1]?.textContent.trim() || '';
+        const authorName = cells[2]?.textContent.trim() || '';
         const rawHref = cells[1]?.querySelector('a')?.href || '';
-        // Ignore VS Code internal URLs or invalid hrefs
-        const validHref = rawHref && !rawHref.startsWith('vscode-') && !rawHref.startsWith('about:')
-          && !rawHref.includes('localhost') ? rawHref : '';
-        // Fallback: use profile link so card is always clickable
-        const profileHref = cells[8]?.querySelector('a')?.href || cells[8]?.textContent.trim() || '';
+        // Use valid project link OR fall back to author's profile page
+        const projectHref = isValidHref(rawHref) ? rawHref : getProfileUrl(authorName);
         currentSection.cards.push({
           id: projTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           imgEl,
-          href: validHref || profileHref || '#',
+          href: projectHref,
           title: projTitle,
-          author: cells[2]?.textContent.trim() || '',
+          author: authorName,
           avatarEl: extractImage(cells[3]),
           likes: cells[4]?.textContent.trim() || '0',
           views: cells[5]?.textContent.trim() || '0',
@@ -216,8 +233,8 @@ export default async function decorate(block) {
           rating: cells[4]?.textContent.trim() || '',
           reviews: cells[5]?.textContent.trim() || '',
           bio: cells[6]?.textContent.trim() || '',
-          skills: skillsText.split(',').map((s) => s.trim()).filter((s) => s.length > 1 && !/^https?:\/\//.test(s)),
-          profileHref: cells[8]?.querySelector('a')?.href || cells[8]?.textContent.trim() || '#',
+          skills: skillsText.split(',').map((s) => s.trim()).filter((s) => s.length > 1 && /\w/.test(s) && !/^https?:\/\//.test(s)),
+          profileHref: getProfileUrl(cells[1]?.textContent.trim()),
         });
       }
     }
@@ -274,8 +291,9 @@ export default async function decorate(block) {
     ctaWrap.className = 'fw-cta';
     const a = document.createElement('a');
     a.className = 'fw-cta-btn';
-    a.href = ctaLink.href;
-    a.textContent = ctaLink.textContent.trim();
+    // Always link to /hire-talent regardless of what's in da.live
+    a.href = isValidHref(ctaLink.href) ? ctaLink.href : '/hire-talent';
+    a.textContent = ctaLink.textContent.trim() || 'View All Freelancers';
     ctaWrap.append(a);
     block.append(ctaWrap);
   }
