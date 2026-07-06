@@ -92,32 +92,29 @@ function buildCard(c) {
   skillsWrap.className = 'ht-skills';
   skillsWrap.innerHTML = skillPills + hiddenPills + moreBtn;
 
-  const footer = document.createElement('div');
-  footer.className = 'ht-card-footer';
-
-  const profileBtn = document.createElement('a');
-  profileBtn.className = 'ht-see-profile';
-  profileBtn.href = c.profileHref;
-  profileBtn.textContent = 'See Profile';
-  footer.appendChild(profileBtn);
-
+  // Star button — top right corner of card
   if (isClient) {
     const favBtn = document.createElement('button');
     favBtn.type = 'button';
     favBtn.className = `ht-fav-btn${isSaved ? ' saved' : ''}`;
     favBtn.title = isSaved ? 'Remove from saved' : 'Save freelancer';
-    favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${isSaved ? '#1dbf73' : 'none'}" stroke="${isSaved ? '#1dbf73' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+    favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${isSaved ? '#f59e0b' : 'none'}" stroke="${isSaved ? '#f59e0b' : '#ccc'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
     favBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       const added = toggleFav(session.id, c.userId || c.profileHref);
       favBtn.classList.toggle('saved', added);
-      favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${added ? '#1dbf73' : 'none'}" stroke="${added ? '#1dbf73' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+      favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${added ? '#f59e0b' : 'none'}" stroke="${added ? '#f59e0b' : '#ccc'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
     });
-    footer.appendChild(favBtn);
+    card.appendChild(favBtn);
   }
 
-  card.append(top, bio, skillsWrap, footer);
+  const profileBtn = document.createElement('a');
+  profileBtn.className = 'ht-see-profile';
+  profileBtn.href = c.profileHref;
+  profileBtn.textContent = 'See Profile';
+
+  card.append(top, bio, skillsWrap, profileBtn);
 
   const moreEl = skillsWrap.querySelector('.ht-skill-more');
   if (moreEl) {
