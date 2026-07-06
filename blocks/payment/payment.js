@@ -124,8 +124,8 @@ export default async function decorate(block) {
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1dbf73" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h2>Payment successful!</h2>
-          <p>Your <strong>${plan.name} Plan</strong> is now active. Start applying to more projects!</p>
-          <a href="/browse-projects" class="btn-back">Start Applying Now →</a>
+          <p>Your <strong>${plan.name} Plan</strong> is now active.</p>
+          <a href="${(() => { try { const s = JSON.parse(localStorage.getItem('skillbridge_auth')); return s?.role === 'client' ? '/post-project' : '/browse-projects'; } catch { return '/browse-projects'; } })()}" class="btn-back" id="pay-success-link">Continue →</a>
         </div>
       </div>
 
