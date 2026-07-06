@@ -11,11 +11,9 @@ export default async function decorate(block) {
     const isBold = !!firstCell.querySelector('strong, b');
 
     if (isBold) {
-      // Header row — title | subtitle
       title = firstCell.textContent.trim();
       subtitle = cells[1]?.textContent.trim() || subtitle;
     } else {
-      // Plan row — name | price | period | highlight | features | cta | popular
       const name = cells[0]?.textContent.trim() || '';
       if (!name) return;
       const featuresRaw = cells[4]?.textContent.trim() || '';
@@ -46,7 +44,7 @@ export default async function decorate(block) {
 
       <div class="up-cards">
         ${plans.map((p) => `
-          <div class="up-card ${p.popular ? 'up-card-popular' : ''}">
+          <div class="up-card ${p.popular ? 'up-card-popular' : ''}" data-plan-name="${p.name}">
             <div class="up-card-header">
               <span class="up-card-name">${p.name}</span>
               ${p.popular ? '<span class="up-popular-badge">Popular</span>' : ''}
@@ -67,13 +65,29 @@ export default async function decorate(block) {
     </div>
   `;
 
+  const cards = [...block.querySelectorAll('.up-card')];
+
+  function selectCard(card) {
+    cards.forEach((c) => c.classList.remove('up-card-selected'));
+    card.classList.add('up-card-selected');
+    const planName = card.dataset.planName;
+    const plan = plans.find((p) => p.name === planName);
+    if (plan) sessionStorage.setItem('sh_selected_plan', JSON.stringify(plan));
+  }
+
+  cards.forEach((card) => {
+    card.addEventListener('click', () => selectCard(card));
+  });
+
   block.querySelectorAll('.up-cta-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const toast = document.createElement('div');
-      toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:13px 24px;border-radius:99px;font-size:0.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgb(0 0 0/25%);text-align:center;max-width:340px';
-      toast.textContent = `${btn.dataset.plan} plan selected — payment integration coming soon!`;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3500);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const planName = btn.dataset.plan;
+      const plan = plans.find((p) => p.name === planName);
+      if (plan) {
+        sessionStorage.setItem('sh_selected_plan', JSON.stringify(plan));
+        window.location.href = '/payment';
+      }
     });
   });
 }

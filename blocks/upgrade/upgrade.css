@@ -190,6 +190,22 @@
   border-color: #111;
 }
 
+/* Selected card state */
+.upgrade .up-card-selected {
+  border: 2px solid #1dbf73;
+  box-shadow: 0 4px 24px rgb(29 191 115 / 20%);
+}
+
+.upgrade .up-card-selected .up-cta-secondary {
+  background: #1dbf73;
+  color: #fff;
+  border-color: #1dbf73;
+}
+
+.upgrade .up-card {
+  cursor: pointer;
+}
+
 /* Back link */
 .upgrade .up-back {
   text-align: center;
