@@ -447,9 +447,16 @@
 
 .hire-talent .ht-skill-more:hover { background: #1dbf73; color: #fff; border-color: #1dbf73; }
 
+.hire-talent .ht-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
 .hire-talent .ht-see-profile {
   display: block;
-  width: 100%;
+  flex: 1;
   padding: 11px 0;
   background: #1dbf73;
   color: #fff;
@@ -461,7 +468,6 @@
   text-decoration: none;
   transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
   letter-spacing: 0.01em;
-  margin-top: auto;
 }
 
 .hire-talent .ht-see-profile:hover {
@@ -469,6 +475,24 @@
   box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
   transform: translateY(-1px);
 }
+
+.hire-talent .ht-fav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e5e5;
+  background: #fff;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.hire-talent .ht-fav-btn:hover { border-color: #1dbf73; color: #1dbf73; }
+.hire-talent .ht-fav-btn.saved { border-color: #1dbf73; color: #1dbf73; }
 
 /* ── Empty state ── */
 .hire-talent .ht-empty-state {

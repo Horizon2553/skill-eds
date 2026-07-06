@@ -24,7 +24,25 @@ const ICONS = {
   empty: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
 };
 
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('skillbridge_auth')); } catch { return null; }
+}
+function getFavIds(clientId) {
+  try { return JSON.parse(localStorage.getItem(`sb_fav_${clientId}`)) || []; } catch { return []; }
+}
+function toggleFav(clientId, freelancerId) {
+  const favs = getFavIds(clientId);
+  const idx = favs.indexOf(freelancerId);
+  if (idx > -1) favs.splice(idx, 1); else favs.push(freelancerId);
+  localStorage.setItem(`sb_fav_${clientId}`, JSON.stringify(favs));
+  return idx === -1; // true = added
+}
+
 function buildCard(c) {
+  const session = getSession();
+  const isClient = session?.role === 'client';
+  const isSaved = isClient ? getFavIds(session.id).includes(c.userId || c.profileHref) : false;
+
   const hasLink = c.profileHref && c.profileHref !== '#';
   const card = document.createElement(hasLink ? 'a' : 'div');
   card.className = 'ht-card';
@@ -74,12 +92,32 @@ function buildCard(c) {
   skillsWrap.className = 'ht-skills';
   skillsWrap.innerHTML = skillPills + hiddenPills + moreBtn;
 
+  const footer = document.createElement('div');
+  footer.className = 'ht-card-footer';
+
   const profileBtn = document.createElement('a');
   profileBtn.className = 'ht-see-profile';
   profileBtn.href = c.profileHref;
   profileBtn.textContent = 'See Profile';
+  footer.appendChild(profileBtn);
 
-  card.append(top, bio, skillsWrap, profileBtn);
+  if (isClient) {
+    const favBtn = document.createElement('button');
+    favBtn.type = 'button';
+    favBtn.className = `ht-fav-btn${isSaved ? ' saved' : ''}`;
+    favBtn.title = isSaved ? 'Remove from saved' : 'Save freelancer';
+    favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${isSaved ? '#1dbf73' : 'none'}" stroke="${isSaved ? '#1dbf73' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+    favBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const added = toggleFav(session.id, c.userId || c.profileHref);
+      favBtn.classList.toggle('saved', added);
+      favBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${added ? '#1dbf73' : 'none'}" stroke="${added ? '#1dbf73' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+    });
+    footer.appendChild(favBtn);
+  }
+
+  card.append(top, bio, skillsWrap, footer);
 
   const moreEl = skillsWrap.querySelector('.ht-skill-more');
   if (moreEl) {
@@ -156,6 +194,7 @@ export default async function decorate(block) {
         bio: u.bio || '',
         skills: Array.isArray(u.skills) ? u.skills : [],
         profileHref: `/my-profile?id=${u.id}`,
+        userId: u.id,
       });
     });
   } catch (e) { /* no local users */ }
