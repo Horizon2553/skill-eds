@@ -199,6 +199,29 @@ export default async function decorate(block) {
     });
   });
 
+  // Prepend client-posted jobs from localStorage (newest first)
+  try {
+    const clientJobs = JSON.parse(localStorage.getItem('sb_all_posted_jobs') || '[]');
+    clientJobs.forEach((j) => {
+      if (!jobs.find((x) => x.id === j.id)) {
+        jobs.unshift({
+          id: j.id,
+          clientId: j.clientId,
+          title: j.title,
+          client: j.clientName || 'Client',
+          posted: 'Just now',
+          budget: j.budget,
+          budgetType: j.budgetType || 'Fixed',
+          deadline: j.deadline || '',
+          proposals: '0',
+          desc: j.desc,
+          skills: Array.isArray(j.skills) ? j.skills : [],
+          category: j.category || 'General',
+        });
+      }
+    });
+  } catch { /* empty */ }
+
   const session = getSession();
   const categories = [...new Set(jobs.map((j) => j.category))].sort((a, b) => a.localeCompare(b));
 

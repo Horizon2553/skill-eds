@@ -151,7 +151,7 @@ export default async function decorate(block) {
             <h2>Project Posted!</h2>
             <p>Your project is now live. Freelancers will start sending proposals soon.</p>
             <div class="pp-success-btns">
-              <a href="/browse-projects" class="pp-browse-btn">Browse All Projects</a>
+              <a href="/dashboard" class="pp-browse-btn">Go to Dashboard</a>
               <button type="button" id="pp-post-another" class="pp-another-btn">Post Another</button>
             </div>
           </div>
@@ -290,6 +290,12 @@ export default async function decorate(block) {
     const jobs = getPostedJobs(session.id || session.email);
     jobs.push(job);
     savePostedJobs(session.id || session.email, jobs);
+    // Also save to global list so browse-projects page shows it
+    try {
+      const all = JSON.parse(localStorage.getItem('sb_all_posted_jobs') || '[]');
+      all.unshift(job); // newest first
+      localStorage.setItem('sb_all_posted_jobs', JSON.stringify(all));
+    } catch { /* quota */ }
 
     // Show success
     block.querySelector('#pp-form-card').style.display = 'none';

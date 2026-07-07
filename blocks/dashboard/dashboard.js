@@ -259,7 +259,6 @@ function buildClientDash(session) {
           Responses${activeResponses.length > 0 ? ` <span class="db-tab-badge-red">${activeResponses.length}</span>` : ''}
         </button>
         <button class="db-tab" data-tab="favourites">Favourite Freelancers</button>
-        <button class="db-tab" data-tab="escrow">Payments &amp; Escrow</button>
         <button class="db-tab" data-tab="contracts">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           My Contracts
@@ -374,31 +373,26 @@ function buildClientDash(session) {
         `}
       </div>
 
-      <!-- Payments & Escrow -->
-      <div class="db-panel" id="db-panel-escrow">
+      <!-- My Contracts: accepted hires -->
+      <div class="db-panel" id="db-panel-contracts">
         ${sentRequests.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').length === 0 ? `
-          <div class="db-empty"><p>No active engagements yet. Once a freelancer accepts your invite, their contact details will appear here.</p></div>
+          <div class="db-empty"><p>No active contracts yet. Once a freelancer accepts your invite, it will appear here.</p></div>
         ` : sentRequests.filter((r) => r.status === 'accepted' || r.status === 'counter_accepted').map((r) => `
           <div class="db-proposal-card">
             <div class="db-proposal-top">
               <div>
                 <div class="db-proposal-title">${r.title}</div>
-                <div class="db-proposal-meta">with ${r.toFreelancerName} · ${r.budget}</div>
+                <div class="db-proposal-meta">with ${r.toFreelancerName} · ${r.budget} · ${r.timeline}</div>
               </div>
               <span class="db-status-badge" style="color:#1dbf73;background:#f0fdf7">Active</span>
             </div>
             <div class="db-accepted-msg" style="margin-top:12px">
-              Get in touch with <strong>${r.toFreelancerName}</strong>
-              ${r.toFreelancerEmail ? ` via <a href="mailto:${r.toFreelancerEmail}" style="color:#1dbf73">${r.toFreelancerEmail}</a>` : ''}
-              ${r.toFreelancerLinkedin ? ` · <a href="${r.toFreelancerLinkedin}" target="_blank" style="color:#1dbf73">LinkedIn Profile</a>` : ''}
+              ✓ Get in touch with <strong>${r.toFreelancerName}</strong>
+              ${r.toFreelancerEmail ? ` — <a href="mailto:${r.toFreelancerEmail}" style="color:#1dbf73">${r.toFreelancerEmail}</a>` : ''}
+              ${r.toFreelancerLinkedin ? ` · <a href="${r.toFreelancerLinkedin}" target="_blank" style="color:#1dbf73">LinkedIn →</a>` : ''}
             </div>
           </div>
         `).join('')}
-      </div>
-
-      <!-- My Contracts -->
-      <div class="db-panel" id="db-panel-contracts">
-        <div class="db-empty"><p>Formal contracts will appear here once both parties agree on terms.</p></div>
       </div>
     </div>
   `;

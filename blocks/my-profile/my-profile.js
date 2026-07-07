@@ -224,9 +224,10 @@ function renderPublicView(block, user) {
     // Contact Candidate
     block.querySelector('#mp-contact-cta')?.addEventListener('click', () => {
       const cm = document.createElement('div');
+      cm.id = 'mp-contact-modal';
       cm.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/55%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
       cm.innerHTML = `<div style="background:#fff;border-radius:16px;padding:36px;max-width:400px;width:100%;text-align:center;position:relative">
-        <button onclick="this.closest('div[style*=fixed]').remove();document.body.style.overflow=''" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;color:#aaa;cursor:pointer">&times;</button>
+        <button id="mp-contact-close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;color:#aaa;cursor:pointer;line-height:1">&times;</button>
         <h3 style="margin:0 0 16px;font-size:1.1rem;font-weight:800">Contact ${user.name}</h3>
         ${user.email ? `<p style="margin:0 0 10px;font-size:0.9rem"><a href="mailto:${user.email}" style="color:#1dbf73">${user.email}</a></p>` : ''}
         ${user.links?.linkedin ? `<p style="margin:0;font-size:0.9rem"><a href="${user.links.linkedin}" target="_blank" style="color:#1dbf73">LinkedIn Profile →</a></p>` : ''}
@@ -234,7 +235,9 @@ function renderPublicView(block, user) {
       </div>`;
       document.body.appendChild(cm);
       document.body.style.overflow = 'hidden';
-      cm.addEventListener('click', (e) => { if (e.target === cm) { cm.remove(); document.body.style.overflow = ''; } });
+      const closeContact = () => { cm.remove(); document.body.style.overflow = ''; };
+      document.getElementById('mp-contact-close').addEventListener('click', closeContact);
+      cm.addEventListener('click', (e) => { if (e.target === cm) closeContact(); });
     });
 
     // Hire Candidate
