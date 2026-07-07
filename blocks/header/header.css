@@ -179,11 +179,36 @@ header nav .nav-sections ul > li > a {
     flex-basis: 100%;
     order: 10;
     border-top: 1px solid #f0f0f0;
-    padding: 8px 0 4px;
+    padding: 4px 0 4px;
   }
 
-  header nav .nav-sections ul > li > a {
-    padding: 12px 0;
+  header nav .nav-sections ul > li {
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  header nav .nav-sections ul > li:last-child {
+    border-bottom: none;
+  }
+
+  header nav .nav-sections ul > li > a,
+  header nav .nav-sections ul > li > p > a {
+    display: block;
+    padding: 14px 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  header nav .nav-sections ul > li > p {
+    margin: 0;
+    line-height: 1;
+  }
+
+  header nav .nav-sections ul > li > a:hover,
+  header nav .nav-sections ul > li > p > a:hover {
+    color: #1dbf73;
   }
 }
 
