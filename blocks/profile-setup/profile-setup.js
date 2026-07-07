@@ -42,25 +42,7 @@ const CLIENT_STEPS = [
     placeholder: 'e.g. Acme Corp, Solo Founder, Startup...',
   },
   {
-    id: 'needs', title: 'What do you need?',
-    desc: 'Describe the type of projects you usually post.',
-    label: 'Project Needs', required: true, type: 'textarea',
-    placeholder: 'e.g. We build SaaS products and need frontend developers...',
-  },
-  {
-    id: 'budget', title: 'Typical Budget',
-    desc: 'What is your usual project budget range?',
-    label: 'Budget Range', required: false, type: 'select',
-    options: ['₹5,000 – ₹15,000', '₹15,000 – ₹50,000', '₹50,000 – ₹1,00,000', '₹1,00,000+', 'Varies per project'],
-  },
-  {
-    id: 'website', title: 'Your Website',
-    desc: 'Optional, but helps freelancers understand your business.',
-    label: 'Website URL (optional)', required: false, type: 'text',
-    placeholder: 'https://yourcompany.com',
-  },
-  {
-    id: 'photo', title: 'Company Logo / Photo',
+    id: 'photo', title: 'Photo',
     desc: 'Optional — helps build trust with freelancers.',
     required: false, type: 'photo',
   },
