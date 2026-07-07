@@ -32,10 +32,11 @@ export default async function decorate(block) {
   // Row 4: trending tags — <a> links preferred, fall back to space-separated text
   const trendingCell = rows[4]?.children[0];
   const trendingLinks = [...(trendingCell?.querySelectorAll('a') || [])];
-  const trendingTags = trendingLinks.length
+  const trendingTags = (trendingLinks.length
     ? trendingLinks.map((a) => ({ text: a.textContent.trim(), href: a.href }))
     : (trendingCell?.textContent?.trim() || '').split(/\s+/).filter(Boolean)
-        .map((t) => ({ text: t, href: `/hire-talent?skills=${encodeURIComponent(t)}` }));
+        .map((t) => ({ text: t, href: `/hire-talent?skills=${encodeURIComponent(t)}` })))
+    .filter((t) => t.text.toLowerCase() !== 'ai');
 
   block.innerHTML = `
     <video class="hero-video-bg" muted loop playsinline preload="none" data-src="${videoSrc}">
@@ -86,6 +87,8 @@ export default async function decorate(block) {
       subtextEl.textContent = isHire ? hireSubtext : workSubtext;
       hireCTA.style.display = isHire ? 'flex' : 'none';
       workCTA.style.display = isHire ? 'none' : 'flex';
+      const trending = block.querySelector('.hero-trending');
+      if (trending) trending.style.display = isHire ? '' : 'none';
     });
   });
 
