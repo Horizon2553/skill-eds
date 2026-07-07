@@ -203,7 +203,24 @@ function buildFreelancerDash(session) {
       </div>
 
       <div class="db-panel" id="db-panel-saved">
-        <div class="db-empty"><p>Save projects from Browse Projects to track them here.</p></div>
+        ${(() => {
+    const uid = session.id || session.email;
+    const saved = (() => { try { return JSON.parse(localStorage.getItem(`sb_saved_proj_${uid}`)) || []; } catch { return []; } })();
+    if (saved.length === 0) return '<div class="db-empty"><p>No saved projects yet. Click the bookmark icon on any job in Browse Projects.</p></div>';
+    return saved.map((p) => `
+          <div class="db-proposal-card">
+            <div class="db-proposal-top">
+              <div>
+                <div class="db-proposal-title">${p.title}</div>
+                <div class="db-proposal-meta">${p.client} · ${p.budget} · ${p.deadline}</div>
+              </div>
+              <a href="/browse-projects" class="db-status-badge" style="color:#1dbf73;background:#f0fdf7;text-decoration:none">Apply →</a>
+            </div>
+            <p class="db-proposal-cover">${(p.desc || '').substring(0, 120)}${p.desc?.length > 120 ? '…' : ''}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">${(p.skills || []).map((s) => `<span class="db-skill">${s}</span>`).join('')}</div>
+          </div>
+        `).join('');
+  })()}
       </div>
 
       <div class="db-panel" id="db-panel-contracts">

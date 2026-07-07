@@ -113,11 +113,24 @@ const ICONS = {
   empty: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d0d0d0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
 };
 
+function getSavedProjects(userId) {
+  try { return JSON.parse(localStorage.getItem(`sb_saved_proj_${userId}`)) || []; } catch { return []; }
+}
+function toggleSaveProject(userId, job) {
+  const saved = getSavedProjects(userId);
+  const idx = saved.findIndex((s) => s.id === job.id);
+  if (idx > -1) { saved.splice(idx, 1); } else { saved.push({ id: job.id, title: job.title, budget: job.budget, budgetType: job.budgetType, deadline: job.deadline, client: job.client, desc: job.desc, skills: job.skills }); }
+  localStorage.setItem(`sb_saved_proj_${userId}`, JSON.stringify(saved));
+  return idx === -1;
+}
+
 function buildJobCard(j, session, appliedIds, freeUsed) {
   const badgeClass = j.budgetType.toLowerCase() === 'hourly' ? 'bp-badge-hourly' : 'bp-badge-fixed';
   const initial = j.client.charAt(0).toUpperCase();
   const hasApplied = appliedIds.has(j.id);
   const isFreelancer = session?.role === 'freelancer';
+  const userId = session?.id || session?.email;
+  const isSaved = isFreelancer && userId ? getSavedProjects(userId).some((s) => s.id === j.id) : false;
 
   let applyBtn;
   if (hasApplied) {
@@ -143,7 +156,12 @@ function buildJobCard(j, session, appliedIds, freeUsed) {
             <span>${j.posted}</span>
           </div>
         </div>
-        <span class="bp-badge bp-badge-open">Open</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="bp-badge bp-badge-open">Open</span>
+          ${isFreelancer ? `<button class="bp-save-btn${isSaved ? ' saved' : ''}" data-save-job="${j.id}" title="${isSaved ? 'Remove from saved' : 'Save project'}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="${isSaved ? '#1dbf73' : 'none'}" stroke="${isSaved ? '#1dbf73' : '#aaa'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>` : ''}
+        </div>
       </div>
       <p class="bp-job-desc">${j.desc}</p>
       <div class="bp-job-skills">
@@ -323,6 +341,22 @@ export default async function decorate(block) {
         const job = jobs.find((j) => j.id === btn.dataset.job);
         if (!job) return;
         openProposalModal(job, s);
+      });
+    });
+
+    // Save/bookmark job
+    list.querySelectorAll('.bp-save-btn[data-save-job]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const s = getSession();
+        if (!s) return;
+        const job = jobs.find((j) => j.id === btn.dataset.saveJob);
+        if (!job) return;
+        const uid = s.id || s.email;
+        const added = toggleSaveProject(uid, job);
+        btn.classList.toggle('saved', added);
+        btn.title = added ? 'Remove from saved' : 'Save project';
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="${added ? '#1dbf73' : 'none'}" stroke="${added ? '#1dbf73' : '#aaa'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
       });
     });
   }

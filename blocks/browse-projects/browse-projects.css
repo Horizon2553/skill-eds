@@ -485,3 +485,16 @@
 }
 
 .browse-projects .bp-apply-btn.pro-required:hover { background: #f0fdf7; }
+
+/* Save/bookmark button on job cards */
+.browse-projects .bp-save-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.browse-projects .bp-save-btn:hover { transform: scale(1.2); }
