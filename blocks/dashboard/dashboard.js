@@ -232,7 +232,7 @@ function buildClientDash(session) {
     ? `<img src="${session.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
     : `<span style="font-size:1.4rem;font-weight:800;color:#fff">${session.name?.charAt(0).toUpperCase()}</span>`;
 
-  const defaultTab = activeResponses.length > 0 ? 'responses' : 'projects';
+  const defaultTab = (activeResponses.length > 0 || myProposals.filter((p) => p.status === 'pending').length > 0) ? 'responses' : 'projects';
 
   return `
     <div class="db-hero">
@@ -256,7 +256,7 @@ function buildClientDash(session) {
       <div class="db-tabs">
         <button class="db-tab ${defaultTab === 'projects' ? 'active' : ''}" data-tab="projects">My Posted Projects</button>
         <button class="db-tab ${defaultTab === 'responses' ? 'active' : ''}" data-tab="responses">
-          Responses${activeResponses.length > 0 ? ` <span class="db-tab-badge-red">${activeResponses.length}</span>` : ''}
+          Responses${(activeResponses.length + myProposals.filter((p) => p.status === 'pending').length) > 0 ? ` <span class="db-tab-badge-red">${activeResponses.length + myProposals.filter((p) => p.status === 'pending').length}</span>` : ''}
         </button>
         <button class="db-tab" data-tab="favourites">Favourite Freelancers</button>
         <button class="db-tab" data-tab="contracts">
@@ -294,10 +294,34 @@ function buildClientDash(session) {
   }).join('')}
       </div>
 
-      <!-- Responses -->
+      <!-- Responses: proposals from browse-projects + hire request responses -->
       <div class="db-panel ${defaultTab === 'responses' ? 'active' : ''}" id="db-panel-responses">
-        ${sentRequests.length === 0 ? `
-          <div class="db-empty"><p>No responses yet. Visit a freelancer's profile and send a hire request.</p></div>
+        ${myProposals.length > 0 ? `
+          <div style="font-size:0.8rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Proposals Received</div>
+          ${myProposals.map((p) => `
+            <div class="db-proposal-card" id="prop-${p.id}">
+              <div class="db-proposal-top">
+                <div>
+                  <div class="db-proposal-title">${p.freelancerName} <span class="db-fl-role">· ${p.freelancerRole}</span></div>
+                  <div class="db-proposal-meta">For: ${p.jobTitle} · Proposed: ${p.budget} · ${p.timeline} · ${timeAgo(p.createdAt)}</div>
+                </div>
+                ${statusBadge(p.status)}
+              </div>
+              <p class="db-proposal-cover">${p.coverLetter}</p>
+              ${p.status === 'pending' ? `
+                <div class="db-action-row">
+                  <button class="db-approve-btn" data-prop="${p.id}">Approve</button>
+                  <button class="db-reject-btn" data-prop="${p.id}">Reject</button>
+                </div>
+              ` : ''}
+              ${p.status === 'approved' ? `<div class="db-approved-msg">✓ Approved. Contact the freelancer to get started!</div>` : ''}
+              ${p.status === 'rejected' ? `<div class="db-rejected-msg">Rejected.</div>` : ''}
+            </div>
+          `).join('')}
+          ${sentRequests.length > 0 ? `<div style="font-size:0.8rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin:20px 0 12px">Hire Invites Sent</div>` : ''}
+        ` : ''}
+        ${sentRequests.length === 0 && myProposals.length === 0 ? `
+          <div class="db-empty"><p>No responses yet. Post a project or send hire invites to freelancers.</p></div>
         ` : sentRequests.map((r) => {
     const freelancer = allUsers.find((u) => u.id === r.toFreelancerId);
     const avatarSrc = freelancer?.avatar;

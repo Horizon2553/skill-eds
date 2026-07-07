@@ -136,7 +136,9 @@ export default async function decorate(block) {
                 <select id="pp-timeline" required>
                   <option value="">Select timeline...</option>
                   ${TIMELINES.map((t) => `<option value="${t}">${t}</option>`).join('')}
+                  <option value="custom">Other (write your own)</option>
                 </select>
+                <input type="text" id="pp-timeline-custom" placeholder="e.g. 10 days, 3 weeks..." style="display:none;margin-top:8px;width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-family:var(--body-font-family);font-size:0.93rem;outline:none">
               </div>
 
               <p class="pp-err" id="pp-err"></p>
@@ -231,6 +233,14 @@ export default async function decorate(block) {
     if (skillsInput.value.trim()) { addSkill(skillsInput.value); skillsInput.value = ''; }
   });
 
+  // Custom timeline toggle
+  const timelineSel = block.querySelector('#pp-timeline');
+  const timelineCustom = block.querySelector('#pp-timeline-custom');
+  timelineSel.addEventListener('change', () => {
+    timelineCustom.style.display = timelineSel.value === 'custom' ? 'block' : 'none';
+    if (timelineSel.value === 'custom') timelineCustom.focus();
+  });
+
   // Budget type label
   block.querySelector('#pp-budget-type').addEventListener('change', (e) => {
     const label = block.querySelector('#pp-budget-label');
@@ -259,7 +269,10 @@ export default async function decorate(block) {
     const desc = block.querySelector('#pp-desc').value.trim();
     const budgetType = block.querySelector('#pp-budget-type').value;
     const budgetAmt = block.querySelector('#pp-budget').value.trim();
-    const timeline = block.querySelector('#pp-timeline').value;
+    const timelineRaw = block.querySelector('#pp-timeline').value;
+    const timeline = timelineRaw === 'custom'
+      ? block.querySelector('#pp-timeline-custom').value.trim()
+      : timelineRaw;
 
     if (!title || !category || !desc || !budgetAmt || !timeline) {
       errEl.textContent = 'Please fill in all required fields.';
