@@ -1,15 +1,8 @@
 // One block handles both Testimonials and FAQ
-// Testimonials: rows → quote | name | role
-// FAQ: first row = heading (1 cell), then rows → question | answer
+// Detection: block.classList.contains('faq') → FAQ accordion
+//            block.classList.contains('testimonials') → testimonial cards
 
 const AVATAR_COLORS = ['#4f46e5', '#1dbf73', '#e53e3e', '#f59e0b', '#0ea5e9'];
-
-function isFaq(rows) {
-  const dataRow = rows.find((r) => [...r.children].length >= 2);
-  if (!dataRow) return false;
-  // FAQ answers are long text; testimonial quotes are medium length
-  return ([...dataRow.children][1]?.textContent.trim().length || 0) > 100;
-}
 
 function buildTestimonials(block, rows) {
   const header = document.createElement('div');
@@ -89,6 +82,6 @@ function buildFaq(block, rows) {
 
 export default async function decorate(block) {
   const rows = [...block.children];
-  if (isFaq(rows)) buildFaq(block, rows);
+  if (block.classList.contains('faq')) buildFaq(block, rows);
   else buildTestimonials(block, rows);
 }
