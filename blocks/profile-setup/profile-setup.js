@@ -350,6 +350,14 @@ export default async function decorate(block) {
         profileComplete: true,
       };
       saveSession(updated);
+      // Also persist to sb_users_v1 so data survives re-login
+      try {
+        const users = JSON.parse(localStorage.getItem('sb_users_v1') || '[]');
+        const idx = users.findIndex((u) => u.id === updated.id || u.email === updated.email);
+        if (idx > -1) users[idx] = { ...users[idx], ...updated };
+        else users.push(updated);
+        localStorage.setItem('sb_users_v1', JSON.stringify(users));
+      } catch (e) { /* quota exceeded — avatar too large */ }
     }
 
     render();

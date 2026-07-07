@@ -190,17 +190,29 @@ export default async function decorate(block) {
     const errEl = block.querySelector('#login-err');
     errEl.textContent = '';
 
-    const user = [...DEMO, ...getUsers()].find((u) => u.email.toLowerCase() === email && u.password === pw);
+    // Check DEMO first, then localStorage users
+    const demoUser = DEMO.find((u) => u.email.toLowerCase() === email && u.password === pw);
+    const lsUser = getUsers().find((u) => u.email.toLowerCase() === email && u.password === pw);
+    const user = demoUser || lsUser;
     if (!user) { errEl.textContent = 'Invalid email or password.'; return; }
-    // Correct role if it was saved wrong — also persists fix to sb_users_v1
-    const ROLE_FIX = { 'vanshi00@gmail.com': 'freelancer', 'vanshi11@gmail.com': 'client' };
-    if (ROLE_FIX[user.email.toLowerCase()]) {
-      user.role = ROLE_FIX[user.email.toLowerCase()];
-      const allUsers = getUsers();
-      const idx = allUsers.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
-      if (idx > -1) { allUsers[idx].role = user.role; saveUsers(allUsers); }
+
+    // If it's a localStorage user, merge with full profile data from sb_users_v1
+    // (so avatar, bio, skills etc are restored even after page refresh)
+    let fullUser = user;
+    if (lsUser) {
+      const stored = getUsers().find((u) => u.email.toLowerCase() === email);
+      if (stored) fullUser = { ...user, ...stored };
     }
-    setSession(user);
+
+    // Correct role if saved wrong
+    const ROLE_FIX = { 'vanshi00@gmail.com': 'freelancer', 'vanshi11@gmail.com': 'client' };
+    if (ROLE_FIX[fullUser.email.toLowerCase()]) {
+      fullUser.role = ROLE_FIX[fullUser.email.toLowerCase()];
+      const allUsers = getUsers();
+      const idx = allUsers.findIndex((u) => u.email.toLowerCase() === fullUser.email.toLowerCase());
+      if (idx > -1) { allUsers[idx].role = fullUser.role; saveUsers(allUsers); }
+    }
+    setSession(fullUser);
     window.location.href = '/';
   });
 

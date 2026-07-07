@@ -191,7 +191,7 @@ export default async function decorate(block) {
   // Add dynamically registered freelancers from localStorage
   try {
     const localUsers = JSON.parse(localStorage.getItem('sb_users_v1')) || [];
-    localUsers.filter((u) => u.role === 'freelancer' && u.profileComplete).forEach((u) => {
+    localUsers.filter((u) => u.role === 'freelancer' && (u.profileComplete || u.bio || u.skills?.length)).forEach((u) => {
       const avatarEl = u.avatar ? (() => { const img = document.createElement('img'); img.src = u.avatar; img.loading = 'lazy'; return img; })() : null;
       candidates.push({
         avatarEl,
