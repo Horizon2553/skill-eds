@@ -437,11 +437,21 @@ function renderEditView(block, session) {
   block.querySelector('#mpf-images').addEventListener('change', (e) => {
     const preview = block.querySelector('#mpf-img-preview');
     [...e.target.files].forEach((file) => {
-      if (file.size > 5 * 1024 * 1024) return;
       const reader = new FileReader();
       reader.onload = (ev) => {
-        projectImages.push(ev.target.result);
-        preview.innerHTML += `<img src="${ev.target.result}" alt="preview">`;
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX = 800;
+          const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.7);
+          projectImages.push(compressed);
+          preview.innerHTML += `<img src="${compressed}" alt="preview">`;
+        };
+        img.src = ev.target.result;
       };
       reader.readAsDataURL(file);
     });
@@ -501,11 +511,23 @@ function renderEditView(block, session) {
     setSession(updated);
 
     // Also update in sb_users_v1
-    const users = getAllUsers();
-    const idx = users.findIndex((u) => u.id === session.id);
-    if (idx !== -1) users[idx] = { ...users[idx], ...updated };
-    else users.push(updated);
-    localStorage.setItem('sb_users_v1', JSON.stringify(users));
+    try {
+      const users = getAllUsers();
+      const idx = users.findIndex((u) => u.id === session.id);
+      if (idx !== -1) users[idx] = { ...users[idx], ...updated };
+      else users.push(updated);
+      localStorage.setItem('sb_users_v1', JSON.stringify(users));
+    } catch (err) {
+      // If quota exceeded, save without project images (at least keep profile data)
+      try {
+        const slim = { ...updated, projects: (updated.projects || []).map((p) => ({ ...p, images: [] })) };
+        const users = getAllUsers();
+        const idx = users.findIndex((u) => u.id === session.id);
+        if (idx !== -1) users[idx] = { ...users[idx], ...slim };
+        else users.push(slim);
+        localStorage.setItem('sb_users_v1', JSON.stringify(users));
+      } catch { /* still failing — storage truly full */ }
+    }
 
     const msg = block.querySelector('#mp-save-msg');
     msg.textContent = 'Profile saved successfully!';
