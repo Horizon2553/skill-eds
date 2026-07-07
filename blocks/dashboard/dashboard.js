@@ -287,6 +287,9 @@ function buildClientDash(session) {
                   ${count} proposal${count !== 1 ? 's' : ''}
                 </span>
                 <span class="db-open-badge">Open</span>
+                <button class="db-delete-job-btn" data-job-id="${j.id}" title="Delete project">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -311,9 +314,22 @@ function buildClientDash(session) {
               ${p.status === 'pending' ? `
                 <div class="db-action-row">
                   <button class="db-approve-btn" data-prop="${p.id}">Approve</button>
+                  <button class="db-counter-toggle" data-prop-counter="${p.id}">Counter Price</button>
                   <button class="db-reject-btn" data-prop="${p.id}">Reject</button>
                 </div>
+                <div class="db-counter-form" id="prop-counter-${p.id}" style="display:none">
+                  <h4 class="db-counter-title">Counter Offer</h4>
+                  <div class="db-counter-row">
+                    <div class="db-counter-field"><label>Your Budget *</label><input type="text" class="db-counter-price" placeholder="e.g. ₹12,000"></div>
+                    <div class="db-counter-field"><label>Timeline *</label><input type="text" class="db-counter-time" placeholder="e.g. 3 weeks"></div>
+                  </div>
+                  <div class="db-counter-btns">
+                    <button class="db-counter-submit db-prop-counter-submit" data-prop="${p.id}">Send Counter</button>
+                    <button class="db-counter-cancel" data-prop-cancel="${p.id}">Cancel</button>
+                  </div>
+                </div>
               ` : ''}
+              ${p.status === 'countered' ? `<div class="db-counter-sent-msg">Counter sent — ${p.counterBudget} · ${p.counterTimeline}. Waiting for freelancer response.</div>` : ''}
               ${p.status === 'approved' ? `<div class="db-approved-msg">✓ Approved. Contact the freelancer to get started!</div>` : ''}
               ${p.status === 'rejected' ? `<div class="db-rejected-msg">Rejected.</div>` : ''}
             </div>
@@ -553,6 +569,60 @@ export default async function decorate(block) {
       const idx = proposals.findIndex((p) => p.id === btn.dataset.prop);
       if (idx === -1) return;
       proposals[idx].status = 'rejected';
+      saveProposals(proposals);
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
+    });
+  });
+
+  // Delete posted project
+  block.querySelectorAll('.db-delete-job-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Delete this project? Freelancers will no longer see it.')) return;
+      const jobId = btn.dataset.jobId;
+      // Remove from client's own list
+      const clientKey = `sb_posted_jobs_${session.id || session.email}`;
+      try {
+        const jobs = JSON.parse(localStorage.getItem(clientKey) || '[]').filter((j) => j.id !== jobId);
+        localStorage.setItem(clientKey, JSON.stringify(jobs));
+      } catch { /* empty */ }
+      // Remove from global list (browse-projects)
+      try {
+        const all = JSON.parse(localStorage.getItem('sb_all_posted_jobs') || '[]').filter((j) => j.id !== jobId);
+        localStorage.setItem('sb_all_posted_jobs', JSON.stringify(all));
+      } catch { /* empty */ }
+      block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
+      decorate(block);
+    });
+  });
+
+  // Counter toggle for proposals received
+  block.querySelectorAll('[data-prop-counter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#prop-counter-${btn.dataset.propCounter}`);
+      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+
+  block.querySelectorAll('[data-prop-cancel]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = block.querySelector(`#prop-counter-${btn.dataset.propCancel}`);
+      if (form) form.style.display = 'none';
+    });
+  });
+
+  block.querySelectorAll('.db-prop-counter-submit').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = btn.closest('.db-counter-form');
+      const price = form.querySelector('.db-counter-price').value.trim();
+      const time = form.querySelector('.db-counter-time').value.trim();
+      if (!price || !time) return;
+      const proposals = getProposals();
+      const idx = proposals.findIndex((p) => p.id === btn.dataset.prop);
+      if (idx === -1) return;
+      proposals[idx].status = 'countered';
+      proposals[idx].counterBudget = price;
+      proposals[idx].counterTimeline = time;
       saveProposals(proposals);
       block.innerHTML = `<div class="db-container">${buildClientDash(session)}</div>`;
       decorate(block);

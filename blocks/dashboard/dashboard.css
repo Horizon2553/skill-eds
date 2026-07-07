@@ -829,3 +829,16 @@
   display: flex;
   align-items: center;
 }
+
+/* Delete project button */
+.dashboard .db-delete-job-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.dashboard .db-delete-job-btn:hover { color: #dc2626; }
