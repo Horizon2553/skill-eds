@@ -65,9 +65,10 @@ function circularProgress(pct) {
 }
 
 export default async function decorate(block) {
+  block.innerHTML = ''; // clear raw content immediately to avoid flash
   const session = getSession();
   if (!session) { window.location.href = '/login'; return; }
-  if (session.profileComplete) { window.location.href = '/dashboard'; return; }
+  if (session.profileComplete) { window.location.href = '/my-profile'; return; }
 
   const isClient = session.role === 'client';
   const steps = isClient ? CLIENT_STEPS : FREELANCER_STEPS;
