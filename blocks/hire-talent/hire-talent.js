@@ -10,6 +10,7 @@ function extractImage(cell) {
     const img = document.createElement('img');
     img.src = src;
     img.loading = 'lazy';
+    img.alt = cell.textContent.trim() || '';
     return img;
   }
   return null;
@@ -192,7 +193,7 @@ export default async function decorate(block) {
   try {
     const localUsers = JSON.parse(localStorage.getItem('sb_users_v1')) || [];
     localUsers.filter((u) => u.role === 'freelancer' && (u.profileComplete || u.bio || u.skills?.length)).forEach((u) => {
-      const avatarEl = u.avatar ? (() => { const img = document.createElement('img'); img.src = u.avatar; img.loading = 'lazy'; return img; })() : null;
+      const avatarEl = u.avatar ? (() => { const img = document.createElement('img'); img.src = u.avatar; img.loading = 'lazy'; img.alt = u.name || ''; return img; })() : null;
       candidates.push({
         avatarEl,
         name: u.name || '',

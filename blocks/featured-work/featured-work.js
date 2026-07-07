@@ -43,6 +43,7 @@ function extractImage(cell) {
     const img = document.createElement('img');
     img.src = src;
     img.loading = 'lazy';
+    img.alt = cell.textContent.trim() || '';
     return img;
   }
   return null;

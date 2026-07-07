@@ -1,5 +1,4 @@
-/* stylelint-disable max-line-length */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Font loaded non-blocking via head.html preload — no @import here */
 
 /* Metric-matched fallback for Bricolage Grotesque */
 @font-face {
