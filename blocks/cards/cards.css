@@ -60,10 +60,10 @@
 
 .cards-container:has(.cards.testimonials) > .default-content-wrapper > :first-child {
   font-family: var(--heading-font-family, inherit);
-  font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem);
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.15;
+  line-height: 1.2;
   color: #111;
   margin: 0;
 }
@@ -74,9 +74,9 @@
 }
 
 .cards-container:has(.cards.testimonials) > .default-content-wrapper p {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: #666;
-  margin: 0.85rem 0 0;
+  margin: 0.6rem 0 0;
 }
 
 .cards.testimonials > ul {
