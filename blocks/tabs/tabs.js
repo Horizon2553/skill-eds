@@ -49,5 +49,15 @@ export default async function decorate(block) {
     block.querySelector(`#${button.getAttribute('aria-controls')}`).setAttribute('aria-hidden', 'false');
   });
 
-  block.prepend(tablist);
+  // If a heading was authored above the block (as plain content, in its own
+  // wrapper), lift the tablist up to sit beside it instead of inside the
+  // block — purely a layout hook, styled per-variant with flexbox order.
+  const section = block.closest('.section');
+  const heading = section?.querySelector(':scope > .default-content-wrapper');
+  if (heading) {
+    tablist.classList.add('tabs-list-lifted');
+    section.insertBefore(tablist, block.parentElement);
+  } else {
+    block.prepend(tablist);
+  }
 }

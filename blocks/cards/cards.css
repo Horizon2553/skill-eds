@@ -50,40 +50,66 @@
 /* Variant: Testimonials — quote + name + role, no image */
 .cards.testimonials > ul {
   grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+
+.cards.testimonials .cards-card {
+  border: 1px solid #ebebeb;
+  border-radius: 18px;
+  padding: 28px 28px 24px;
+  gap: 16px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.cards.testimonials .cards-card:hover {
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.cards.testimonials .cards-card-body {
+  padding: 0;
 }
 
 .cards.testimonials .cards-card-body:nth-of-type(1) {
-  font-size: 1.05rem;
+  font-size: 0.925rem;
   font-style: italic;
-  line-height: 1.6;
-  border-bottom: 1px solid var(--border-color, #e2e2e2);
-  padding-bottom: 1.25rem;
-  margin-bottom: 0;
+  line-height: 1.65;
+  color: #444;
+  flex: 1;
 }
 
 .cards.testimonials .cards-card-body:nth-of-type(1)::before {
-  content: '\2605\2605\2605\2605\2605';
+  content: '\2605\2605\2605\2605\2605' '\A' '"';
+  white-space: pre-line;
   display: block;
   color: #f59e0b;
   font-style: normal;
-  letter-spacing: 0.2em;
-  font-size: 0.85rem;
-  margin-bottom: 0.85rem;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.cards.testimonials .cards-card-body:nth-of-type(1)::after {
+  content: '"';
+  font-style: normal;
 }
 
 .cards.testimonials .cards-card-body:nth-of-type(2) {
-  padding-top: 1.25rem;
-  padding-bottom: 0;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f2f2f2;
   font-weight: 700;
+  font-size: 0.9rem;
+  color: #111;
 }
 
 .cards.testimonials .cards-card-body:nth-of-type(2)::first-letter {
   background: var(--avatar-color, #4f46e5);
   color: #fff;
+  font-weight: 800;
   border-radius: 50%;
-  padding: 0.55em 0.85em;
-  margin-right: 0.6em;
-  font-weight: 700;
+  padding: 0.65em 0.95em;
+  margin-right: 0.7em;
   line-height: 1;
 }
 
@@ -96,17 +122,29 @@
 }
 
 .cards.testimonials .cards-card:nth-child(3n+3) {
-  --avatar-color: #e11d48;
+  --avatar-color: #e53e3e;
 }
 
 .cards.testimonials .cards-card-body:nth-of-type(3) {
   padding-top: 0;
-  color: var(--text-color-muted, #666);
-  font-size: 0.9rem;
+  color: #888;
+  font-size: 0.78rem;
 }
 
 @media (min-width: 900px) {
   .cards.testimonials > ul {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .cards.testimonials > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cards.testimonials > ul {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

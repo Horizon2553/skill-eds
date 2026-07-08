@@ -6,7 +6,7 @@
  */
 
 export default function decorate(block) {
-  [...block.children].forEach((row) => {
+  [...block.children].forEach((row, i) => {
     row.classList.add('accordion-item');
     const label = row.children[0];
     const summary = document.createElement('summary');
@@ -14,6 +14,7 @@ export default function decorate(block) {
     summary.append(...label.childNodes);
     const details = document.createElement('details');
     details.className = 'accordion-item-body-wrapper';
+    if (i === 0) details.open = true;
     details.append(summary);
 
     const body = row.children[1];

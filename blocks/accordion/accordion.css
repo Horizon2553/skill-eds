@@ -52,32 +52,77 @@
   }
 }
 
-/* Variant: FAQ — heading sits beside the list on desktop, matching the
-   two-column layout of the original design. The heading lives in the
-   section's default-content-wrapper (plain content), a sibling of the
+/* Variant: FAQ — two-column layout: heading beside the list, matching the
+   original design. The heading lives in the section's
+   default-content-wrapper (plain content), a sibling of the
    accordion-wrapper — both scoped via the auto-added `accordion-container`
    class on the section, only when the `faq` variant is present. */
 .accordion-container:has(.accordion.faq) {
-  border-bottom: 3px solid var(--link-color, #1dbf73);
-  padding-bottom: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
 @media (min-width: 900px) {
   .accordion-container:has(.accordion.faq) {
-    display: grid;
-    grid-template-columns: 0.85fr 1.4fr;
-    gap: 3rem;
-    align-items: start;
+    grid-template-columns: 320px 1fr;
+    gap: 64px;
   }
 }
 
-.accordion-container:has(.accordion.faq) .default-content-wrapper h2 {
-  font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
-  line-height: 1.1;
+.accordion-container:has(.accordion.faq) > .default-content-wrapper h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #111;
   margin: 0;
 }
 
-.accordion-container:has(.accordion.faq) .default-content-wrapper h2 em {
+@media (min-width: 900px) {
+  .accordion-container:has(.accordion.faq) > .default-content-wrapper h2 {
+    position: sticky;
+    top: 88px;
+  }
+}
+
+.accordion-container:has(.accordion.faq) > .default-content-wrapper h2 em {
   color: var(--link-color, #1dbf73);
   font-style: normal;
+}
+
+.accordion.faq .accordion-item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.accordion.faq .accordion-item:first-child {
+  border-top: 1px solid #f0f0f0;
+}
+
+.accordion.faq .accordion-item-label {
+  padding: 22px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.accordion.faq .accordion-item-label::after {
+  color: #aaa;
+}
+
+.accordion.faq .accordion-item-body-wrapper[open] .accordion-item-label::after {
+  color: #1dbf73;
+}
+
+.accordion.faq .accordion-item-body-wrapper {
+  padding: 0;
+}
+
+.accordion.faq .accordion-item-body {
+  padding: 0 0 22px;
+  font-size: 0.925rem;
+  line-height: 1.7;
+  color: #555;
+  max-width: 600px;
 }
