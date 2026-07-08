@@ -230,6 +230,17 @@
   margin: 0;
 }
 
+.cards-container:has(.cards.plans) > .default-content-wrapper .cards-plans-summary {
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.8;
+  margin: 14px 0 0;
+}
+
+.cards-container:has(.cards.plans) > .default-content-wrapper .cards-plans-summary strong {
+  color: #111;
+}
+
 .cards.plans > ul {
   grid-template-columns: repeat(1, 1fr);
   gap: 20px;

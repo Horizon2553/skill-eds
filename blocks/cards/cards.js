@@ -11,6 +11,7 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 // name | price | period | highlight | features (comma-separated) | CTA text | popular flag
 function enhancePlanCards(block) {
   const cards = [...block.querySelectorAll('.cards-card')];
+  const summaries = [];
 
   cards.forEach((card) => {
     const [nameEl, priceEl, periodEl, highlightEl, featuresEl, ctaEl, popularEl] = [
@@ -85,7 +86,17 @@ function enhancePlanCards(block) {
         features,
       }));
     });
+
+    summaries.push(`<strong>${planName}</strong> — ${highlightEl?.textContent.trim() || ''} for ${priceEl?.textContent.trim() || ''}`);
   });
+
+  const headingWrapper = block.closest('.section')?.querySelector(':scope > .default-content-wrapper');
+  if (headingWrapper && summaries.length) {
+    const p = document.createElement('p');
+    p.className = 'cards-plans-summary';
+    p.innerHTML = summaries.join(' &nbsp;&middot;&nbsp; ');
+    headingWrapper.append(p);
+  }
 }
 
 export default async function decorate(block) {
