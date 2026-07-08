@@ -32,6 +32,7 @@ export default async function decorate(block) {
 
     row.className = 'tabs-panel';
     row.id = `tabpanel-${id}`;
+    row.dataset.tabIndex = i;
     row.setAttribute('role', 'tabpanel');
     row.setAttribute('aria-labelledby', `tab-${id}`);
     if (i !== 0) row.setAttribute('aria-hidden', 'true');

@@ -28,6 +28,30 @@
 }
 
 /* Variant: How It Works — panel content authored as a plain <ul>, styled as a card grid */
+.tabs.how-it-works .tabs-list {
+  display: inline-flex;
+  width: fit-content;
+  background: var(--background-color-secondary, #f0f2f1);
+  border: none;
+  border-radius: 999px;
+  padding: 0.3rem;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.tabs.how-it-works .tabs-tab {
+  border-radius: 999px;
+  padding: 0.55rem 1.35rem;
+  border-bottom: none;
+  color: var(--text-color-muted, #666);
+}
+
+.tabs.how-it-works .tabs-tab[aria-selected='true'] {
+  background: var(--link-color, #1dbf73);
+  color: #fff;
+  border-bottom: none;
+}
+
 .tabs.how-it-works .tabs-panel-content ul {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -38,10 +62,21 @@
 }
 
 .tabs.how-it-works .tabs-panel-content li {
+  position: relative;
   background: var(--card-background, #fff);
   border: 1px solid var(--border-color, #e2e2e2);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.tabs.how-it-works .tabs-panel-content li::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+  background: var(--link-color, #1dbf73);
+  mask: var(--step-icon) center / contain no-repeat;
 }
 
 .tabs.how-it-works .tabs-panel-content li strong {
@@ -53,6 +88,44 @@
 .tabs.how-it-works .tabs-panel-content li p {
   margin: 0.35rem 0 0;
   color: var(--text-color-muted, #666);
+}
+
+.tabs.how-it-works .tabs-panel-content li a {
+  display: inline-block;
+  margin-top: 0.85rem;
+  font-weight: 700;
+  color: var(--link-color, #1dbf73);
+}
+
+.tabs.how-it-works .tabs-panel-content li a::after {
+  content: ' \2192';
+}
+
+/* Per-step icons, mapped by position within each panel (icon is purely
+   decorative, so it's fine to key off structural position rather than
+   authored content) */
+.tabs.how-it-works .tabs-panel[data-tab-index='0'] li:nth-child(1) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E");
+}
+
+.tabs.how-it-works .tabs-panel[data-tab-index='0'] li:nth-child(2) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'/%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E");
+}
+
+.tabs.how-it-works .tabs-panel[data-tab-index='0'] li:nth-child(3) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='1' y='4' width='22' height='16' rx='2' ry='2'/%3E%3Cline x1='1' y1='10' x2='23' y2='10'/%3E%3C/svg%3E");
+}
+
+.tabs.how-it-works .tabs-panel[data-tab-index='1'] li:nth-child(1) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+}
+
+.tabs.how-it-works .tabs-panel[data-tab-index='1'] li:nth-child(2) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+}
+
+.tabs.how-it-works .tabs-panel[data-tab-index='1'] li:nth-child(3) {
+  --step-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E");
 }
 
 @media (min-width: 900px) {
