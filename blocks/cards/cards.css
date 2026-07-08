@@ -195,50 +195,50 @@
 /* Variant: Plans (pricing cards) — used on /upgrade */
 .cards-container:has(.cards.plans) {
   background: #f8f8f8;
-  padding: 60px 24px 80px;
+  padding: 32px 20px 40px;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper {
   text-align: center;
   max-width: 640px;
-  margin: 0 auto 52px;
+  margin: 0 auto 28px;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper::before {
   content: '';
   display: block;
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  margin: 0 auto 20px;
+  margin: 0 auto 12px;
   background-color: rgba(29, 191, 115, 0.12);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231dbf73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='1' x2='12' y2='23'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 26px 26px;
+  background-size: 20px 20px;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper > :first-child {
   font-family: var(--heading-font-family, inherit);
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #111;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper p {
-  font-size: 1rem;
+  font-size: 0.92rem;
   color: #888;
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper .cards-plans-summary {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: #555;
-  line-height: 1.8;
-  margin: 14px 0 0;
+  line-height: 1.6;
+  margin: 8px 0 0;
 }
 
 .cards-container:has(.cards.plans) > .default-content-wrapper .cards-plans-summary strong {
