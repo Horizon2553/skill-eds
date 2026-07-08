@@ -39,7 +39,7 @@ export default async function decorate(block) {
     .filter((t) => t.text.toLowerCase() !== 'ai');
 
   block.innerHTML = `
-    <video class="hero-video-bg" muted loop playsinline preload="none" data-src="${videoSrc}">
+    <video class="hero-video-bg" muted loop playsinline preload="none" poster="/blocks/hero/hero-poster.jpg" fetchpriority="high" data-src="${videoSrc}">
       <source data-src="${videoSrc}" type="video/webm">
     </video>
     <div class="hero-content">

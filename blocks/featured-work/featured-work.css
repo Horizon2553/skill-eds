@@ -8,6 +8,17 @@ main .section:has(.featured-work) {
   padding: 80px 0;
 }
 
+/* Hide until fully decorated — avoids a visible layout shift when the raw
+   content (plain rows) resizes to the decorated card grid once
+   featured-work.js finishes running. */
+.featured-work {
+  visibility: hidden;
+}
+
+.featured-work[data-block-status='loaded'] {
+  visibility: visible;
+}
+
 /* ── Header ── */
 .featured-work .fw-header {
   display: flex;
