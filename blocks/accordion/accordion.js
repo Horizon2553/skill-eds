@@ -26,4 +26,22 @@ export default function decorate(block) {
     label.remove();
     row.append(details);
   });
+
+  // Variant hook: if a heading was authored directly above the block, pull
+  // it and the block into a small dedicated layout row together so they can
+  // sit side by side. Scoped to this one variant, and built from a wrapper
+  // we create ourselves — never touches display on the shared section, so
+  // unrelated sibling content (e.g. another block sharing the same section)
+  // can't be affected by it.
+  if (block.classList.contains('faq')) {
+    const section = block.closest('.section');
+    const headingWrapper = section?.querySelector(':scope > .default-content-wrapper');
+    const blockWrapper = block.parentElement;
+    if (headingWrapper && blockWrapper) {
+      const layout = document.createElement('div');
+      layout.className = 'accordion-faq-layout';
+      headingWrapper.replaceWith(layout);
+      layout.append(headingWrapper, blockWrapper);
+    }
+  }
 }

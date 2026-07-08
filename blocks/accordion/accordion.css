@@ -53,11 +53,11 @@
 }
 
 /* Variant: FAQ — two-column layout: heading beside the list, matching the
-   original design. The heading lives in the section's
-   default-content-wrapper (plain content), a sibling of the
-   accordion-wrapper — both scoped via the auto-added `accordion-container`
-   class on the section, only when the `faq` variant is present. */
-.accordion-container:has(.accordion.faq) {
+   original design. Built by accordion.js only for the faq variant, only
+   out of the heading wrapper + this block's own wrapper (never the whole
+   section) — so it can't affect unrelated sibling content sharing the
+   same section. */
+.accordion-faq-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
@@ -65,13 +65,13 @@
 }
 
 @media (min-width: 900px) {
-  .accordion-container:has(.accordion.faq) {
+  .accordion-faq-layout {
     grid-template-columns: 320px 1fr;
     gap: 64px;
   }
 }
 
-.accordion-container:has(.accordion.faq) > .default-content-wrapper h2 {
+.accordion-faq-layout > .default-content-wrapper > :first-child {
   font-size: clamp(1.7rem, 3.5vw, 2.4rem);
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -81,13 +81,13 @@
 }
 
 @media (min-width: 900px) {
-  .accordion-container:has(.accordion.faq) > .default-content-wrapper h2 {
+  .accordion-faq-layout > .default-content-wrapper > :first-child {
     position: sticky;
     top: 88px;
   }
 }
 
-.accordion-container:has(.accordion.faq) > .default-content-wrapper h2 em {
+.accordion-faq-layout > .default-content-wrapper > :first-child em {
   color: var(--link-color, #1dbf73);
   font-style: normal;
 }

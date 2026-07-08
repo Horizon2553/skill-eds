@@ -29,32 +29,30 @@
 
 /* Variant: How It Works */
 
-.tabs-container:has(.tabs.how-it-works) {
+/* This row is built by tabs.js only for the how-it-works variant, only out
+   of the heading wrapper + tablist (never the whole section) — so it can't
+   affect unrelated sibling content sharing the same section. */
+.tabs-heading-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  margin-bottom: 48px;
 }
 
-.tabs-container:has(.tabs.how-it-works) > .default-content-wrapper {
+.tabs-heading-row > .default-content-wrapper {
   flex: 1 1 auto;
 }
 
-.tabs-container:has(.tabs.how-it-works) > .default-content-wrapper h2 {
+.tabs-heading-row > .default-content-wrapper > :first-child {
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
   color: #111;
 }
 
-.tabs-container:has(.tabs.how-it-works) > .tabs-wrapper {
-  flex: 1 1 100%;
-  order: 3;
-}
-
 .tabs.how-it-works .tabs-list.tabs-list-lifted {
-  order: 2;
   flex: 0 0 auto;
   display: inline-flex;
   background: #f3f3f3;
@@ -86,10 +84,6 @@
 
 .tabs.how-it-works .tabs-tab:not([aria-selected='true']):hover {
   color: #111;
-}
-
-.tabs.how-it-works .tabs-wrapper {
-  margin-top: 48px;
 }
 
 .tabs.how-it-works .tabs-panel-content ul {
@@ -199,12 +193,8 @@
 }
 
 @media (max-width: 640px) {
-  .tabs-container:has(.tabs.how-it-works) {
+  .tabs-heading-row {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .tabs.how-it-works .tabs-list.tabs-list-lifted {
-    order: 2;
   }
 }

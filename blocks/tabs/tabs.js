@@ -49,14 +49,22 @@ export default async function decorate(block) {
     block.querySelector(`#${button.getAttribute('aria-controls')}`).setAttribute('aria-hidden', 'false');
   });
 
-  // If a heading was authored above the block (as plain content, in its own
-  // wrapper), lift the tablist up to sit beside it instead of inside the
-  // block — purely a layout hook, styled per-variant with flexbox order.
-  const section = block.closest('.section');
-  const heading = section?.querySelector(':scope > .default-content-wrapper');
-  if (heading) {
+  // Variant hook: if a heading was authored directly above the block, pull
+  // it and the tablist into a small dedicated row so they can sit side by
+  // side. Scoped to this one variant, and scoped to a wrapper we build
+  // ourselves — never touches display on the shared section, so unrelated
+  // sibling content (e.g. a hero block sharing the same section) can't be
+  // affected by it.
+  const headingWrapper = block.classList.contains('how-it-works')
+    ? block.closest('.section')?.querySelector(':scope > .default-content-wrapper')
+    : null;
+
+  if (headingWrapper) {
+    const headingRow = document.createElement('div');
+    headingRow.className = 'tabs-heading-row';
+    headingWrapper.replaceWith(headingRow);
     tablist.classList.add('tabs-list-lifted');
-    section.insertBefore(tablist, block.parentElement);
+    headingRow.append(headingWrapper, tablist);
   } else {
     block.prepend(tablist);
   }
