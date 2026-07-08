@@ -23,6 +23,15 @@
   border-bottom-color: var(--link-color, #1dbf73);
 }
 
+.tabs .tabs-tab:focus {
+  outline: none;
+}
+
+.tabs .tabs-tab:focus-visible {
+  outline: 2px solid var(--link-color, #1dbf73);
+  outline-offset: 2px;
+}
+
 .tabs .tabs-panel[aria-hidden='true'] {
   display: none;
 }
