@@ -33,16 +33,33 @@ function isValidHref(href) {
     && href.length > 1;
 }
 
-function extractImage(cell) {
+function hasImageContent(cell) {
+  if (!cell) return false;
+  if (cell.querySelector('picture, img')) return true;
+  const link = cell.querySelector('a');
+  const href = link?.href || '';
+  const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
+    ? href : cell.textContent.trim();
+  return /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src);
+}
+
+function extractImage(cell, width = 750) {
   if (!cell) return null;
   const existing = cell.querySelector('picture, img');
-  if (existing) return existing.cloneNode(true);
+  if (existing) {
+    const img = existing.tagName === 'IMG' ? existing : existing.querySelector('img');
+    const src = img?.getAttribute('src');
+    if (src) {
+      return createOptimizedPicture(src, img.getAttribute('alt') || '', false, [{ width: String(width) }]);
+    }
+    return existing.cloneNode(true);
+  }
   const link = cell.querySelector('a');
   const href = link?.href || '';
   const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
     ? href : cell.textContent.trim();
   if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
-    return createOptimizedPicture(src, cell.textContent.trim() || '', false, [{ width: '750' }]);
+    return createOptimizedPicture(src, cell.textContent.trim() || '', false, [{ width: String(width) }]);
   }
   return null;
 }
@@ -241,7 +258,7 @@ export default async function decorate(block) {
     const cells = [...row.children];
     const firstCell = cells[0];
     const hasBold = !!firstCell.querySelector('strong, b');
-    const hasImage = !!(firstCell.querySelector('picture, img') || extractImage(firstCell));
+    const hasImage = hasImageContent(firstCell);
     const firstAnchor = firstCell.querySelector('a');
     const isCTA = !hasBold && !hasImage && firstAnchor
       && cells.slice(1).every((c) => !c.textContent.trim() && !c.querySelector('a'));
@@ -258,8 +275,9 @@ export default async function decorate(block) {
     } else if (isCTA) {
       ctaLink = firstAnchor;
     } else if (hasImage && currentSection) {
-      const imgEl = extractImage(firstCell);
-      if (currentSection.label.toLowerCase().includes('project')) {
+      const isProjects = currentSection.label.toLowerCase().includes('project');
+      const imgEl = extractImage(firstCell, isProjects ? 750 : 150);
+      if (isProjects) {
         const projTitle = cells[1]?.textContent.trim() || '';
         const authorName = cells[2]?.textContent.trim() || '';
         const rawHref = cells[1]?.querySelector('a')?.href || '';
@@ -272,7 +290,7 @@ export default async function decorate(block) {
           href: projectHref,
           title: projTitle,
           author: authorName,
-          avatarEl: extractImage(cells[3]),
+          avatarEl: extractImage(cells[3], 100),
           likes: cells[4]?.textContent.trim() || '0',
           views: cells[5]?.textContent.trim() || '0',
         });
