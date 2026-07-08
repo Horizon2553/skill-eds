@@ -52,19 +52,22 @@
   color: #111;
 }
 
-.tabs.how-it-works .tabs-list.tabs-list-lifted {
+/* `.tabs-list-lifted` is only ever added by tabs.js for the how-it-works
+   heading-lift case, so it's specific enough on its own — it no longer
+   lives inside `.tabs.how-it-works` in the DOM (it's a sibling, moved into
+   `.tabs-heading-row`), so these rules can't depend on that ancestry. */
+.tabs-list.tabs-list-lifted {
   flex: 0 0 auto;
   display: inline-flex;
   background: #f3f3f3;
   border: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
   border-radius: 99px;
   padding: 4px;
   gap: 0;
   margin-bottom: 0;
 }
 
-.tabs.how-it-works .tabs-tab {
+.tabs-list-lifted .tabs-tab {
   border-radius: 99px;
   padding: 10px 24px;
   font-size: 0.92rem;
@@ -75,14 +78,14 @@
   white-space: nowrap;
 }
 
-.tabs.how-it-works .tabs-tab[aria-selected='true'] {
+.tabs-list-lifted .tabs-tab[aria-selected='true'] {
   background: #1dbf73;
   color: #fff;
   border-bottom: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.tabs.how-it-works .tabs-tab:not([aria-selected='true']):hover {
+.tabs-list-lifted .tabs-tab:not([aria-selected='true']):hover {
   color: #111;
 }
 
