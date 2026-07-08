@@ -1,3 +1,5 @@
+import { createOptimizedPicture } from '../../scripts/aem.js';
+
 // Hardcoded author → profile URL mapping (no da.live linking needed)
 const AUTHOR_PROFILES = {
   'aditi rao': '/profile/aditi-rao',
@@ -40,11 +42,7 @@ function extractImage(cell) {
   const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
     ? href : cell.textContent.trim();
   if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
-    const img = document.createElement('img');
-    img.src = src;
-    img.loading = 'lazy';
-    img.alt = cell.textContent.trim() || '';
-    return img;
+    return createOptimizedPicture(src, cell.textContent.trim() || '', false, [{ width: '750' }]);
   }
   return null;
 }
