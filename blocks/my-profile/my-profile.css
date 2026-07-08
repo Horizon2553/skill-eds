@@ -443,6 +443,14 @@
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.my-profile .mp-proj-card:hover,
+.my-profile .mp-proj-card:focus-visible {
+  box-shadow: 0 8px 24px rgb(0 0 0/10%);
+  transform: translateY(-2px);
 }
 
 .my-profile .mp-proj-thumb { aspect-ratio: 16/9; overflow: hidden; }
@@ -453,6 +461,7 @@
 .my-profile .mp-proj-tags span { font-size: 0.7rem; font-weight: 600; color: #1dbf73; background: #f0fdf7; padding: 2px 8px; border-radius: 99px; }
 .my-profile .mp-proj-info h3 { font-size: 0.93rem; font-weight: 700; color: #111; margin: 0 0 4px; }
 .my-profile .mp-proj-info p { font-size: 0.82rem; color: #666; margin: 0; line-height: 1.5; }
+.my-profile .mp-proj-view { font-size: 0.78rem; font-weight: 700; color: #1dbf73; margin-top: 8px; }
 
 @media (width < 600px) {
   .my-profile .mp-form-row { grid-template-columns: 1fr; }

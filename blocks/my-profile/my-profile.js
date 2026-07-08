@@ -133,6 +133,47 @@ function openHireModal(user) {
   });
 }
 
+function openProjectModal(project) {
+  const existing = document.getElementById('mp-proj-modal');
+  if (existing) existing.remove();
+
+  const images = project.images?.length ? project.images : [];
+
+  const modal = document.createElement('div');
+  modal.id = 'mp-proj-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgb(0 0 0/65%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgb(0 0 0/25%)">
+      <button id="mp-proj-close" style="position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1.4rem;color:#555;cursor:pointer;line-height:1;box-shadow:0 2px 8px rgb(0 0 0/15%)">&times;</button>
+      ${images[0] ? `<img id="mp-proj-main-img" src="${images[0]}" alt="${project.name}" style="width:100%;max-height:360px;object-fit:cover;display:block;border-radius:16px 16px 0 0">` : ''}
+      ${images.length > 1 ? `
+        <div style="display:flex;gap:8px;padding:12px 24px 0;overflow-x:auto">
+          ${images.map((img, i) => `<img data-idx="${i}" src="${img}" alt="thumb ${i + 1}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;flex-shrink:0;border:2px solid ${i === 0 ? '#1dbf73' : 'transparent'}">`).join('')}
+        </div>
+      ` : ''}
+      <div style="padding:24px">
+        ${project.tags?.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${project.tags.map((t) => `<span style="font-size:0.75rem;font-weight:600;color:#1dbf73;background:#f0fdf7;padding:3px 10px;border-radius:99px">${t}</span>`).join('')}</div>` : ''}
+        <h2 style="font-family:var(--heading-font-family);font-size:1.3rem;font-weight:800;color:#111;margin:0 0 12px">${project.name}</h2>
+        <p style="font-size:0.92rem;color:#555;line-height:1.7;margin:0">${project.desc || ''}</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  const close = () => { modal.remove(); document.body.style.overflow = ''; };
+  document.getElementById('mp-proj-close').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  const mainImg = document.getElementById('mp-proj-main-img');
+  modal.querySelectorAll('[data-idx]').forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      mainImg.src = images[+thumb.dataset.idx];
+      modal.querySelectorAll('[data-idx]').forEach((t) => { t.style.borderColor = 'transparent'; });
+      thumb.style.borderColor = '#1dbf73';
+    });
+  });
+}
+
 function renderPublicView(block, user) {
   const viewer = getSession();
   const isClient = viewer?.role === 'client' && viewer?.id !== user.id;
@@ -189,13 +230,14 @@ function renderPublicView(block, user) {
           <h2>Projects &amp; Work <span class="mp-proj-count">${(user.projects || []).length} total</span></h2>
           ${(!user.projects || user.projects.length === 0) ? '<p style="color:#999">No projects yet.</p>' : `
             <div class="mp-proj-grid">
-              ${user.projects.map((p) => `
-                <div class="mp-proj-card">
+              ${user.projects.map((p, i) => `
+                <div class="mp-proj-card" data-idx="${i}" role="button" tabindex="0">
                   ${p.images?.[0] ? `<div class="mp-proj-thumb"><img src="${p.images[0]}" alt="${p.name}"></div>` : ''}
                   <div class="mp-proj-info">
                     ${p.tags?.length ? `<div class="mp-proj-tags">${p.tags.map((t) => `<span>${t}</span>`).join('')}</div>` : ''}
                     <h3>${p.name}</h3>
                     <p>${p.desc || ''}</p>
+                    <div class="mp-proj-view">View details →</div>
                   </div>
                 </div>
               `).join('')}
@@ -205,6 +247,12 @@ function renderPublicView(block, user) {
       </div>
     </div>
   `;
+
+  block.querySelectorAll('.mp-proj-card').forEach((card) => {
+    const open = () => openProjectModal(user.projects[+card.dataset.idx]);
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
 
   if (isClient) {
     // Save to Favourites
