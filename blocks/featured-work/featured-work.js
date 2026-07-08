@@ -43,14 +43,27 @@ function hasImageContent(cell) {
   return /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src);
 }
 
-function extractImage(cell, width = 750) {
+// displayW/displayH are the intrinsic width/height attributes set on the
+// <img> so the browser can reserve its box before the file loads (avoids a
+// layout shift) — they're just the aspect-ratio hint, not the fetched size.
+function setIntrinsicSize(picture, displayW, displayH) {
+  const img = picture?.querySelector?.('img');
+  if (img && displayW && displayH) {
+    img.setAttribute('width', displayW);
+    img.setAttribute('height', displayH);
+  }
+  return picture;
+}
+
+function extractImage(cell, width = 750, displayW, displayH) {
   if (!cell) return null;
   const existing = cell.querySelector('picture, img');
   if (existing) {
     const img = existing.tagName === 'IMG' ? existing : existing.querySelector('img');
     const src = img?.getAttribute('src');
     if (src) {
-      return createOptimizedPicture(src, img.getAttribute('alt') || '', false, [{ width: String(width) }]);
+      const picture = createOptimizedPicture(src, img.getAttribute('alt') || '', false, [{ width: String(width) }]);
+      return setIntrinsicSize(picture, displayW, displayH);
     }
     return existing.cloneNode(true);
   }
@@ -59,7 +72,8 @@ function extractImage(cell, width = 750) {
   const src = /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(href)
     ? href : cell.textContent.trim();
   if (/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(src)) {
-    return createOptimizedPicture(src, cell.textContent.trim() || '', false, [{ width: String(width) }]);
+    const picture = createOptimizedPicture(src, cell.textContent.trim() || '', false, [{ width: String(width) }]);
+    return setIntrinsicSize(picture, displayW, displayH);
   }
   return null;
 }
@@ -276,7 +290,9 @@ export default async function decorate(block) {
       ctaLink = firstAnchor;
     } else if (hasImage && currentSection) {
       const isProjects = currentSection.label.toLowerCase().includes('project');
-      const imgEl = extractImage(firstCell, isProjects ? 750 : 150);
+      const imgEl = isProjects
+        ? extractImage(firstCell, 750, 400, 300)
+        : extractImage(firstCell, 150, 70, 70);
       if (isProjects) {
         const projTitle = cells[1]?.textContent.trim() || '';
         const authorName = cells[2]?.textContent.trim() || '';
@@ -290,7 +306,7 @@ export default async function decorate(block) {
           href: projectHref,
           title: projTitle,
           author: authorName,
-          avatarEl: extractImage(cells[3], 100),
+          avatarEl: extractImage(cells[3], 100, 28, 28),
           likes: cells[4]?.textContent.trim() || '0',
           views: cells[5]?.textContent.trim() || '0',
         });

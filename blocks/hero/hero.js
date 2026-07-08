@@ -41,6 +41,7 @@ export default async function decorate(block) {
   block.innerHTML = `
     <video class="hero-video-bg" muted loop playsinline preload="none" poster="/blocks/hero/hero-poster.jpg" fetchpriority="high" data-src="${videoSrc}">
       <source data-src="${videoSrc}" type="video/webm">
+      <track kind="captions" src="/blocks/hero/hero-captions.vtt" srclang="en" label="English">
     </video>
     <div class="hero-content">
       <div class="hero-toggle-wrapper">
