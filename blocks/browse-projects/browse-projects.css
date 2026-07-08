@@ -500,14 +500,14 @@
 .browse-projects .bp-save-btn:hover { transform: scale(1.2); }
 
 /* ── Merged in from project-detail (see browse-projects.js for why) ── */
-:is(.browse-projects.project, .project-detail) .pd-page {
+.browse-projects.project .pd-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 24px 100px;
 }
 
 /* Back link */
-:is(.browse-projects.project, .project-detail) .pd-back {
+.browse-projects.project .pd-back {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -519,12 +519,12 @@
   transition: color 0.15s ease;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-back:hover {
+.browse-projects.project .pd-back:hover {
   color: #111;
 }
 
 /* Two-column layout */
-:is(.browse-projects.project, .project-detail) .pd-layout {
+.browse-projects.project .pd-layout {
   display: grid;
   grid-template-columns: 1fr 340px;
   gap: 56px;
@@ -532,7 +532,7 @@
 }
 
 /* Gallery */
-:is(.browse-projects.project, .project-detail) .pd-main-wrap {
+.browse-projects.project .pd-main-wrap {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgb(0 0 0 / 8%);
@@ -541,7 +541,7 @@
   background: #f0f0f0;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-main-wrap img {
+.browse-projects.project .pd-main-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -549,13 +549,13 @@
   transition: opacity 0.18s ease;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-thumbs {
+.browse-projects.project .pd-thumbs {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-thumb {
+.browse-projects.project .pd-thumb {
   width: 80px;
   height: 60px;
   border-radius: 8px;
@@ -566,25 +566,25 @@
   flex-shrink: 0;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-thumb img {
+.browse-projects.project .pd-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-thumb.active,
-:is(.browse-projects.project, .project-detail) .pd-thumb:hover {
+.browse-projects.project .pd-thumb.active,
+.browse-projects.project .pd-thumb:hover {
   border-color: #111;
   transform: translateY(-2px);
 }
 
 /* Sidebar */
-:is(.browse-projects.project, .project-detail) .pd-sidebar {
+.browse-projects.project .pd-sidebar {
   position: sticky;
   top: 80px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-title {
+.browse-projects.project .pd-title {
   font-family: var(--heading-font-family);
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 800;
@@ -594,14 +594,14 @@
   line-height: 1.2;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-tags {
+.browse-projects.project .pd-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-tag {
+.browse-projects.project .pd-tag {
   display: inline-block;
   padding: 5px 14px;
   border-radius: 999px;
@@ -612,7 +612,7 @@
   border: 1px solid #e8e8e8;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-desc {
+.browse-projects.project .pd-desc {
   font-size: 0.97rem;
   line-height: 1.75;
   color: #666;
@@ -620,7 +620,7 @@
 }
 
 /* Author card */
-:is(.browse-projects.project, .project-detail) .pd-author {
+.browse-projects.project .pd-author {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -633,12 +633,12 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-author:hover {
+.browse-projects.project .pd-author:hover {
   border-color: #111;
   box-shadow: 0 4px 20px rgb(0 0 0 / 8%);
 }
 
-:is(.browse-projects.project, .project-detail) .pd-author-avatar {
+.browse-projects.project .pd-author-avatar {
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -647,20 +647,20 @@
   flex-shrink: 0;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-author-name {
+.browse-projects.project .pd-author-name {
   font-size: 1rem;
   font-weight: 700;
   color: #111;
   margin-bottom: 2px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-author-role {
+.browse-projects.project .pd-author-role {
   font-size: 0.82rem;
   color: #888;
 }
 
 /* Stats */
-:is(.browse-projects.project, .project-detail) .pd-stats {
+.browse-projects.project .pd-stats {
   display: flex;
   gap: 24px;
   padding: 18px 0;
@@ -669,20 +669,20 @@
   margin-bottom: 28px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-stat {
+.browse-projects.project .pd-stat {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-stat-val {
+.browse-projects.project .pd-stat-val {
   font-family: var(--heading-font-family);
   font-size: 1.4rem;
   font-weight: 800;
   color: #0a0a0a;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-stat-label {
+.browse-projects.project .pd-stat-label {
   font-size: 0.78rem;
   font-weight: 500;
   color: #888;
@@ -691,13 +691,13 @@
 }
 
 /* Actions */
-:is(.browse-projects.project, .project-detail) .pd-actions {
+.browse-projects.project .pd-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-like-btn {
+.browse-projects.project .pd-like-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -714,21 +714,21 @@
   transition: border-color 0.2s, color 0.2s, transform 0.15s;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-like-btn:hover,
-:is(.browse-projects.project, .project-detail) .pd-like-btn.liked {
+.browse-projects.project .pd-like-btn:hover,
+.browse-projects.project .pd-like-btn.liked {
   border-color: #1dbf73;
   color: #1dbf73;
   background: #f0fdf7;
   transform: translateY(-2px);
 }
 
-:is(.browse-projects.project, .project-detail) .pd-like-btn svg {
+.browse-projects.project .pd-like-btn svg {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-profile-btn {
+.browse-projects.project .pd-profile-btn {
   display: block;
   text-align: center;
   padding: 12px 24px;
@@ -741,38 +741,38 @@
   transition: background 0.2s, transform 0.15s;
 }
 
-:is(.browse-projects.project, .project-detail) .pd-profile-btn:hover {
+.browse-projects.project .pd-profile-btn:hover {
   background: #1dbf73;
   transform: translateY(-2px);
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  :is(.browse-projects.project, .project-detail) .pd-layout {
+  .browse-projects.project .pd-layout {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
-  :is(.browse-projects.project, .project-detail) .pd-sidebar {
+  .browse-projects.project .pd-sidebar {
     position: static;
   }
 }
 
 @media (max-width: 600px) {
-  :is(.browse-projects.project, .project-detail) .pd-page {
+  .browse-projects.project .pd-page {
     padding: 24px 16px 60px;
   }
 }
 
 /* ── Merged in from hire-talent (see browse-projects.js for why) ── */
 /* ── Page hero ── */
-:is(.browse-projects.talent, .hire-talent) .ht-hero {
+.browse-projects.talent .ht-hero {
   padding: 30px 0 20px;
   background: #fff;
   border-bottom: 1px solid #eaeaea;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-hero-inner {
+.browse-projects.talent .ht-hero-inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 32px;
@@ -783,7 +783,7 @@
   flex-wrap: wrap;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-hero-title {
+.browse-projects.talent .ht-hero-title {
   flex: 1;
   min-width: 0;
   font-size: clamp(2rem, 4vw, 3rem);
@@ -793,7 +793,7 @@
   margin: 0;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-hero-btn {
+.browse-projects.talent .ht-hero-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -813,14 +813,14 @@
   white-space: nowrap;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-hero-btn:hover {
+.browse-projects.talent .ht-hero-btn:hover {
   background: #17a362;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgb(29 191 115 / 36%);
 }
 
 /* ── Page layout ── */
-:is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+.browse-projects.talent .ht-page-wrap {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
@@ -831,7 +831,7 @@
 }
 
 @media (width >= 900px) {
-  :is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+  .browse-projects.talent .ht-page-wrap {
     grid-template-columns: 260px 1fr;
     gap: 24px;
     padding: 40px 32px 96px;
@@ -839,14 +839,14 @@
 }
 
 @media (width >= 1100px) {
-  :is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+  .browse-projects.talent .ht-page-wrap {
     grid-template-columns: 300px 1fr;
     gap: 32px;
   }
 }
 
 /* ── Sidebar filters ── */
-:is(.browse-projects.talent, .hire-talent) .ht-sidebar {
+.browse-projects.talent .ht-sidebar {
   background: #fff;
   border: 1px solid #e8e8e8;
   border-radius: 16px;
@@ -856,20 +856,20 @@
 }
 
 @media (width >= 900px) {
-  :is(.browse-projects.talent, .hire-talent) .ht-sidebar {
+  .browse-projects.talent .ht-sidebar {
     position: sticky;
     top: 80px;
   }
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sidebar-top {
+.browse-projects.talent .ht-sidebar-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sidebar-top h2 {
+.browse-projects.talent .ht-sidebar-top h2 {
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -878,7 +878,7 @@
   margin: 0;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-clear-all {
+.browse-projects.talent .ht-clear-all {
   background: none;
   border: none;
   font-family: var(--body-font-family);
@@ -889,14 +889,14 @@
   padding: 0;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-clear-all:hover { opacity: 0.7; }
+.browse-projects.talent .ht-clear-all:hover { opacity: 0.7; }
 
-:is(.browse-projects.talent, .hire-talent) .ht-search-wrapper {
+.browse-projects.talent .ht-search-wrapper {
   position: relative;
   margin-bottom: 20px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-search-wrapper svg {
+.browse-projects.talent .ht-search-wrapper svg {
   position: absolute;
   left: 11px;
   top: 50%;
@@ -905,7 +905,7 @@
   pointer-events: none;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-search-input {
+.browse-projects.talent .ht-search-input {
   width: 100%;
   padding: 9px 12px 9px 34px;
   font-family: var(--body-font-family);
@@ -919,21 +919,21 @@
   box-sizing: border-box;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-search-input:focus {
+.browse-projects.talent .ht-search-input:focus {
   border-color: #1dbf73;
   background: #fff;
   box-shadow: 0 0 0 3px rgb(29 191 115 / 10%);
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sidebar-divider {
+.browse-projects.talent .ht-sidebar-divider {
   height: 1px;
   background: #f0f0f0;
   margin: 0 0 18px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-filter-group { margin-bottom: 18px; }
+.browse-projects.talent .ht-filter-group { margin-bottom: 18px; }
 
-:is(.browse-projects.talent, .hire-talent) .ht-filter-label {
+.browse-projects.talent .ht-filter-label {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -943,13 +943,13 @@
   display: block;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-filter-options {
+.browse-projects.talent .ht-filter-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px 8px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label {
+.browse-projects.talent .ht-checkbox-label {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -961,10 +961,10 @@
   min-width: 0;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:hover { background: #f5f5f5; }
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:has(input:checked) { background: #f0fdf7; }
+.browse-projects.talent .ht-checkbox-label:hover { background: #f5f5f5; }
+.browse-projects.talent .ht-checkbox-label:has(input:checked) { background: #f0fdf7; }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label input[type="checkbox"] {
+.browse-projects.talent .ht-checkbox-label input[type="checkbox"] {
   appearance: none;
   appearance: none;
   width: 15px;
@@ -978,7 +978,7 @@
   transition: all 0.15s;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label input[type="checkbox"]:checked {
+.browse-projects.talent .ht-checkbox-label input[type="checkbox"]:checked {
   background: #1dbf73;
   border-color: #1dbf73;
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -986,7 +986,7 @@
   background-position: center;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label span {
+.browse-projects.talent .ht-checkbox-label span {
   font-size: 0.82rem;
   font-weight: 500;
   color: #444;
@@ -995,9 +995,9 @@
   text-overflow: ellipsis;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:has(input:checked) span { color: #111; font-weight: 600; }
+.browse-projects.talent .ht-checkbox-label:has(input:checked) span { color: #111; font-weight: 600; }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sort-select {
+.browse-projects.talent .ht-sort-select {
   width: 100%;
   padding: 9px 32px 9px 11px;
   border: 1px solid #e0e0e0;
@@ -1011,35 +1011,35 @@
   cursor: pointer;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sort-select:focus { border-color: #1dbf73; }
+.browse-projects.talent .ht-sort-select:focus { border-color: #1dbf73; }
 
 /* ── Directory ── */
-:is(.browse-projects.talent, .hire-talent) .ht-directory {
+.browse-projects.talent .ht-directory {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-results-count {
+.browse-projects.talent .ht-results-count {
   font-size: 0.85rem;
   font-weight: 600;
   color: #888;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-candidates-grid {
+.browse-projects.talent .ht-candidates-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 18px;
 }
 
 @media (width >= 640px) {
-  :is(.browse-projects.talent, .hire-talent) .ht-candidates-grid {
+  .browse-projects.talent .ht-candidates-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* ── Candidate card ── */
-:is(.browse-projects.talent, .hire-talent) .ht-card {
+.browse-projects.talent .ht-card {
   background: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 16px;
@@ -1051,29 +1051,29 @@
   transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.18s;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-card:hover {
+.browse-projects.talent .ht-card:hover {
   box-shadow: 0 12px 36px rgb(0 0 0 / 9%);
   transform: translateY(-3px);
   border-color: rgb(29 191 115 / 35%);
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-card-top {
+.browse-projects.talent .ht-card-top {
   display: flex;
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 14px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap {
+.browse-projects.talent .ht-avatar-wrap {
   position: relative;
   flex-shrink: 0;
   width: 70px;
   height: 70px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-avatar-img,
-:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap picture,
-:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap img {
+.browse-projects.talent .ht-avatar-img,
+.browse-projects.talent .ht-avatar-wrap picture,
+.browse-projects.talent .ht-avatar-wrap img {
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -1082,7 +1082,7 @@
   display: block;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-online-dot {
+.browse-projects.talent .ht-online-dot {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -1094,13 +1094,13 @@
   box-shadow: 0 0 0 2px rgb(29 191 115 / 20%);
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-info {
+.browse-projects.talent .ht-info {
   flex: 1;
   min-width: 0;
   padding-top: 2px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-name {
+.browse-projects.talent .ht-name {
   font-family: var(--heading-font-family);
   font-size: 1.05rem;
   font-weight: 800;
@@ -1110,7 +1110,7 @@
   margin-bottom: 3px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-role {
+.browse-projects.talent .ht-role {
   font-size: 0.84rem;
   color: #666;
   font-weight: 500;
@@ -1118,43 +1118,43 @@
   line-height: 1.3;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-meta-row {
+.browse-projects.talent .ht-meta-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 5px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-rate {
+.browse-projects.talent .ht-rate {
   font-size: 0.88rem;
   font-weight: 700;
   color: #111;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-sep {
+.browse-projects.talent .ht-sep {
   color: #ccc;
   font-size: 0.8rem;
   line-height: 1;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-rating {
+.browse-projects.talent .ht-rating {
   font-size: 0.84rem;
   font-weight: 700;
   color: #111;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-review-cnt {
+.browse-projects.talent .ht-review-cnt {
   font-size: 0.78rem;
   color: #999;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-jobs {
+.browse-projects.talent .ht-jobs {
   font-size: 0.78rem;
   color: #888;
   font-weight: 500;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-bio {
+.browse-projects.talent .ht-bio {
   font-size: 0.855rem;
   color: #555;
   line-height: 1.55;
@@ -1165,7 +1165,7 @@
   overflow: hidden;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-skills {
+.browse-projects.talent .ht-skills {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1174,13 +1174,13 @@
   flex: 1;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-skills img,
-:is(.browse-projects.talent, .hire-talent) .ht-skills picture,
-:is(.browse-projects.talent, .hire-talent) .ht-skills source {
+.browse-projects.talent .ht-skills img,
+.browse-projects.talent .ht-skills picture,
+.browse-projects.talent .ht-skills source {
   display: none;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-skill {
+.browse-projects.talent .ht-skill {
   display: inline-flex;
   align-items: center;
   background: #f5f5f5;
@@ -1195,7 +1195,7 @@
   line-height: 1;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-skill-more {
+.browse-projects.talent .ht-skill-more {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -1212,9 +1212,9 @@
   transition: background 0.15s, color 0.15s;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-skill-more:hover { background: #1dbf73; color: #fff; border-color: #1dbf73; }
+.browse-projects.talent .ht-skill-more:hover { background: #1dbf73; color: #fff; border-color: #1dbf73; }
 
-:is(.browse-projects.talent, .hire-talent) .ht-see-profile {
+.browse-projects.talent .ht-see-profile {
   display: block;
   width: 100%;
   padding: 11px 0;
@@ -1231,14 +1231,14 @@
   margin-top: auto;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-see-profile:hover {
+.browse-projects.talent .ht-see-profile:hover {
   background: #17a862;
   box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
   transform: translateY(-1px);
 }
 
 /* Star button — top right corner */
-:is(.browse-projects.talent, .hire-talent) .ht-fav-btn {
+.browse-projects.talent .ht-fav-btn {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -1256,11 +1256,11 @@
   z-index: 1;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-fav-btn:hover { transform: scale(1.2); }
-:is(.browse-projects.talent, .hire-talent) .ht-fav-btn.saved svg polygon { fill: #f59e0b; stroke: #f59e0b; }
+.browse-projects.talent .ht-fav-btn:hover { transform: scale(1.2); }
+.browse-projects.talent .ht-fav-btn.saved svg polygon { fill: #f59e0b; stroke: #f59e0b; }
 
 /* ── Empty state ── */
-:is(.browse-projects.talent, .hire-talent) .ht-empty-state {
+.browse-projects.talent .ht-empty-state {
   grid-column: 1 / -1;
   text-align: center;
   padding: 72px 24px;
@@ -1273,6 +1273,6 @@
   gap: 12px;
 }
 
-:is(.browse-projects.talent, .hire-talent) .ht-empty-icon { color: #d0d0d0; }
-:is(.browse-projects.talent, .hire-talent) .ht-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: #111; margin: 0; }
-:is(.browse-projects.talent, .hire-talent) .ht-empty-state p { font-size: 0.88rem; color: #999; max-width: 300px; margin: 0 auto; }
+.browse-projects.talent .ht-empty-icon { color: #d0d0d0; }
+.browse-projects.talent .ht-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: #111; margin: 0; }
+.browse-projects.talent .ht-empty-state p { font-size: 0.88rem; color: #999; max-width: 300px; margin: 0 auto; }

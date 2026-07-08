@@ -710,15 +710,10 @@ async function decorateHireTalent(block) {
 }
 
 export default async function decorate(block) {
-  // Checks both the new variant classes ("Browse Projects (project)" /
-  // "Browse Projects (talent)" in da.live) and the old standalone block
-  // names (project-detail / hire-talent), so this keeps working on any
-  // page that hasn't been migrated to the new block name yet. Once every
-  // page is confirmed migrated, the old class checks can be dropped.
-  if (block.classList.contains('project') || block.classList.contains('project-detail')) {
+  if (block.classList.contains('project')) {
     await decorateProjectDetail(block); return;
   }
-  if (block.classList.contains('talent') || block.classList.contains('hire-talent')) {
+  if (block.classList.contains('talent')) {
     await decorateHireTalent(block); return;
   }
 
