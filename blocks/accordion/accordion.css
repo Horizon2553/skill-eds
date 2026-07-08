@@ -1,3 +1,23 @@
+/* Hide until fully decorated (same technique the boilerplate already uses
+   for header/footer) — avoids a visible layout shift when the raw content
+   (every answer fully expanded) collapses down to the accordion view once
+   accordion.js finishes running. */
+.accordion {
+  visibility: hidden;
+}
+
+.accordion[data-block-status='loaded'] {
+  visibility: visible;
+}
+
+/* The FAQ heading sits beside the list once laid out side by side — hide
+   it too until its sibling accordion block is ready, so it doesn't visibly
+   reposition when the two-column layout applies. Only touches visibility,
+   never layout/display, so it can't affect unrelated sibling content. */
+.accordion-container:has(.accordion.faq:not([data-block-status='loaded'])) > .default-content-wrapper {
+  visibility: hidden;
+}
+
 .accordion .accordion-item {
   border-bottom: 1px solid var(--border-color, #e2e2e2);
 }

@@ -1,3 +1,15 @@
+/* Hide until fully decorated (same technique the boilerplate already uses
+   for header/footer) — avoids a visible layout shift when the raw content
+   (plain rows, no card boxes) resizes to the decorated card grid once
+   cards.js finishes running. */
+.cards {
+  visibility: hidden;
+}
+
+.cards[data-block-status='loaded'] {
+  visibility: visible;
+}
+
 .cards > ul {
   display: grid;
   grid-template-columns: repeat(1, 1fr);

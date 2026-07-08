@@ -1,3 +1,23 @@
+/* Hide until fully decorated (same technique the boilerplate already uses
+   for header/footer) — avoids a visible layout shift when the raw content
+   (all rows flattened, no tabs hidden) resizes down to the decorated
+   tabbed view once tabs.js finishes running. */
+.tabs {
+  visibility: hidden;
+}
+
+.tabs[data-block-status='loaded'] {
+  visibility: visible;
+}
+
+/* The how-it-works heading sits beside the tablist once lifted — hide it
+   too until its sibling tabs block is ready, so the heading doesn't visibly
+   reposition when the tablist appears next to it. Only touches visibility,
+   never layout/display, so it can't affect unrelated sibling content. */
+.tabs-container:has(.tabs.how-it-works:not([data-block-status='loaded'])) > .default-content-wrapper {
+  visibility: hidden;
+}
+
 .tabs .tabs-list {
   display: flex;
   gap: 0.5rem;
