@@ -51,52 +51,59 @@
     </div>
 
     <!-- ==========================================
-         HOW IT WORKS SECTION
-         Block rows:
-           Row 1: section title (1 cell, plain text — no bold)
-           Tab header rows: 1 cell containing <strong> text
-           Card rows: title (cell 0) | description (cell 1) | link text (cell 2, optional)
+         HOW IT WORKS SECTION — generic `tabs` block
+         Structure:
+           Plain content: section heading (not part of the block)
+           Block rows: label cell (tab name) | content cell (plain <ul> of items,
+             styled as a card grid via the `how-it-works` variant CSS — no
+             nested block needed)
          ========================================== -->
     <div>
-      <div class="how-it-works">
+      <div>
+        <h2>How SkillBridge works</h2>
+      </div>
+      <div class="tabs how-it-works">
         <div>
-          <div>How SkillBridge works</div>
+          <div>For Clients</div>
+          <div>
+            <ul>
+              <li>
+                <strong>Post a Project</strong>
+                <p>Describe what you need, set your budget, and publish. Receive tailored proposals within hours.</p>
+                <p><a href="/post-project">Post a Project</a></p>
+              </li>
+              <li>
+                <strong>Browse &amp; Select Freelancers</strong>
+                <p>Review proposals, view portfolios, check ratings. Pick the best match — no pressure.</p>
+                <p><a href="/hire-talent">Browse Freelancers</a></p>
+              </li>
+              <li>
+                <strong>Review &amp; Hire</strong>
+                <p>Review proposals, check freelancer profiles and portfolios. Send a hire request directly — no middlemen.</p>
+              </li>
+            </ul>
+          </div>
         </div>
         <div>
-          <div><strong>For Clients</strong></div>
-        </div>
-        <div>
-          <div>Post a Project</div>
-          <div>Describe what you need, set your budget, and publish. Receive tailored proposals within hours.</div>
-          <div><a href="/post-project">Post a Project</a></div>
-        </div>
-        <div>
-          <div>Browse &amp; Select Freelancers</div>
-          <div>Review proposals, view portfolios, check ratings. Pick the best match — no pressure.</div>
-          <div><a href="/hire-talent">Browse Freelancers</a></div>
-        </div>
-        <div>
-          <div>Pay When Work is Done</div>
-          <div>Funds are held securely and released only when you approve the deliverables. Full control.</div>
-          <div></div>
-        </div>
-        <div>
-          <div><strong>For Freelancers</strong></div>
-        </div>
-        <div>
-          <div>Create Your Profile</div>
-          <div>Showcase your skills, portfolio, and experience. Let your work speak — no resume required.</div>
-          <div><a href="/profile-setup">Create Profile</a></div>
-        </div>
-        <div>
-          <div>Browse &amp; Apply to Projects</div>
-          <div>Find projects that match your skills. Submit a tailored proposal and connect with clients.</div>
-          <div><a href="/browse-projects">Find Work</a></div>
-        </div>
-        <div>
-          <div>Get Paid Securely</div>
-          <div>Complete milestones, receive secure payments straight to your account. No invoice chasing.</div>
-          <div></div>
+          <div>For Freelancers</div>
+          <div>
+            <ul>
+              <li>
+                <strong>Create Your Profile</strong>
+                <p>Showcase your skills, portfolio, and experience. Let your work speak — no resume required.</p>
+                <p><a href="/profile-setup">Create Profile</a></p>
+              </li>
+              <li>
+                <strong>Browse &amp; Apply to Projects</strong>
+                <p>Find projects that match your skills. Submit a tailored proposal and connect with clients.</p>
+                <p><a href="/browse-projects">Find Work</a></p>
+              </li>
+              <li>
+                <strong>Get Hired Directly</strong>
+                <p>Once a client approves your proposal, they'll contact you directly to discuss the project. Your first proposal is always free.</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -215,15 +222,19 @@
     </div>
 
     <!-- ==========================================
-         TESTIMONIALS SECTION
+         TESTIMONIALS SECTION — generic `cards` block
          Uses "highlight" section style for light background.
-         Block rows: each row = one testimonial
-           Cell 0: quote text
-           Cell 1: author name
-           Cell 2: author role/title
+         Structure:
+           Plain content: section heading + subheading (not part of the block)
+           Block rows: each row = one testimonial, no image cell
+             Cell 0: quote text | Cell 1: author name | Cell 2: author role/title
          ========================================== -->
     <div class="highlight">
-      <div class="testimonials">
+      <div>
+        <h2>Trusted by leaders &amp; freelancers</h2>
+        <p>Here's what people are saying about working on SkillBridge.</p>
+      </div>
+      <div class="cards testimonials">
         <div>
           <div>We hired a React developer within 48 hours. The quality of proposals was outstanding — every applicant had a real portfolio. SkillBridge has completely replaced our old hiring pipeline.</div>
           <div>Rohan Mehta</div>
@@ -243,16 +254,16 @@
     </div>
 
     <!-- ==========================================
-         FAQ SECTION
-         Block rows:
-           Row 1: section heading (1 cell — use <em> for green accent word)
-           Row 2+: question (cell 0) | answer (cell 1)
+         FAQ SECTION — generic `accordion` block
+         Structure:
+           Plain content: section heading (not part of the block)
+           Block rows: question (cell 0) | answer (cell 1)
          ========================================== -->
     <div>
-      <div class="faq">
-        <div>
-          <div>Your questions, <em>answered</em></div>
-        </div>
+      <div>
+        <h2>Your questions, <em>answered</em></h2>
+      </div>
+      <div class="accordion faq">
         <div>
           <div>What is SkillBridge?</div>
           <div>SkillBridge is a two-sided freelance marketplace where clients post real projects and skilled freelancers apply with tailored proposals. Whether you're a startup building your first product or an experienced developer looking for meaningful work, SkillBridge connects the right talent to the right opportunity — fast, transparently, and with zero noise.</div>
