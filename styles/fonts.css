@@ -1,4 +1,19 @@
-/* Font loaded non-blocking via head.html preload — no @import here */
+/* Self-hosted (latin subset only — this is an English-only UI) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/inter-variable-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/bricolage-grotesque-variable-latin.woff2') format('woff2');
+}
 
 /* Metric-matched fallback for Bricolage Grotesque */
 @font-face {
@@ -20,7 +35,7 @@
   size-adjust: 100%;
 }
 
-/* Ensure CSS custom properties reference correct Google Fonts names */
+/* Ensure CSS custom properties reference correct font names */
 :root {
   --body-font-family: 'Inter', inter-fallback, sans-serif;
   --heading-font-family: 'Bricolage Grotesque', bricolage-grotesque-fallback, sans-serif;

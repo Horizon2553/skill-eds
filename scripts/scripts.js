@@ -11,19 +11,11 @@ import {
   loadCSS,
 } from './aem.js';
 
-const GOOGLE_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@300;400;500;600;700&display=swap';
-
 /**
  * load fonts.css and set a session storage flag
- * Google Fonts is loaded here (not as a <link> in head.html) so it never
- * blocks rendering — the page's strict CSP blocks inline onload="" attributes,
- * so the usual preload+onload trick can't be used directly in head.html.
  */
 async function loadFonts() {
-  await Promise.all([
-    loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`),
-    loadCSS(GOOGLE_FONTS_HREF),
-  ]);
+  await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
     if (!window.location.hostname.includes('localhost')) sessionStorage.setItem('fonts-loaded', 'true');
   } catch (e) {
