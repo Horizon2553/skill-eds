@@ -10,29 +10,67 @@ function getLiked() {
   try { return JSON.parse(localStorage.getItem('sb_liked_projects')) || []; } catch { return []; }
 }
 
-export default async function decorate(block) {
-  const data = {};
+function getAllUsers() {
+  try { return JSON.parse(localStorage.getItem('sb_users_v1')) || []; } catch { return []; }
+}
 
-  [...block.children].forEach((row) => {
-    const cells = [...row.children];
-    const key = cells[0]?.textContent.trim().toLowerCase();
-    if (!key) return;
-    if (key === 'images') {
-      data.images = cells.slice(1)
-        .map((c) => c.querySelector('code')?.textContent.trim() || c.textContent.trim())
-        .filter(Boolean);
-    } else if (key === 'author') {
-      data.authorName = cells[1]?.textContent.trim() || '';
-      data.authorImg = cells[2]?.querySelector('code')?.textContent.trim() || cells[2]?.textContent.trim() || '';
-      data.authorRole = cells[3]?.textContent.trim() || '';
-      const aEl = cells[4]?.querySelector('a');
-      data.authorLink = aEl?.getAttribute('href') || aEl?.href || '';
-      data.likes = cells[5]?.textContent.trim() || '0';
-      data.views = cells[6]?.textContent.trim() || '';
-    } else {
-      data[key] = cells[1]?.textContent.trim() || '';
-    }
-  });
+// Self-uploaded profile projects only ever live in localStorage (no CMS page backs them),
+// so a ?uid=&pid= pair is resolved from there instead of parsing authored rows.
+function getUserProjectData() {
+  const params = new URLSearchParams(window.location.search);
+  const uid = params.get('uid');
+  const pid = params.get('pid');
+  if (!uid || !pid) return undefined;
+
+  const user = getAllUsers().find((u) => u.id === uid);
+  const project = user?.projects?.find((p) => p.id === pid) || user?.projects?.[Number(pid)];
+  if (!user || !project) return null;
+
+  return {
+    title: project.name || '',
+    desc: project.desc || '',
+    images: project.images || [],
+    tags: (project.tags || []).join(','),
+    authorName: user.name || '',
+    authorImg: user.avatar || '',
+    authorRole: user.skill || 'Freelancer',
+    authorLink: `/my-profile?id=${encodeURIComponent(user.id)}`,
+    likes: '0',
+    views: '',
+  };
+}
+
+export default async function decorate(block) {
+  const userData = getUserProjectData();
+  if (userData === null) {
+    block.innerHTML = '<div style="padding:60px;text-align:center;color:#888">Project not found.</div>';
+    return;
+  }
+
+  const data = userData || {};
+
+  if (!userData) {
+    [...block.children].forEach((row) => {
+      const cells = [...row.children];
+      const key = cells[0]?.textContent.trim().toLowerCase();
+      if (!key) return;
+      if (key === 'images') {
+        data.images = cells.slice(1)
+          .map((c) => c.querySelector('code')?.textContent.trim() || c.textContent.trim())
+          .filter(Boolean);
+      } else if (key === 'author') {
+        data.authorName = cells[1]?.textContent.trim() || '';
+        data.authorImg = cells[2]?.querySelector('code')?.textContent.trim() || cells[2]?.textContent.trim() || '';
+        data.authorRole = cells[3]?.textContent.trim() || '';
+        const aEl = cells[4]?.querySelector('a');
+        data.authorLink = aEl?.getAttribute('href') || aEl?.href || '';
+        data.likes = cells[5]?.textContent.trim() || '0';
+        data.views = cells[6]?.textContent.trim() || '';
+      } else {
+        data[key] = cells[1]?.textContent.trim() || '';
+      }
+    });
+  }
 
   const tags = (data.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
   const images = data.images || [];
@@ -40,7 +78,7 @@ export default async function decorate(block) {
   const viewsNum = data.views
     ? parseInt(String(data.views).replace(/,/g, ''), 10)
     : Math.round(likesNum * 5.5);
-  const pageKey = window.location.pathname;
+  const pageKey = window.location.pathname + window.location.search;
   const isLiked = getLiked().includes(pageKey);
 
   const thumbsHtml = images.length > 1
