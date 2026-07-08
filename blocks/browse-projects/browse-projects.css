@@ -498,3 +498,781 @@
   flex-shrink: 0;
 }
 .browse-projects .bp-save-btn:hover { transform: scale(1.2); }
+
+/* ── Merged in from project-detail (see browse-projects.js for why) ── */
+:is(.browse-projects.project, .project-detail) .pd-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
+}
+
+/* Back link */
+:is(.browse-projects.project, .project-detail) .pd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #777;
+  margin-bottom: 32px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-back:hover {
+  color: #111;
+}
+
+/* Two-column layout */
+:is(.browse-projects.project, .project-detail) .pd-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Gallery */
+:is(.browse-projects.project, .project-detail) .pd-main-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgb(0 0 0 / 8%);
+  margin-bottom: 24px;
+  aspect-ratio: 16 / 10;
+  background: #f0f0f0;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-main-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.18s ease;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-thumbs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-thumb.active,
+:is(.browse-projects.project, .project-detail) .pd-thumb:hover {
+  border-color: #111;
+  transform: translateY(-2px);
+}
+
+/* Sidebar */
+:is(.browse-projects.project, .project-detail) .pd-sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-title {
+  font-family: var(--heading-font-family);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a0a0a;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #444;
+  background: #f2f2f2;
+  border: 1px solid #e8e8e8;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-desc {
+  font-size: 0.97rem;
+  line-height: 1.75;
+  color: #666;
+  margin: 0 0 32px;
+}
+
+/* Author card */
+:is(.browse-projects.project, .project-detail) .pd-author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  text-decoration: none;
+  background: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-author:hover {
+  border-color: #111;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 8%);
+}
+
+:is(.browse-projects.project, .project-detail) .pd-author-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e8e8e8;
+  flex-shrink: 0;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-author-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-author-role {
+  font-size: 0.82rem;
+  color: #888;
+}
+
+/* Stats */
+:is(.browse-projects.project, .project-detail) .pd-stats {
+  display: flex;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  margin-bottom: 28px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-stat-val {
+  font-family: var(--heading-font-family);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0a0a0a;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-stat-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Actions */
+:is(.browse-projects.project, .project-detail) .pd-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-like-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-like-btn:hover,
+:is(.browse-projects.project, .project-detail) .pd-like-btn.liked {
+  border-color: #1dbf73;
+  color: #1dbf73;
+  background: #f0fdf7;
+  transform: translateY(-2px);
+}
+
+:is(.browse-projects.project, .project-detail) .pd-like-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-profile-btn {
+  display: block;
+  text-align: center;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #0a0a0a;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+:is(.browse-projects.project, .project-detail) .pd-profile-btn:hover {
+  background: #1dbf73;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  :is(.browse-projects.project, .project-detail) .pd-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  :is(.browse-projects.project, .project-detail) .pd-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  :is(.browse-projects.project, .project-detail) .pd-page {
+    padding: 24px 16px 60px;
+  }
+}
+
+/* ── Merged in from hire-talent (see browse-projects.js for why) ── */
+/* ── Page hero ── */
+:is(.browse-projects.talent, .hire-talent) .ht-hero {
+  padding: 30px 0 20px;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-hero-title {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111;
+  margin: 0;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-hero-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1dbf73;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 26px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 4px 14px rgb(29 191 115 / 28%);
+  white-space: nowrap;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-hero-btn:hover {
+  background: #17a362;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(29 191 115 / 36%);
+}
+
+/* ── Page layout ── */
+:is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 22px 16px 72px;
+}
+
+@media (width >= 900px) {
+  :is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    padding: 40px 32px 96px;
+  }
+}
+
+@media (width >= 1100px) {
+  :is(.browse-projects.talent, .hire-talent) .ht-page-wrap {
+    grid-template-columns: 300px 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── Sidebar filters ── */
+:is(.browse-projects.talent, .hire-talent) .ht-sidebar {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (width >= 900px) {
+  :is(.browse-projects.talent, .hire-talent) .ht-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-sidebar-top h2 {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-clear-all {
+  background: none;
+  border: none;
+  font-family: var(--body-font-family);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1dbf73;
+  cursor: pointer;
+  padding: 0;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-clear-all:hover { opacity: 0.7; }
+
+:is(.browse-projects.talent, .hire-talent) .ht-search-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-search-wrapper svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #bbb;
+  pointer-events: none;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-search-input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  font-family: var(--body-font-family);
+  font-size: 0.875rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #111;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  box-sizing: border-box;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-search-input:focus {
+  border-color: #1dbf73;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(29 191 115 / 10%);
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-sidebar-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 0 0 18px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-filter-group { margin-bottom: 18px; }
+
+:is(.browse-projects.talent, .hire-talent) .ht-filter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 10px;
+  display: block;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-filter-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 8px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+  min-width: 0;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:hover { background: #f5f5f5; }
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:has(input:checked) { background: #f0fdf7; }
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label input[type="checkbox"]:checked {
+  background: #1dbf73;
+  border-color: #1dbf73;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label span {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-checkbox-label:has(input:checked) span { color: #111; font-weight: 600; }
+
+:is(.browse-projects.talent, .hire-talent) .ht-sort-select {
+  width: 100%;
+  padding: 9px 32px 9px 11px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: var(--body-font-family);
+  font-size: 0.875rem;
+  color: #333;
+  background: #fafafa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 11px center;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-sort-select:focus { border-color: #1dbf73; }
+
+/* ── Directory ── */
+:is(.browse-projects.talent, .hire-talent) .ht-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-results-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-candidates-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (width >= 640px) {
+  :is(.browse-projects.talent, .hire-talent) .ht-candidates-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Candidate card ── */
+:is(.browse-projects.talent, .hire-talent) .ht-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 24px 24px 22px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.18s;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-card:hover {
+  box-shadow: 0 12px 36px rgb(0 0 0 / 9%);
+  transform: translateY(-3px);
+  border-color: rgb(29 191 115 / 35%);
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-avatar-img,
+:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap picture,
+:is(.browse-projects.talent, .hire-talent) .ht-avatar-wrap img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #e8e8e8;
+  display: block;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-online-dot {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 12px;
+  height: 12px;
+  background: #1dbf73;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgb(29 191 115 / 20%);
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-info {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-name {
+  font-family: var(--heading-font-family);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-bottom: 3px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-role {
+  font-size: 0.84rem;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-rate {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #111;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-sep {
+  color: #ccc;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-rating {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #111;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-review-cnt {
+  font-size: 0.78rem;
+  color: #999;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-jobs {
+  font-size: 0.78rem;
+  color: #888;
+  font-weight: 500;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-bio {
+  font-size: 0.855rem;
+  color: #555;
+  line-height: 1.55;
+  margin: 0 0 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-skills img,
+:is(.browse-projects.talent, .hire-talent) .ht-skills picture,
+:is(.browse-projects.talent, .hire-talent) .ht-skills source {
+  display: none;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-skill {
+  display: inline-flex;
+  align-items: center;
+  background: #f5f5f5;
+  border: 1px solid #e8e8e8;
+  color: #444;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 99px;
+  white-space: nowrap;
+  height: 26px;
+  line-height: 1;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-skill-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #f0fdf7;
+  border: 1px solid rgb(29 191 115 / 25%);
+  color: #1dbf73;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  height: 26px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-skill-more:hover { background: #1dbf73; color: #fff; border-color: #1dbf73; }
+
+:is(.browse-projects.talent, .hire-talent) .ht-see-profile {
+  display: block;
+  width: 100%;
+  padding: 11px 0;
+  background: #1dbf73;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
+  letter-spacing: 0.01em;
+  margin-top: auto;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-see-profile:hover {
+  background: #17a862;
+  box-shadow: 0 4px 16px rgb(29 191 115 / 30%);
+  transform: translateY(-1px);
+}
+
+/* Star button — top right corner */
+:is(.browse-projects.talent, .hire-talent) .ht-fav-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.15s;
+  z-index: 1;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-fav-btn:hover { transform: scale(1.2); }
+:is(.browse-projects.talent, .hire-talent) .ht-fav-btn.saved svg polygon { fill: #f59e0b; stroke: #f59e0b; }
+
+/* ── Empty state ── */
+:is(.browse-projects.talent, .hire-talent) .ht-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 72px 24px;
+  background: #fafafa;
+  border: 1.5px dashed #e4e4e4;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+:is(.browse-projects.talent, .hire-talent) .ht-empty-icon { color: #d0d0d0; }
+:is(.browse-projects.talent, .hire-talent) .ht-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: #111; margin: 0; }
+:is(.browse-projects.talent, .hire-talent) .ht-empty-state p { font-size: 0.88rem; color: #999; max-width: 300px; margin: 0 auto; }
